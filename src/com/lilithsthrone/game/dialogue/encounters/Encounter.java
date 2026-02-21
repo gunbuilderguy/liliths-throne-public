@@ -23,6 +23,7 @@ import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.NPCGenerationFlag;
 import com.lilithsthrone.game.character.npc.dominion.Cultist;
 import com.lilithsthrone.game.character.npc.dominion.DominionAlleywayAttacker;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.npc.dominion.DominionSuccubusAttacker;
 import com.lilithsthrone.game.character.npc.dominion.HarpyNestsAttacker;
 import com.lilithsthrone.game.character.npc.dominion.Lumi;
@@ -417,6 +418,13 @@ public class Encounter {
 				}
 			}
 			
+			
+			// Dogmeat: 10% chance on day 1, decreasing by 1% per day, minimum 1%.
+			// Only available while he hasn't been found yet.
+			if(Main.game.isStarted() && !Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
+				float dogmeatChance = Math.max(1f, 11f - Main.game.getDayNumber());
+				map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, dogmeatChance);
+			}
 			return map;
 		}
 		
@@ -523,6 +531,12 @@ public class Encounter {
 					return null;
 				}
 				return SlaveEncountersDialogue.getSlaveUsingOtherSlaveAlleyway(slaves);
+
+			} else if(node == EncounterType.DOMINION_ALLEY_DOGMEAT) {
+				Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+				dogmeat.setLocation(Main.game.getPlayer(), true);
+				Main.game.setActiveNPC(dogmeat);
+				return dogmeat.getEncounterDialogue();
 			}
 			
 			return null;
