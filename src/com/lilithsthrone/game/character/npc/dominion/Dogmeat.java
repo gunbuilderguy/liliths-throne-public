@@ -93,8 +93,7 @@ public class Dogmeat extends NPC {
 
 	@Override
 	public void equipClothing(List<EquipClothingSetting> settings) {
-		// Dogs don't wear clothing
-		this.unequipAllClothingIntoVoid(true, true);
+		// No starting clothing — leave whatever the player has equipped untouched
 	}
 
 	@Override
