@@ -138,10 +138,14 @@ public class Dogmeat extends NPC {
 	@Override
 	public void turnUpdate() {
 		if (!Main.game.getPlayer().getCompanions().contains(this)) {
-			// Not a companion - stay in the holding cell
-			if (!this.getWorldLocation().equals(WorldType.EMPTY)) {
-				this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
+			if (!Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
+				// Not yet found — keep in holding cell so the encounter isn't triggered early
+				if (!this.getWorldLocation().equals(WorldType.EMPTY)) {
+					this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
+				}
 			}
+			// After the initial encounter, leave him wherever he was placed (the alley)
+			// so the player can run into him again.
 		}
 		// When a companion, the standard companion following logic handles movement
 	}

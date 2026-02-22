@@ -419,11 +419,23 @@ public class Encounter {
 			}
 			
 			
-			// Dogmeat: 10% chance on day 1, decreasing by 1% per day, minimum 1%.
-			// Only available while he hasn't been found yet.
-			if(Main.game.isStarted() && !Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
-				float dogmeatChance = Math.max(1f, 11f - Main.game.getDayNumber());
-				map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, dogmeatChance);
+			// Dogmeat: first encounter has a 10% chance on day 1, decreasing by 1%/day (min 1%).
+			// After the first meeting, the player can run into him again with a 5% chance,
+			// provided he isn't already a companion and at least 2 hours have passed since
+			// the last time they crossed paths.
+			if(Main.game.isStarted()) {
+				Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+				if(!Main.game.getPlayer().getCompanions().contains(dogmeat)) {
+					if(!Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
+						float dogmeatChance = Math.max(1f, 11f - Main.game.getDayNumber());
+						map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, dogmeatChance);
+					} else {
+						long lastSeen = Main.game.getDialogueFlags().getSavedLong("dogmeat_found");
+						if(Main.game.getMinutesPassed() - lastSeen > 120) {
+							map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, 5f);
+						}
+					}
+				}
 			}
 			return map;
 		}
