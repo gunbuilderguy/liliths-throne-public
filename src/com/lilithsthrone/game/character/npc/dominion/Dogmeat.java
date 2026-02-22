@@ -10,8 +10,12 @@ import com.lilithsthrone.game.character.CharacterImportSetting;
 import com.lilithsthrone.game.character.EquipClothingSetting;
 import com.lilithsthrone.game.character.body.coverings.BodyCoveringType;
 import com.lilithsthrone.game.character.body.coverings.Covering;
+import com.lilithsthrone.game.character.body.types.PenisType;
 import com.lilithsthrone.game.character.body.valueEnums.BodySize;
 import com.lilithsthrone.game.character.body.valueEnums.Muscle;
+import com.lilithsthrone.game.character.body.valueEnums.PenetrationGirth;
+import com.lilithsthrone.game.character.body.valueEnums.PenetrationModifier;
+import com.lilithsthrone.game.character.body.valueEnums.TesticleSize;
 import com.lilithsthrone.game.character.effects.PerkCategory;
 import com.lilithsthrone.game.character.effects.PerkManager;
 import com.lilithsthrone.game.character.gender.Gender;
@@ -89,6 +93,17 @@ public class Dogmeat extends NPC {
 		// Fur - tan/black saddle pattern like a German Shepherd:
 		this.setSkinCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_TAN), true);
 		this.setHairCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_BLACK), true);
+
+		// Genitalia:
+		this.setPenisType(PenisType.DOG_MORPH);
+		this.addPenisModifier(PenetrationModifier.KNOTTED);
+		this.addPenisModifier(PenetrationModifier.TAPERED);
+		this.setPenisSize(22);
+		this.setPenisGirth(PenetrationGirth.THREE_AVERAGE);
+		this.setTesticleSize(TesticleSize.FOUR_HUGE);
+		this.setInternalTesticles(false);
+		this.setPenisCumStorage(60);
+		this.fillCumToMaxStorage();
 
 		// Actual quadrupedal dog, not an anthro morph:
 		this.setFeral(Subspecies.DOG_MORPH_GERMAN_SHEPHERD);
