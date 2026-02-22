@@ -10,6 +10,7 @@ import com.lilithsthrone.game.character.CharacterImportSetting;
 import com.lilithsthrone.game.character.EquipClothingSetting;
 import com.lilithsthrone.game.character.body.coverings.BodyCoveringType;
 import com.lilithsthrone.game.character.body.coverings.Covering;
+import com.lilithsthrone.game.character.attributes.Attribute;
 import com.lilithsthrone.game.character.body.types.PenisType;
 import com.lilithsthrone.game.character.body.valueEnums.BodySize;
 import com.lilithsthrone.game.character.body.valueEnums.Muscle;
@@ -104,6 +105,7 @@ public class Dogmeat extends NPC {
 		this.setInternalTesticles(false);
 		this.setPenisCumStorage(60);
 		this.fillCumToMaxStorage();
+		this.setAttribute(Attribute.VIRILITY, 75);
 
 		// Actual quadrupedal dog, not an anthro morph:
 		this.setFeral(Subspecies.DOG_MORPH_GERMAN_SHEPHERD);
