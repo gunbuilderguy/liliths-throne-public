@@ -52,7 +52,7 @@ public class Dogmeat extends NPC {
 				"A scruffy but powerfully-built stray dog roaming Dominion's alleyways."
 						+ " Despite the hardships of street life, there's a fierce loyalty in those amber eyes.",
 				5, Month.JUNE, 1,
-				165, Gender.M_P_MALE, Subspecies.DOG_MORPH, RaceStage.LESSER,
+				165, Gender.M_P_MALE, Subspecies.DOG_MORPH_GERMAN_SHEPHERD, RaceStage.FERAL,
 				new CharacterInventory(false, 0),
 				WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, true);
 	}
@@ -89,6 +89,9 @@ public class Dogmeat extends NPC {
 		// Fur - tan/black saddle pattern like a German Shepherd:
 		this.setSkinCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_TAN), true);
 		this.setHairCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_BLACK), true);
+
+		// Actual quadrupedal dog, not an anthro morph:
+		this.setFeral(Subspecies.DOG_MORPH_GERMAN_SHEPHERD);
 	}
 
 	@Override
