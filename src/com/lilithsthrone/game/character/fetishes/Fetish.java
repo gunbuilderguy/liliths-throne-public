@@ -2063,6 +2063,24 @@ public class Fetish {
 		}
 	};
 	
+	public static AbstractFetish FETISH_BESTIALITY = new AbstractFetish(60,
+			"bestiality",
+			"sexual contact with feral creatures",
+			"fetish_bestiality",
+			FetishExperience.BASE_EXPERIENCE_GAIN,
+			PresetColour.BASE_TAN,
+			Util.newHashMapOfValues(new Value<>(Attribute.MAJOR_CORRUPTION, 5)),
+			Util.newArrayListOfValues(
+					"[style.boldSex(Enjoys)] sex with <span style='color:"
+							+ PresetColour.RACE_DOG_MORPH.toWebHexString()
+							+ ";'>feral creatures</span>"),
+			null) {
+		@Override
+		public CorruptionLevel getCorruptionNeeded() {
+			return CorruptionLevel.THREE_DIRTY;
+		}
+	};
+
 	public static AbstractFetish FETISH_LUSTY_MAIDEN = new AbstractFetish(60,
 			"lusty maiden",
 			"lusty maiden",

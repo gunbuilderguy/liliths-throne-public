@@ -106,6 +106,7 @@ import com.lilithsthrone.game.character.npc.dominion.Lilaya;
 import com.lilithsthrone.game.character.npc.dominion.Loppy;
 import com.lilithsthrone.game.character.npc.dominion.Lovienne;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
+import com.lilithsthrone.game.character.npc.dominion.FeralStrayDog;
 import com.lilithsthrone.game.character.npc.dominion.Lumi;
 import com.lilithsthrone.game.character.npc.dominion.Natalya;
 import com.lilithsthrone.game.character.npc.dominion.Nyan;
@@ -2374,6 +2375,7 @@ public class Game implements XMLSaving {
 
 			// Dominion stray companions:
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Dogmeat.class))) { addNPC(new Dogmeat(), false); addedNpcs.add(Dogmeat.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(FeralStrayDog.class))) { addNPC(new FeralStrayDog(), false); addedNpcs.add(FeralStrayDog.class); }
 
 			// Enforcers:
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Brax.class))) { addNPC(new Brax(), false); addedNpcs.add(Brax.class); }

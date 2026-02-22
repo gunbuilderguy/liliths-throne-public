@@ -28,7 +28,6 @@ import com.lilithsthrone.game.character.persona.SexualOrientation;
 import com.lilithsthrone.game.character.race.RaceStage;
 import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.dialogue.DialogueNode;
-import com.lilithsthrone.game.dialogue.npcDialogue.dominion.DogmeatDialogue;
 import com.lilithsthrone.game.inventory.CharacterInventory;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
@@ -38,26 +37,24 @@ import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
 /**
- * Dogmeat - a loyal stray dog found in Dominion's alleyways.
- * A subtle nod to the faithful canine companion from the Fallout series.
+ * A generic feral stray dog used as a second participant in Dogmeat's pack encounter.
  *
  * @since 0.4.11.3
  * @version 0.4.11.3
  */
-public class Dogmeat extends NPC {
+public class FeralStrayDog extends NPC {
 
-	public Dogmeat() {
+	public FeralStrayDog() {
 		this(false);
 	}
 
-	public Dogmeat(boolean isImported) {
+	public FeralStrayDog(boolean isImported) {
 		super(isImported,
-				new NameTriplet("Dogmeat"),
+				new NameTriplet("Stray"),
 				"",
-				"A scruffy but powerfully-built stray dog roaming Dominion's alleyways."
-						+ " Despite the hardships of street life, there's a fierce loyalty in those amber eyes.",
-				5, Month.JUNE, 1,
-				165, Gender.M_P_MALE, Subspecies.DOG_MORPH_GERMAN_SHEPHERD, RaceStage.FERAL,
+				"A large male dog with a rough, wiry coat — clearly another denizen of Dominion's back alleys.",
+				4, Month.JANUARY, 1,
+				160, Gender.M_P_MALE, Subspecies.DOG_MORPH_GERMAN_SHEPHERD, RaceStage.FERAL,
 				new CharacterInventory(false, 0),
 				WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, true);
 	}
@@ -79,41 +76,36 @@ public class Dogmeat extends NPC {
 
 	@Override
 	public void setStartingBody(boolean setPersona) {
-		// Persona:
 		if (setPersona) {
 			this.setPersonalityTraits(PersonalityTrait.BRAVE);
 			this.setSexualOrientation(SexualOrientation.AMBIPHILIC);
 			this.setHistory(Occupation.NPC_STRAY_DOG);
 		}
 
-		// Body:
 		this.setFemininity(10);
-		this.setMuscle(Muscle.THREE_MUSCULAR.getMedianValue());
+		this.setMuscle(Muscle.TWO_TONED.getMedianValue());
 		this.setBodySize(BodySize.TWO_AVERAGE.getMedianValue());
 
-		// Fur - tan/black saddle pattern like a German Shepherd:
-		this.setSkinCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_TAN), true);
-		this.setHairCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_BLACK), true);
+		// Mixed grey/brown fur:
+		this.setSkinCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_GREY), true);
+		this.setHairCovering(new Covering(BodyCoveringType.CANINE_FUR, PresetColour.COVERING_BROWN), true);
 
-		// Genitalia:
 		this.setPenisType(PenisType.DOG_MORPH);
 		this.addPenisModifier(PenetrationModifier.KNOTTED);
 		this.addPenisModifier(PenetrationModifier.TAPERED);
-		this.setPenisSize(22);
-		this.setPenisGirth(PenetrationGirth.THREE_AVERAGE);
-		this.setTesticleSize(TesticleSize.FOUR_HUGE);
+		this.setPenisSize(20);
+		this.setPenisGirth(PenetrationGirth.TWO_SLIM);
+		this.setTesticleSize(TesticleSize.THREE_LARGE);
 		this.setInternalTesticles(false);
-		this.setPenisCumStorage(60);
+		this.setPenisCumStorage(40);
 		this.fillCumToMaxStorage();
-		this.setAttribute(Attribute.VIRILITY, 75);
+		this.setAttribute(Attribute.VIRILITY, 60);
 
-		// Actual quadrupedal dog, not an anthro morph:
 		this.setFeral(Subspecies.DOG_MORPH_GERMAN_SHEPHERD);
 	}
 
 	@Override
 	public void equipClothing(List<EquipClothingSetting> settings) {
-		// No starting clothing — leave whatever the player has equipped untouched
 	}
 
 	@Override
@@ -123,7 +115,7 @@ public class Dogmeat extends NPC {
 
 	@Override
 	public String getSpeechColour() {
-		return "#C68B3A";
+		return "#8B7355";
 	}
 
 	@Override
@@ -138,21 +130,16 @@ public class Dogmeat extends NPC {
 	@Override
 	public void turnUpdate() {
 		if (!Main.game.getPlayer().getCompanions().contains(this)) {
-			if (!Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
-				// Not yet found — keep in holding cell so the encounter isn't triggered early
-				if (!this.getWorldLocation().equals(WorldType.EMPTY)) {
-					this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
-				}
+			// Keep in holding cell when not actively in an encounter
+			if (!this.getWorldLocation().equals(WorldType.EMPTY)) {
+				this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
 			}
-			// After the initial encounter, leave him wherever he was placed (the alley)
-			// so the player can run into him again.
 		}
-		// When a companion, the standard companion following logic handles movement
 	}
 
 	@Override
 	public DialogueNode getEncounterDialogue() {
-		return DogmeatDialogue.DOGMEAT_ENCOUNTER;
+		return null;
 	}
 
 }

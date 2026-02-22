@@ -144,6 +144,8 @@ public enum Occupation {
 	
 	NPC_FITNESS_INSTRUCTOR(Perk.JOB_MISC, "fitness instructor", "-", OccupationTag.HAS_PREREQUISITES),
 	
+	NPC_STRAY_DOG(Perk.JOB_STRAY_DOG, "stray", "[npc.Name] [npc.verb(live)] on the streets of Dominion as a feral animal, surviving on instinct alone."),
+
 	NPC_MUGGER(Perk.JOB_MUGGER, "mugger", "[npc.NameIsFull] a mugger, and [npc.verb(make)] a living by stealing other people's possessions.", OccupationTag.LOWLIFE),
 
 	NPC_BOUNTY_HUNTER(Perk.JOB_BOUNTY_HUNTER, "bounty hunter", "[npc.NameIsFull] a bounty hunter, who earns a wage by tracking down and capturing wanted criminals.", OccupationTag.HAS_PREREQUISITES),
