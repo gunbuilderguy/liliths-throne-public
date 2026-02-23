@@ -4,7 +4,6 @@ import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.attributes.CorruptionLevel;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
-import com.lilithsthrone.game.character.npc.dominion.FeralStrayDog;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseSex;
@@ -12,23 +11,25 @@ import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
+import com.lilithsthrone.utils.colours.PresetColour;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
 /**
- * Dialogue for discovering and adopting Dogmeat in the alleyways of Dominion.
- * After the player kneels before him three times, they become his bitch;
- * subsequent encounters trigger random escalating events.
+ * Dialogue for Dogmeat encounters in the alleyways of Dominion.
  *
- * Random event indices (stored in dogmeat_event_index):
- *   0 = Walkies   (he leads you for a walk)
- *   1 = Pack      (he's brought another stray; sex scene with two dogs)
- *   2 = Mounted   (he takes you directly; sex scene)
- *   3 = Knotted   (mounting + knotted drag aftermath)
- *   4 = Claimed   (he pins you against the wall and refuses to let you leave)
+ * Every submission leads to a mounting sex scene. After the 3rd mounting,
+ * Dogmeat shakes off his collar and offers it to the player. The player
+ * must then find a tattoo artist to engrave it: their name on the front,
+ * "Property of: Dogmeat" on the back.
+ *
+ * Collar state (dogmeat_collar_state):
+ *   0 = no collar event yet
+ *   1 = collar given, quest active (needs engraving)
+ *   2 = collar engraved and worn
  *
  * @since 0.4.11.3
- * @version 0.4.11.3
+ * @version 0.4.11.4
  */
 public class DogmeatDialogue {
 
@@ -36,16 +37,32 @@ public class DogmeatDialogue {
 		return Main.game.getNpc(Dogmeat.class);
 	}
 
-	private static FeralStrayDog getStray() {
-		return Main.game.getNpc(FeralStrayDog.class);
+	private static long getCollarState() {
+		return Main.game.getDialogueFlags().getSavedLong("dogmeat_collar_state");
 	}
 
-	/** True if this is the very first meeting with Dogmeat. */
-	private static boolean isFirstMeeting;
+	private static void setCollarState(long state) {
+		Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", state);
+	}
 
-	// -------------------------------------------------------------------------
-	// ENCOUNTER
-	// -------------------------------------------------------------------------
+	private static SMGeneric createMountingManager() {
+		return new SMGeneric(
+				Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+				Util.newArrayListOfValues(Main.game.getPlayer()),
+				null, null) {
+			@Override
+			public SexControl getSexControl(GameCharacter character) {
+				if (character.isPlayer()) {
+					return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
+				}
+				return super.getSexControl(character);
+			}
+		};
+	}
+
+	// =========================================================================
+	// ENCOUNTER (entry point)
+	// =========================================================================
 
 	public static final DialogueNode DOGMEAT_ENCOUNTER = new DialogueNode("A stray dog", ".", true) {
 
@@ -56,271 +73,189 @@ public class DogmeatDialogue {
 
 		@Override
 		public void applyPreParsingEffects() {
-			isFirstMeeting = !Main.game.getDialogueFlags().hasSavedLong("dogmeat_found");
 			Main.game.getDialogueFlags().setSavedLong("dogmeat_found", Main.game.getMinutesPassed());
-
-			if (getDogmeat().getPlayerSurrenderCount() >= 3) {
-				int eventIndex = Util.random.nextInt(5);
-				Main.game.getDialogueFlags().setSavedLong("dogmeat_event_index", eventIndex);
-
-				// Pre-spawn the pack stray so it exists when getResponse() runs
-				if (eventIndex == 1) {
-					FeralStrayDog stray = getStray();
-					stray.setLocation(Main.game.getPlayer(), true);
-				}
-			}
 		}
 
 		@Override
 		public String getContent() {
 			int count = getDogmeat().getPlayerSurrenderCount();
+			long collarState = getCollarState();
 
-			if (isFirstMeeting) {
+			// First meeting
+			if (count == 0) {
 				return "<p>"
 						+ "Rounding a corner deeper into the alley, your eye is caught by a large dog sitting in the shadows between two rubbish bins."
-						+ " It's a powerfully-built animal — broad shoulders, tan and black fur matted with the dust of Dominion's streets — watching you with steady, amber eyes."
+						+ " It's a powerfully-built animal &mdash; broad shoulders, tan and black fur matted with the dust of Dominion's streets"
+						+ " &mdash; watching you with steady, amber eyes."
 						+ "</p>"
 						+ "<p>"
-						+ "The dog doesn't growl or cower. It simply holds your gaze, tail giving one slow, measured wag, as if it has been waiting for precisely <i>you</i> to come along."
+						+ "The dog doesn't growl or cower. It simply holds your gaze, tail giving one slow, measured wag,"
+						+ " as if it has been waiting for precisely <i>you</i> to come along."
 						+ " A worn collar hangs loose around its neck, the tag too scratched to read."
 						+ "</p>"
 						+ "<p>"
-						+ "Stray dogs aren't uncommon in Dominion, but something about this one feels different — calm, intelligent, and utterly unafraid."
-						+ "</p>";
-
-			} else if (count >= 3) {
-				long eventIndex = Main.game.getDialogueFlags().getSavedLong("dogmeat_event_index");
-				String base = "<p>"
-						+ "He's waiting. That's the impression you get as you round the corner — he was already watching the entrance of the alley,"
-						+ " already knew you'd come. He rises before you've fully stopped walking, stretching once with languid confidence, then fixes you with those amber eyes."
-						+ "</p>";
-				if (eventIndex == 0) {
-					return base + "<p>"
-							+ "He pads deliberately past you toward the far end of the alley, then stops and looks back over his shoulder."
-							+ " The message is clear: <i>follow.</i>"
-							+ "</p>";
-				} else if (eventIndex == 1) {
-					return base + "<p>"
-							+ "He's not alone. A second dog — larger, with a rough grey-and-brown coat — detaches itself from the shadows behind him,"
-							+ " watching you with the same quiet, appraising intensity. Dogmeat's tail sweeps once, slow and deliberate."
-							+ "</p>"
-							+ "<p>"
-							+ "He's brought a friend."
-							+ "</p>";
-				} else if (eventIndex == 2 || eventIndex == 3) {
-					return base + "<p>"
-							+ "His gaze drops to your hips, then returns to your face. He steps closer, nostrils flaring."
-							+ " He is not here to go for a walk."
-							+ "</p>";
-				} else {
-					return base + "<p>"
-							+ "Instead of moving toward you, he simply sits, blocking your path with his bulk."
-							+ " His amber eyes are steady. Patient. He isn't going anywhere, and his posture makes it clear:"
-							+ " neither are you."
-							+ "</p>";
-				}
-
-			} else {
-				return "<p>"
-						+ "The dog is there again, sitting in the same spot between the rubbish bins."
-						+ " He spots you before you spot him — his head turns, ears pricking forward, amber eyes finding yours across the alley."
-						+ " His tail begins a slow, deliberate sweep."
-						+ "</p>"
-						+ "<p>"
-						+ "He remembers you."
+						+ "Stray dogs aren't uncommon in Dominion, but something about this one feels different"
+						+ " &mdash; calm, intelligent, and utterly unafraid."
 						+ "</p>";
 			}
+
+			// Wearing engraved collar
+			if (collarState == 2) {
+				return "<p>"
+						+ "He's there before you round the corner &mdash; you feel him first."
+						+ " A low, pleased rumble carries through the alley, and you look down to see Dogmeat"
+						+ " sitting squarely in your path, tail sweeping once across the cobblestones."
+						+ "</p>"
+						+ "<p>"
+						+ "His amber eyes find the collar around your neck immediately."
+						+ " His tag. His name. His property."
+						+ " He rises and presses his broad muzzle against the leather, inhaling once"
+						+ " &mdash; deep, satisfied, entirely possessive."
+						+ "</p>";
+			}
+
+			// Has un-engraved collar (quest active)
+			if (collarState == 1) {
+				return "<p>"
+						+ "The dog is waiting in his usual spot, amber eyes tracking you as you approach."
+						+ " His gaze lingers on your bare neck &mdash; the spot where the collar should be"
+						+ " &mdash; and a low, disapproving sound rumbles in his chest."
+						+ "</p>"
+						+ "<p>"
+						+ "You still haven't had it engraved. He knows."
+						+ "</p>";
+			}
+
+			// Returning (count >= 1, no collar yet)
+			if (count >= 3) {
+				return "<p>"
+						+ "He's waiting. That's the impression you get as you round the corner"
+						+ " &mdash; he was already watching the entrance of the alley,"
+						+ " already knew you'd come."
+						+ " He rises before you've fully stopped walking, stretching once with languid confidence,"
+						+ " then fixes you with those amber eyes."
+						+ "</p>"
+						+ "<p>"
+						+ "His gaze drops to your hips, then returns to your face. He steps closer, nostrils flaring."
+						+ " He is not here to go for a walk."
+						+ "</p>";
+			}
+
+			return "<p>"
+					+ "The dog is there again, sitting in the same spot between the rubbish bins."
+					+ " He spots you before you spot him &mdash; his head turns, ears pricking forward,"
+					+ " amber eyes finding yours across the alley."
+					+ " His tail begins a slow, deliberate sweep."
+					+ "</p>"
+					+ "<p>"
+					+ "He remembers you."
+					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			int count = getDogmeat().getPlayerSurrenderCount();
+			long collarState = getCollarState();
 
-			// ---- Bitch event responses (count >= 3) ----
-			if (count >= 3) {
-				long eventIndex = Main.game.getDialogueFlags().getSavedLong("dogmeat_event_index");
-
-				if (index == 1) {
-					// Event-specific main response
-					if (eventIndex == 0) {
-						return new Response("Follow him",
-								"Fall into step behind him and go wherever he leads."
-										+ "<br/>[style.italicsSubmissive(You follow your master through the alley...)]",
-								DOGMEAT_WALKIES,
-								Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
-								CorruptionLevel.THREE_DIRTY,
-								null, null, null) {
-							@Override
-							public void effects() {
-								getDogmeat().incrementPlayerSurrenderCount(1);
-							}
-						};
-
-					} else if (eventIndex == 1) {
-						// Pack: sex scene with Dogmeat + the stray
-						return new ResponseSex("Submit to both",
-								"Present yourself to your master and his companion, letting them take turns with you."
-										+ "<br/>[style.italicsSex(You submit to both dogs, letting them use you as they please...)]",
-								Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE, Fetish.FETISH_BESTIALITY),
-								null,
-								CorruptionLevel.FIVE_CORRUPT,
-								null, null, null,
-								true, false,
-								new SMGeneric(
-										Util.newArrayListOfValues((GameCharacter) getDogmeat(), (GameCharacter) getStray()),
-										Util.newArrayListOfValues(Main.game.getPlayer()),
-										null,
-										null) {
-									@Override
-									public SexControl getSexControl(GameCharacter character) {
-										if (character.isPlayer()) {
-											return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
-										}
-										return super.getSexControl(character);
-									}
-								},
-								DOGMEAT_AFTER_SEX,
-								"<p>"
-										+ "They close in on you together — Dogmeat at your face, his companion pressing in from behind."
-										+ " You find yourself bracketed between two large, warm bodies, each insisting on your full attention."
-										+ "</p>") {
-							@Override
-							public void effects() {
-								getDogmeat().incrementPlayerSurrenderCount(1);
-								if (!Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-									Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-								}
-							}
-						};
-
-					} else if (eventIndex == 2) {
-						// Mounted
-						return new ResponseSex("Present yourself",
-								"Get down and present yourself to him, letting him mount you."
-										+ "<br/>[style.italicsSex(You offer yourself to your master...)]",
-								Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE, Fetish.FETISH_BESTIALITY),
-								null,
-								CorruptionLevel.THREE_DIRTY,
-								null, null, null,
-								true, false,
-								new SMGeneric(
-										Util.newArrayListOfValues((GameCharacter) getDogmeat()),
-										Util.newArrayListOfValues(Main.game.getPlayer()),
-										null,
-										null) {
-									@Override
-									public SexControl getSexControl(GameCharacter character) {
-										if (character.isPlayer()) {
-											return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
-										}
-										return super.getSexControl(character);
-									}
-								},
-								DOGMEAT_AFTER_SEX,
-								"<p>"
-										+ "He mounts you heavily, his forelegs locking around your hips with practiced certainty."
-										+ " His amber eyes are focused somewhere past your head — you are a surface for him to use, and he uses you thoroughly."
-										+ "</p>") {
-							@Override
-							public void effects() {
-								getDogmeat().incrementPlayerSurrenderCount(1);
-								if (!Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-									Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-								}
-							}
-						};
-
-					} else if (eventIndex == 3) {
-						// Knotted — same sex start, different post-sex
-						return new ResponseSex("Present yourself",
-								"Get down and present yourself to him, letting him mount you fully."
-										+ "<br/>[style.italicsSex(You offer yourself to your master — there's no telling when he'll decide to let go...)]",
-								Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE, Fetish.FETISH_BESTIALITY),
-								null,
-								CorruptionLevel.FOUR_LUSTFUL,
-								null, null, null,
-								true, false,
-								new SMGeneric(
-										Util.newArrayListOfValues((GameCharacter) getDogmeat()),
-										Util.newArrayListOfValues(Main.game.getPlayer()),
-										null,
-										null) {
-									@Override
-									public SexControl getSexControl(GameCharacter character) {
-										if (character.isPlayer()) {
-											return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
-										}
-										return super.getSexControl(character);
-									}
-								},
-								DOGMEAT_KNOTTED_AFTERMATH,
-								"<p>"
-										+ "He mounts you with the same blunt confidence, driving forward until the broad knot of him catches and holds."
-										+ " He is completely still for a moment — then begins to move, slow and deliberate, utterly unhurried."
-										+ "</p>") {
-							@Override
-							public void effects() {
-								getDogmeat().incrementPlayerSurrenderCount(1);
-								if (!Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-									Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-								}
-							}
-						};
-
-					} else {
-						// Claimed
-						return new Response("Stay",
-								"Let him keep you here. Don't fight it."
-										+ "<br/>[style.italicsSubmissive(You stay where you are, because he won't let you leave anyway.)]",
-								DOGMEAT_CLAIMED,
-								Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
-								CorruptionLevel.THREE_DIRTY,
-								null, null, null) {
-							@Override
-							public void effects() {
-								getDogmeat().incrementPlayerSurrenderCount(1);
-							}
-						};
-					}
-
-				} else if (index == 2) {
-					return new Response("Push past him",
-							"Assert yourself. You're not his."
-									+ "<br/>[style.italicsSubmissive(He'll make his displeasure known — but you push through anyway.)]",
-							DOGMEAT_RESIST) {
-						@Override
-						public void effects() {
-							getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
-						}
-					};
-				}
-
-				return null;
+			// Determine post-sex destination.
+			// If this is the 3rd mounting (count == 2 before increment), trigger the collar scene.
+			DialogueNode postSex;
+			if (count == 2 && collarState == 0) {
+				postSex = DOGMEAT_COLLAR_SCENE;
+			} else {
+				postSex = DOGMEAT_AFTER_SEX;
 			}
 
-			// ---- Normal encounter responses (count < 3) ----
+			// --- Index 1: Submit / Kneel -> mounting sex ---
 			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
-							null);
+				String title;
+				String tooltip;
+				String startContent;
+
+				if (count == 0) {
+					title = "Kneel before him";
+					tooltip = "Lower yourself before the powerful stray."
+							+ " Something about those amber eyes compels you."
+							+ "<br/>[style.italicsSex(Kneeling will lead to him mounting you.)]";
+					startContent = "<p>"
+							+ "You slowly lower yourself to your knees. The dog watches you with calm, steady eyes,"
+							+ " then steps forward and sniffs along the side of your face &mdash; slow, deliberate, appraising."
+							+ "</p>"
+							+ "<p>"
+							+ "Apparently satisfied with what he finds, he circles behind you."
+							+ " His forelegs lock around your hips with sudden, startling certainty."
+							+ " There is nothing tentative about it. He mounts you like he owns you."
+							+ "</p>";
+
+				} else if (collarState == 2) {
+					title = "Present yourself";
+					tooltip = "Lower yourself before your master."
+							+ " The collar around your neck says everything."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You sink to your knees without hesitation, feeling the weight of the engraved collar"
+							+ " against your throat. His. The tag says so. You say so."
+							+ "</p>"
+							+ "<p>"
+							+ "He mounts you with the unhurried confidence of absolute ownership,"
+							+ " forelegs locking around your hips as his weight settles over you."
+							+ "</p>";
+
+				} else if (count >= 3) {
+					title = "Submit";
+					tooltip = "Lower yourself before your master."
+							+ " You both know what comes next."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You lower yourself. It's automatic now &mdash; knees to the cobblestones, head dipping."
+							+ " He's behind you before you've even settled, forelegs catching your hips,"
+							+ " broad chest pressing against your back."
+							+ " He mounts you with practised certainty."
+							+ "</p>";
+
+				} else {
+					title = "Kneel before him";
+					tooltip = "Lower yourself before the powerful stray again, offering your submission."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You kneel. His ears prick forward &mdash; he remembers this."
+							+ " He circles you once, then mounts you from behind without preamble,"
+							+ " forelegs locking around your hips with the same blunt authority as before."
+							+ "</p>";
 				}
-				return new Response("Take him",
-						"Crouch down and call the dog over. Invite him to travel with you.",
-						DOGMEAT_ADOPTED) {
+
+				return new ResponseSex(title, tooltip,
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.THREE_DIRTY,
+						null, null, null,
+						true, false,
+						createMountingManager(),
+						postSex,
+						startContent) {
 					@Override
 					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setLocation(Main.game.getPlayer(), true);
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
+						getDogmeat().incrementPlayerSurrenderCount(1);
 					}
 				};
 			}
 
-			if (index == 2) {
-				return new Response("Leave him",
-						"Leave the dog where he is and continue through the alley.",
+			// --- Index 2: Get collar engraved (only when quest active) ---
+			if (index == 2 && collarState == 1) {
+				return new Response("Get it engraved",
+						"Seek out a tattoo artist in the back streets to have the collar re-engraved."
+								+ "<br/>[style.italicsQuest(Your name on the front. 'Property of: Dogmeat' on the back.)]"
+								+ "<br/>[style.italicsMoney(This will cost 200 flames.)]",
+						DOGMEAT_TATTOOIST);
+			}
+
+			// --- Leave ---
+			int leaveIdx = (collarState == 1) ? 3 : 2;
+			if (index == leaveIdx) {
+				return new Response("Leave",
+						count >= 3
+								? "Walk away &mdash; if he lets you."
+								: "Leave the dog and continue through the alley.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
@@ -329,76 +264,16 @@ public class DogmeatDialogue {
 				};
 			}
 
-			if (index == 3) {
-				String title = count >= 3 ? "Kneel (his bitch)" : "Kneel before him";
-				String tooltip;
-				if (count >= 3) {
-					tooltip = "Lower yourself before your master, as you've come to know is your place."
-							+ "<br/>[style.italicsSex(You are his. You both know it.)]";
-				} else if (count == 2) {
-					tooltip = "Lower yourself before the powerful stray, offering your submission."
-							+ "<br/>[style.italicsSubmissive(You kneel before the dog, showing him he is dominant over you.)]"
-							+ "<br/>[style.italicsSex(A third act of submission will confirm your place as his.)]";
-				} else {
-					tooltip = "Lower yourself before the powerful stray, offering your submission."
-							+ "<br/>[style.italicsSubmissive(You kneel before the dog, showing him he is dominant over you.)]";
-				}
-				return new Response(title, tooltip, DOGMEAT_KNEEL,
-						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
-						CorruptionLevel.TWO_MESSY,
-						null, null, null) {
+			// --- Push past (count >= 3 only) ---
+			int resistIdx = (collarState == 1) ? 4 : 3;
+			if (index == resistIdx && count >= 3) {
+				return new Response("Push past him",
+						"Assert yourself. You're not his &mdash; not today."
+								+ "<br/>[style.italicsMinorBad(He won't be happy about this.)]",
+						DOGMEAT_RESIST) {
 					@Override
 					public void effects() {
-						getDogmeat().incrementPlayerSurrenderCount(1);
-						if (getDogmeat().getPlayerSurrenderCount() >= 3) {
-							Main.game.getDialogueFlags().setSavedLong("dogmeat_is_bitch", 1);
-						}
-						// Introduce the bestiality fetish organically on first submission
-						if (getDogmeat().getPlayerSurrenderCount() == 1
-								&& !Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-							Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-						}
-						getDogmeat().setLocation(Main.game.getPlayer(), true);
-					}
-				};
-			}
-
-			if (index == 4 && count >= 3) {
-				return new ResponseSex("Offer yourself",
-						"Present yourself to your master, letting him take you as he pleases."
-								+ "<br/>[style.italicsSex(You offer your body to the powerful dog, submitting to him completely...)]",
-						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
-						null,
-						CorruptionLevel.THREE_DIRTY,
-						null, null, null,
-						true, false,
-						new SMGeneric(
-								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
-								Util.newArrayListOfValues(Main.game.getPlayer()),
-								null,
-								null) {
-							@Override
-							public SexControl getSexControl(GameCharacter character) {
-								if (character.isPlayer()) {
-									return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
-								}
-								return super.getSexControl(character);
-							}
-						},
-						DOGMEAT_AFTER_SEX,
-						"<p>"
-								+ "The dog's nostrils flare as you lower yourself before him, his amber eyes sharpening with sudden, possessive interest."
-								+ " He moves to you without hesitation, nosing along your neck — deliberate, claiming, entirely assured of his right to you."
-								+ "</p>"
-								+ "<p>"
-								+ "This is what you are to him now."
-								+ "</p>") {
-					@Override
-					public void effects() {
-						getDogmeat().setLocation(Main.game.getPlayer(), true);
-						if (!Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-							Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-						}
+						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
 					}
 				};
 			}
@@ -407,11 +282,11 @@ public class DogmeatDialogue {
 		}
 	};
 
-	// -------------------------------------------------------------------------
-	// KNEEL
-	// -------------------------------------------------------------------------
+	// =========================================================================
+	// AFTER SEX (generic post-sex)
+	// =========================================================================
 
-	public static final DialogueNode DOGMEAT_KNEEL = new DialogueNode("Kneeling", ".", false) {
+	public static final DialogueNode DOGMEAT_AFTER_SEX = new DialogueNode("Aftermath", ".", false) {
 
 		@Override
 		public int getSecondsPassed() {
@@ -420,179 +295,20 @@ public class DogmeatDialogue {
 
 		@Override
 		public String getContent() {
-			int count = getDogmeat().getPlayerSurrenderCount();
-			if (count >= 3) {
-				return "<p>"
-						+ "You've done this enough times that lowering yourself before him feels almost natural."
-						+ " He moves to you immediately, no hesitation, pressing the full weight of his broad muzzle against the top of your head."
-						+ " A low sound rumbles in his chest — not a growl, but something deeper. A rumble of possession."
-						+ "</p>"
-						+ "<p>"
-						+ "You stay there a long moment, fully aware of what this has become."
-						+ " He has claimed you, in whatever way a dog can claim a person."
-						+ " When you finally look up at those steady amber eyes, something about it feels permanent."
-						+ "</p>";
+			long collarState = getCollarState();
 
-			} else if (count == 2) {
+			if (collarState == 2) {
 				return "<p>"
-						+ "His amber eyes fix on you the moment you start to lower yourself, as if he expected it."
-						+ " He doesn't rush — just waits, tail giving one slow, steady sweep, as you come to your knees before him."
-						+ " He presses his broad muzzle to your cheek and exhales warm breath against your skin, then steps back, satisfied."
-						+ "</p>"
-						+ "<p>"
-						+ "Something in his gaze has shifted. He looks at you differently now — like something that belongs to him."
-						+ "</p>";
-
-			} else {
-				return "<p>"
-						+ "You slowly lower yourself to your knees before the powerful dog."
-						+ " He watches you with calm, steady eyes as you bow your head, then steps forward to sniff along the side of your face."
-						+ " After a long moment, he drags his broad tongue from your chin to your forehead — slow, deliberate, claiming."
-						+ "</p>"
-						+ "<p>"
-						+ "You stay there, heart pounding, until he steps back and sits. He watches you with those amber eyes,"
-						+ " as if gauging what you'll do next."
+						+ "He steps back, panting softly, and nudges the tag hanging from your collar with his nose."
+						+ " Satisfied. His property, used as his property should be."
+						+ " His tail sweeps the cobblestones in slow, possessive arcs."
 						+ "</p>";
 			}
-		}
 
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			int count = getDogmeat().getPlayerSurrenderCount();
-
-			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
-							null);
-				}
-				String adoptTitle = count >= 3 ? "Follow him" : "Take him";
-				String adoptTooltip = count >= 3
-						? "Fall into step behind him. He leads; you follow."
-						: "He's clearly taken a liking to you. Invite him to travel with you.";
-				return new Response(adoptTitle, adoptTooltip, DOGMEAT_ADOPTED) {
-					@Override
-					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
-					}
-				};
-			}
-
-			if (index == 2) {
-				return new Response("Leave him",
-						"Leave the dog here and continue on your way.",
-						Main.game.getDefaultDialogue(false)) {
-					@Override
-					public void effects() {
-						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
-					}
-				};
-			}
-
-			if (index == 3 && count >= 3) {
-				return new ResponseSex("Offer yourself",
-						"Present yourself to your master, letting him take you as he pleases."
-								+ "<br/>[style.italicsSex(You offer your body to him, submitting to him completely...)]",
-						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
-						null,
-						CorruptionLevel.THREE_DIRTY,
-						null, null, null,
-						true, false,
-						new SMGeneric(
-								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
-								Util.newArrayListOfValues(Main.game.getPlayer()),
-								null,
-								null) {
-							@Override
-							public SexControl getSexControl(GameCharacter character) {
-								if (character.isPlayer()) {
-									return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
-								}
-								return super.getSexControl(character);
-							}
-						},
-						DOGMEAT_AFTER_SEX,
-						"<p>"
-								+ "The dog's nostrils flare as you position yourself for him, his amber eyes sharpening with sudden, possessive intent."
-								+ " He moves to you without hesitation — deliberate, assured of his right to you."
-								+ "</p>") {
-					@Override
-					public void effects() {
-						getDogmeat().setLocation(Main.game.getPlayer(), true);
-						if (!Main.game.getPlayer().hasFetish(Fetish.FETISH_BESTIALITY)) {
-							Main.game.getPlayer().addFetish(Fetish.FETISH_BESTIALITY);
-						}
-					}
-				};
-			}
-
-			return null;
-		}
-	};
-
-	// -------------------------------------------------------------------------
-	// ADOPTION
-	// -------------------------------------------------------------------------
-
-	public static final DialogueNode DOGMEAT_ADOPTED = new DialogueNode("New companion", ".", false) {
-
-		@Override
-		public int getSecondsPassed() {
-			return 0;
-		}
-
-		@Override
-		public String getContent() {
-			if (getDogmeat().getPlayerSurrenderCount() >= 3) {
-				return "<p>"
-						+ "You rise and take a step. He's already moving."
-						+ " He falls into step just ahead of you — not beside you, but leading — glancing back once to make sure you're following."
-						+ "</p>"
-						+ "<p>"
-						+ "<b>Dogmeat</b> has joined your party."
-						+ "</p>";
-			}
-			return "<p>"
-					+ "You crouch down and hold out your hand."
-					+ " The dog sniffs it once, then pushes its broad head firmly against your palm."
-					+ "</p>"
-					+ "<p>"
-					+ "You scratch behind his ears and he leans into it with full canine commitment."
-					+ " When you stand and start walking, he falls into step beside you without hesitation —"
-					+ " as if he's been your companion for years."
-					+ "</p>"
-					+ "<p>"
-					+ "<b>Dogmeat</b> has joined your party."
-					+ "</p>";
-		}
-
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			if (index == 1) {
-				return new Response("Continue", "Head onward with your new companion.", Main.game.getDefaultDialogue(false));
-			}
-			return null;
-		}
-	};
-
-	// -------------------------------------------------------------------------
-	// AFTER SEX
-	// -------------------------------------------------------------------------
-
-	public static final DialogueNode DOGMEAT_AFTER_SEX = new DialogueNode("Aftermath", ".", false) {
-
-		@Override
-		public int getSecondsPassed() {
-			return 0;
-		}
-
-		@Override
-		public String getContent() {
 			return "<p>"
 					+ "The dog steps back, panting softly, tail wagging in slow, satisfied sweeps."
-					+ " He regards you with those calm amber eyes — no judgement, no expectation, only the quiet, uncomplicated warmth of a dog who has gotten exactly what he wanted."
+					+ " He regards you with those calm amber eyes &mdash; no judgement, only the quiet warmth"
+					+ " of an animal who has gotten exactly what he wanted."
 					+ "</p>"
 					+ "<p>"
 					+ "He nudges your hand with his broad muzzle, then sits, watching to see what you'll do next."
@@ -602,26 +318,8 @@ public class DogmeatDialogue {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
-							null);
-				}
-				return new Response("Take him",
-						"He's clearly taken a liking to you. Invite him to travel with you.",
-						DOGMEAT_ADOPTED) {
-					@Override
-					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
-					}
-				};
-			}
-
-			if (index == 2) {
-				return new Response("Leave him",
-						"Leave the dog here and continue on your way.",
+				return new Response("Continue",
+						"Continue on your way.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
@@ -629,65 +327,58 @@ public class DogmeatDialogue {
 					}
 				};
 			}
-
 			return null;
 		}
 	};
 
-	// -------------------------------------------------------------------------
-	// EVENT: WALKIES
-	// -------------------------------------------------------------------------
+	// =========================================================================
+	// COLLAR SCENE (after 3rd mounting)
+	// =========================================================================
 
-	public static final DialogueNode DOGMEAT_WALKIES = new DialogueNode("Walkies", ".", false) {
+	public static final DialogueNode DOGMEAT_COLLAR_SCENE = new DialogueNode("The collar", ".", false) {
 
 		@Override
 		public int getSecondsPassed() {
-			return 20 * 60;
+			return 5 * 60;
 		}
 
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "You follow him. There's nothing else to do — he moves with quiet authority, pausing now and then"
-					+ " to ensure you're keeping up, his amber gaze sweeping back with the calm expectation of something that has"
-					+ " never once considered the possibility of being disobeyed."
+					+ "He steps back from you, panting softly, and shakes himself."
+					+ " Then, with a sudden, violent wrench of his head, something flies loose &mdash;"
+					+ " his collar."
+					+ " The worn leather strap skids across the cobblestones and lands at your feet,"
+					+ " its metal tag glinting dully in the light."
 					+ "</p>"
 					+ "<p>"
-					+ "He leads you in a long, circuitous route through the back alleys. Past the rubbish bins, around a crumbling"
-					+ " wall, along the shadowed edge of a courtyard. At one point a pair of street merchants glance over and"
-					+ " watch you follow a large dog in thoughtful silence. You don't meet their eyes."
+					+ "He sits. Looks at the collar. Looks at you."
+					+ " His nose drops and pushes it deliberately toward your hand."
+					+ " Then he sits back and watches, amber eyes steady and expectant."
 					+ "</p>"
 					+ "<p>"
-					+ "Eventually he circles back to his usual spot. He sits. Looks at you. His tail sweeps once across the"
-					+ " cobblestones — satisfied, unhurried, completely assured of where the two of you stand."
+					+ "You understand. He doesn't want it back."
+					+ " He wants <i>you</i> to wear it."
+					+ "</p>"
+					+ "<p>"
+					+ "The tag is scratched beyond legibility &mdash; it'll need to be re-engraved."
+					+ " Your name on the front. And on the back..."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(Find a tattoo artist to engrave the collar:"
+					+ " your name on the front, 'Property of: Dogmeat' on the back.)]"
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
-							null);
-				}
-				return new Response("Take him",
-						"After that little walk, bringing him along feels natural.",
-						DOGMEAT_ADOPTED) {
-					@Override
-					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
-					}
-				};
-			}
-			if (index == 2) {
-				return new Response("Leave him",
-						"Go your separate ways — for now.",
+				return new Response("Pick it up",
+						"Take the collar. You know what it means.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
+						setCollarState(1);
 						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
 					}
 				};
@@ -696,11 +387,11 @@ public class DogmeatDialogue {
 		}
 	};
 
-	// -------------------------------------------------------------------------
-	// EVENT: CLAIMED
-	// -------------------------------------------------------------------------
+	// =========================================================================
+	// TATTOOIST (collar engraving)
+	// =========================================================================
 
-	public static final DialogueNode DOGMEAT_CLAIMED = new DialogueNode("Claimed", ".", false) {
+	public static final DialogueNode DOGMEAT_TATTOOIST = new DialogueNode("The tattooist", ".", false) {
 
 		@Override
 		public int getSecondsPassed() {
@@ -710,43 +401,53 @@ public class DogmeatDialogue {
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "He doesn't move from the spot he's chosen. He simply sits across your path and waits — massive, warm, and completely immovable."
-					+ " When you try to edge around him, he shifts without effort, blocking your route again. He's not threatening."
-					+ " He doesn't need to threaten. He just doesn't let you leave."
+					+ "You don't have to look far."
+					+ " A few twists deeper into the back alleys and you find what you need:"
+					+ " a narrow shopfront wedged between two crumbling tenements, its sign reading"
+					+ " <i>'Needlework &mdash; Tattoos, Engravings, Body Art'</i> in peeling letters."
 					+ "</p>"
 					+ "<p>"
-					+ "You end up sitting with your back against the alley wall, Dogmeat pressed solidly against your side. His breathing"
-					+ " slows. He is spectacularly comfortable. This is, apparently, what he wanted: you, here, not going anywhere."
-					+ " His property, resting where his property belongs."
+					+ "Inside, a bored-looking artisan glances up from a workbench cluttered with inks and implements."
+					+ " You set the worn leather collar on the counter."
 					+ "</p>"
 					+ "<p>"
-					+ "Eventually — on his schedule, not yours — he rises, stretches, and pads aside. You're free to go."
-					+ " He watches you leave with the expression of someone who knows exactly where you'll be the next time he wants you."
+					+ "\"I need this engraved. My name on the front. <i>Property of: Dogmeat</i> on the back.\""
+					+ "</p>"
+					+ "<p>"
+					+ "The artisan picks up the collar, turns it over, and gives you a long, appraising look."
+					+ " Whatever they're thinking, they keep it to themselves."
+					+ "</p>"
+					+ "<p>"
+					+ "\"Two hundred flames. Take a seat.\""
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
+				if (Main.game.getPlayer().getMoney() < 200) {
+					return new Response("Pay ([style.moneyFormat(200, span)])",
+							"You don't have enough money for the engraving.",
 							null);
 				}
-				return new Response("Follow him",
-						"You're going to end up following him anyway. May as well make it official.",
-						DOGMEAT_ADOPTED) {
+				return new Response("Pay ([style.moneyFormat(200, span)])",
+						"Pay the tattooist 200 flames to engrave the collar.",
+						DOGMEAT_COLLAR_WORN) {
 					@Override
 					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
+						Main.game.getPlayer().incrementMoney(-200);
+						setCollarState(2);
+						Main.game.getPlayer().equipClothingFromNowhere(
+								Main.game.getItemGen().generateClothing(
+										"innoxia_neck_dogmeat_collar_engraved",
+										PresetColour.CLOTHING_BLACK, false),
+								true, Main.game.getPlayer());
 					}
 				};
 			}
 			if (index == 2) {
-				return new Response("Go your way",
-						"Take your leave — now that he's given you permission.",
+				return new Response("Not yet",
+						"You're not ready. Head back.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
@@ -758,58 +459,55 @@ public class DogmeatDialogue {
 		}
 	};
 
-	// -------------------------------------------------------------------------
-	// EVENT: KNOTTED AFTERMATH
-	// -------------------------------------------------------------------------
+	// =========================================================================
+	// COLLAR WORN (engraving complete)
+	// =========================================================================
 
-	public static final DialogueNode DOGMEAT_KNOTTED_AFTERMATH = new DialogueNode("Knotted", ".", false) {
+	public static final DialogueNode DOGMEAT_COLLAR_WORN = new DialogueNode("Collared", ".", false) {
 
 		@Override
 		public int getSecondsPassed() {
-			return 15 * 60;
+			return 10 * 60;
 		}
 
 		@Override
 		public String getContent() {
+			String playerName = Main.game.getPlayer().getName();
+
 			return "<p>"
-					+ "He doesn't slow. Doesn't wait. The moment his finish overtakes him, the knot swells thick and unyielding,"
-					+ " locking the two of you together. You are not going anywhere. He seems completely at peace with this."
+					+ "You watch in silence as the artisan works &mdash; fine tools tracing careful lines into the metal tag."
+					+ " It doesn't take long."
+					+ " When they hand the collar back, the engraving catches the light:"
+					+ "</p>"
+					+ "<p style='text-align:center;'>"
+					+ "<i>Front: " + playerName + "</i>"
+					+ "<br/>"
+					+ "<i>Back: Property of: Dogmeat</i>"
 					+ "</p>"
 					+ "<p>"
-					+ "He begins to move — not urgently, but with an unhurried, possessive confidence — dragging you with him"
-					+ " as he paces a short distance across the alley. You have no choice but to scramble along with him, bent"
-					+ " and ungainly, his property on a very intimate leash. He stops, shifts, drags you back the other way."
-					+ " He is not trying to go anywhere in particular. He is just reminding you of the arrangement."
+					+ "You fasten it around your neck."
+					+ " The leather is warm from the work, the tag resting against your collarbone."
+					+ " It fits perfectly. Of course it does."
 					+ "</p>"
 					+ "<p>"
-					+ "After a long stretch of this — long enough that your knees are sore and your face is hot — he finally"
-					+ " stills. The swelling eases slowly. When it releases, he steps away without ceremony, tail swinging once."
-					+ " He sits and looks at you with those amber eyes, entirely satisfied with himself."
+					+ "When you step back into the alley, he's there &mdash; as if he never left."
+					+ " His amber eyes find the collar instantly."
+					+ " He rises, crosses to you in three long strides,"
+					+ " and presses his muzzle against the tag, inhaling deeply."
+					+ "</p>"
+					+ "<p>"
+					+ "His tail begins to wag. Slow. Possessive. Utterly satisfied."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(Quest complete: Dogmeat's collar has been engraved and is now yours to wear.)]"
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				if (!Main.game.getPlayer().canHaveMoreCompanions()) {
-					return new Response("Take him",
-							"You'd love to bring this dog along, but your party is already full.",
-							null);
-				}
-				return new Response("Take him",
-						"After that, leaving him behind feels unlikely.",
-						DOGMEAT_ADOPTED) {
-					@Override
-					public void effects() {
-						Dogmeat dogmeat = getDogmeat();
-						dogmeat.setPlayerKnowsName(true);
-						Main.game.getPlayer().addCompanion(dogmeat);
-					}
-				};
-			}
-			if (index == 2) {
-				return new Response("Leave him",
-						"Stagger off and pretend this alley doesn't exist.",
+				return new Response("Continue",
+						"Continue on your way &mdash; wearing Dogmeat's collar.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
@@ -821,9 +519,9 @@ public class DogmeatDialogue {
 		}
 	};
 
-	// -------------------------------------------------------------------------
-	// RESIST
-	// -------------------------------------------------------------------------
+	// =========================================================================
+	// RESIST (pushing past him)
+	// =========================================================================
 
 	public static final DialogueNode DOGMEAT_RESIST = new DialogueNode("Pushing back", ".", false) {
 
@@ -835,12 +533,16 @@ public class DogmeatDialogue {
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "You step forward. He shifts to block you. You step again — firmly, with intent — and press past him."
-					+ " He lets out a low, displeased sound, deep in his chest, and for a moment his amber eyes are very sharp."
+					+ "You step forward. He shifts to block you."
+					+ " You step again &mdash; firmly, with intent &mdash; and press past him."
+					+ " He lets out a low, displeased sound, deep in his chest,"
+					+ " and for a moment his amber eyes are very sharp."
 					+ "</p>"
 					+ "<p>"
-					+ "But he doesn't stop you. He watches you go with the patient, unhurried look of something that has all the time"
-					+ " in the world. Whatever this cost you in his estimation, he's already decided you'll be back."
+					+ "But he doesn't stop you."
+					+ " He watches you go with the patient, unhurried look of something"
+					+ " that has all the time in the world."
+					+ " Whatever this cost you in his estimation, he's already decided you'll be back."
 					+ "</p>"
 					+ "<p>"
 					+ "He's probably right."
