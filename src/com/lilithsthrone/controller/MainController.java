@@ -1740,6 +1740,8 @@ public class MainController implements Initializable {
 			MiscController.initFamilyRenameListeners();
 		} else if (currentNode.equals(GiftDialogue.GIFT_DIALOGUE)) {
 			MiscController.initGiftListeners();
+		} else if (currentNode.equals(com.lilithsthrone.game.dialogue.utils.PortalDialogue.PORTAL_MANAGE)) {
+			MiscController.initPortalListeners();
 		} else if (currentNode.getDialogueNodeType() == DialogueNodeType.INVENTORY) {
 			if (currentNode.equals(InventoryDialogue.DYE_CLOTHING)
 					|| currentNode.equals(InventoryDialogue.DYE_CLOTHING_CHARACTER_CREATION)

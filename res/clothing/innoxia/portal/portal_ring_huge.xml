@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>5000</value>
+		<determiner><![CDATA[a]]></determiner>
+		<name appendColourName="false"><![CDATA[huge portal ring]]></name>
+		<namePlural pluralByDefault="false" appendColourName="false"><![CDATA[huge portal rings]]></namePlural>
+		<description><![CDATA[An enormous ring of arcane alloy, wide enough to encircle a torso or a chest. The inner surface is lined with runes that pulse softly with contained power. When linked to a remote portal, the body section it encircles appears to vanish at this end — the top or bottom half of the torso, or the entire chest — emerging at the remote location. The result is severely restrictive, as the missing section is simply... elsewhere.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>ANDROGYNOUS</femininity>
+		<equipSlots>
+			<slot>TORSO_UNDER</slot>
+			<slot>CHEST</slot>
+		</equipSlots>
+		<rarity>LEGENDARY</rarity>
+		<imageName>portal_ring_huge.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="TORSO_UNDER">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>ARMS_UP_TO_SHOULDER</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="CHEST">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>CHEST</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts>
+					<bodyPart>BREASTS</bodyPart>
+					<bodyPart>NIPPLES</bodyPart>
+				</blockedBodyParts>
+				<clothingAccessBlocked>
+					<clothingAccess>CHEST</clothingAccess>
+				</clothingAccessBlocked>
+				<concealedSlots values="CONCEALED_PARTIAL_TORSO"/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_SILVER</colour>
+			<colour>CLOTHING_GOLD</colour>
+			<colour>CLOTHING_BLACK</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours/>
+		<secondaryColoursDye/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>SOLD_BY_FINCH</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		Restrictive portal locations — output only.
+		TORSO (maps to TORSO_UNDER slot) – portal amputates half the torso
+		CHEST (maps to CHEST slot)       – portal amputates the chest/breasts
+	-->
+	<portalLocationConfig bodyArea="TORSO" enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="CHEST" enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(step)] through the huge portal ring. As it activates, a significant portion of [npc.her] body seems to vanish into the shimmering aperture, the effect deeply disorienting.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(guide)] the huge portal ring into position around [npc2.namePos] body. The arcane aperture engulfs the relevant section, which promptly disappears from view.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(force)] the huge portal ring around [npc2.namePos] body.]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(remove)] the huge portal ring. The missing portion of [npc.her] body reappears with a disorienting lurch as the portal collapses.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(slide)] the huge portal ring off [npc2.name], [npc2.her] displaced body section snapping back into existence.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(yank)] the huge portal ring off [npc2.name].]]></otherRough>
+	</displacementText>
+</clothing>

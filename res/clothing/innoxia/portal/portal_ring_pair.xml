@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>2200</value>
+		<determiner><![CDATA[a pair of]]></determiner>
+		<name appendColourName="false"><![CDATA[portal ring pair]]></name>
+		<namePlural pluralByDefault="true" appendColourName="false"><![CDATA[portal ring pairs]]></namePlural>
+		<description><![CDATA[A matched pair of slender arcane rings, connected by an invisible resonance bond. Each ring bears the same portal ID but opens a separate aperture where placed. They can be worn on nipples, crotch-nipples, or fingers. Link them to a remote portal to transmit sensation — or penetration — through their shimmering surfaces.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>ANDROGYNOUS</femininity>
+		<equipSlots>
+			<slot>NIPPLE</slot>
+			<slot>FINGER</slot>
+		</equipSlots>
+		<rarity>RARE</rarity>
+		<imageName>portal_ring_pair.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="NIPPLE">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>CHEST</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="FINGER">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>WRIST</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_SILVER</colour>
+			<colour>CLOTHING_GOLD</colour>
+			<colour>CLOTHING_BLACK</colour>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours/>
+		<secondaryColoursDye/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>ENABLE_SEX_EQUIP</tag>
+			<tag>SOLD_BY_KATE</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		Portal locations for each possible slot:
+		NIPPLE       – input/output (nipple rings)
+		CROTCH_NIPPLE– input/output (crotch-nipple rings)
+		FINGER       – input/output (finger rings)
+	-->
+	<portalLocationConfig bodyArea="NIPPLE"       enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="CROTCH_NIPPLE" enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="FINGER"       enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(slip)] the portal ring pair into place, both apertures shimmering open in tandem.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(place)] the portal ring pair on [npc2.name], the twin apertures activating with a soft glow.]]></other>
+		<otherRough><![CDATA[[npc.Name] [npc.verb(push)] the portal ring pair into place on [npc2.name].]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(remove)] the portal ring pair, the twin apertures winking out.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(take)] the portal ring pair off [npc2.name].]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(pull)] the portal ring pair free from [npc2.name].]]></otherRough>
+	</displacementText>
+</clothing>

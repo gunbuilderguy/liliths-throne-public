@@ -44,6 +44,8 @@ import com.lilithsthrone.game.inventory.ColourReplacement;
 import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.inventory.ItemTag;
 import com.lilithsthrone.game.inventory.Rarity;
+import com.lilithsthrone.game.inventory.portal.PortalItemData;
+import com.lilithsthrone.game.inventory.portal.PortalManager;
 import com.lilithsthrone.game.inventory.enchanting.AbstractItemEffectType;
 import com.lilithsthrone.game.inventory.enchanting.ItemEffect;
 import com.lilithsthrone.game.inventory.enchanting.ItemEffectType;
@@ -85,7 +87,10 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 	protected String hiddenName; // Used for when an enchantment is revealed
 	
 	private List<DisplacementType> displacedList;
-	
+
+	/** Portal data; {@code null} for non-portal clothing types. */
+	private PortalItemData portalData;
+
 	public AbstractClothing(AbstractClothingType clothingType, List<Colour> colours, boolean allowRandomEnchantment) {
 		super(clothingType.getName(),
 				clothingType.getNamePlural(),
@@ -121,6 +126,14 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		handleStickerCreation();
 
 		displacedList = new ArrayList<>();
+
+		// Initialise portal data if this clothing type defines portal locations
+		if (!clothingType.getPortalLocationConfigs().isEmpty()) {
+			this.portalData = new PortalItemData(clothingType.getPortalLocationConfigs());
+			PortalManager.register(this);
+		} else {
+			this.portalData = null;
+		}
 
 		if(allowRandomEnchantment
 				&& getClothingType().getRarity()!=Rarity.LEGENDARY
@@ -268,7 +281,15 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 
 	public AbstractClothing(AbstractClothing clothing) {
 		this(clothing.getClothingType(), clothing.getColours(), clothing.getEffects());
-		
+
+		// The chained constructor does not initialise portal data.
+		// Copy the original's portal data and update the registry so the copy
+		// (which replaces the original) is the registered item.
+		this.portalData = clothing.portalData;
+		if (this.portalData != null) {
+			PortalManager.register(this);
+		}
+
 		this.setEnchantmentKnown(null, clothing.isEnchantmentKnown());
 		this.setHiddenName(clothing.getHiddenName());
 		
@@ -505,7 +526,11 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 				XMLUtil.addAttribute(doc, displacementType, "value", dt.toString());
 			}
 		}
-		
+
+		if (portalData != null) {
+			portalData.saveAsXML(element, doc);
+		}
+
 		return element;
 	}
 	
@@ -989,10 +1014,30 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 			}
 		} catch(Exception ex) {
 		}
-		
+
+		// Try to load portal data:
+		try {
+			if (!clothing.getClothingType().getPortalLocationConfigs().isEmpty()) {
+				org.w3c.dom.Element portalEl = (org.w3c.dom.Element)
+						parentElement.getElementsByTagName("portalData").item(0);
+				if (portalEl != null) {
+					clothing.portalData = PortalItemData.loadFromXML(
+							portalEl, clothing.getClothingType().getPortalLocationConfigs());
+				} else {
+					// No saved portal data – create fresh (item generated before portal system)
+					clothing.portalData = new PortalItemData(
+							clothing.getClothingType().getPortalLocationConfigs());
+				}
+				PortalManager.register(clothing);
+			}
+		} catch(Exception ex) {
+			System.err.println("Warning: Failed to load portal data for clothing ("
+					+ parentElement.getAttribute("id") + "): " + ex.getMessage());
+		}
+
 		return clothing;
 	}
-	
+
 	/**
 	 * Returns the id of a pattern that the clothing has.
 	 * @return
@@ -2356,6 +2401,14 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 	
 	public void clearDisplacementList() {
 		displacedList.clear();
+	}
+
+	/**
+	 * Returns the portal data for this clothing item, or {@code null} if this
+	 * is not a portal item.
+	 */
+	public PortalItemData getPortalData() {
+		return portalData;
 	}
 
 	public boolean isEnchantmentKnown() {

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>1800</value>
+		<determiner><![CDATA[a]]></determiner>
+		<name appendColourName="false"><![CDATA[small portal ring]]></name>
+		<namePlural pluralByDefault="false" appendColourName="false"><![CDATA[small portal rings]]></namePlural>
+		<description><![CDATA[A small ring made from a lustrous arcane metal, its inner surface engraved with flowing sigils. Small enough to fit at — or within — an intimate orifice or around a penis. When equipped, a shimmering portal aperture forms at the ring's opening, ready to be linked to a remote portal item.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>ANDROGYNOUS</femininity>
+		<equipSlots>
+			<slot>PENIS</slot>
+			<slot>VAGINA</slot>
+			<slot>ANUS</slot>
+		</equipSlots>
+		<rarity>RARE</rarity>
+		<imageName>portal_ring_small.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="PENIS">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>GROIN</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="VAGINA">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>GROIN</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="ANUS">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>GROIN</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_SILVER</colour>
+			<colour>CLOTHING_GOLD</colour>
+			<colour>CLOTHING_BLACK</colour>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours/>
+		<secondaryColoursDye/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>ENABLE_SEX_EQUIP</tag>
+			<tag>SOLD_BY_FINCH</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		The portal location is determined by which slot the ring is equipped to.
+		PENIS  – input/output (cock ring variant)
+		VAGINA – output only  (vaginal ring variant)
+		ANUS   – output only  (anal ring variant)
+		The XML config lists all possibilities; only the equipped slot's area is
+		meaningful at runtime. The game tracks slotEquippedTo on AbstractClothing.
+	-->
+	<portalLocationConfig bodyArea="PENIS"  enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="VAGINA" enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="ANUS"   enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(slip)] the small portal ring into place, the sigils flaring briefly as the portal aperture opens.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(ease)] the small portal ring onto [npc2.namePos] body, the arcane aperture humming to life.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(push)] the small portal ring into place on [npc2.name].]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(remove)] the small portal ring, the aperture winking out as it comes free.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(slide)] the small portal ring off [npc2.name], the portal closing.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(pull)] the small portal ring free from [npc2.name].]]></otherRough>
+	</displacementText>
+</clothing>

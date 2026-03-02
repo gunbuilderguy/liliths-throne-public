@@ -44,6 +44,7 @@ import com.lilithsthrone.game.dialogue.utils.GiftDialogue;
 import com.lilithsthrone.game.dialogue.utils.MapTravelType;
 import com.lilithsthrone.game.dialogue.utils.MiscDialogue;
 import com.lilithsthrone.game.dialogue.utils.PhoneDialogue;
+import com.lilithsthrone.game.dialogue.utils.PortalDialogue;
 import com.lilithsthrone.game.dialogue.utils.SpellManagement;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.inventory.ColourReplacement;
@@ -1325,6 +1326,119 @@ public class MiscController {
 		}
 	
 	}
-	
-	
+
+
+	/**
+	 * Set up event listeners for the Portal Manager dialogue
+	 * ({@link PortalDialogue#PORTAL_MANAGE}).
+	 */
+	public static void initPortalListeners() {
+		if (PortalDialogue.managedClothing == null
+				|| PortalDialogue.managedClothing.getPortalData() == null) {
+			return;
+		}
+
+		// ---- Rename confirm ----
+		String renameId = PortalDialogue.BTN_RENAME_CONFIRM;
+		if (MainController.document.getElementById(renameId) != null) {
+			((EventTarget) MainController.document.getElementById(renameId))
+					.addEventListener("click", e -> {
+				String inputId = PortalDialogue.INPUT_NAME;
+				if (Main.mainController.getWebEngine().executeScript(
+						"document.getElementById('" + inputId + "')") != null) {
+					Main.mainController.getWebEngine().executeScript(
+							"document.getElementById('" + PortalDialogue.HIDDEN_FIELD
+							+ "').innerHTML=document.getElementById('" + inputId + "').value;");
+					org.w3c.dom.Document doc = Main.mainController.getWebEngine().getDocument();
+					if (doc != null) {
+						String newName = doc.getElementById(PortalDialogue.HIDDEN_FIELD).getTextContent();
+						PortalDialogue.applyRename(newName);
+					}
+				}
+			}, false);
+		}
+
+		// ---- Regen ID ----
+		String regenId = PortalDialogue.BTN_REGEN_ID;
+		if (MainController.document.getElementById(regenId) != null) {
+			((EventTarget) MainController.document.getElementById(regenId))
+					.addEventListener("click", e -> PortalDialogue.applyRegenId(), false);
+		}
+
+		// ---- Per-location buttons ----
+		com.lilithsthrone.game.inventory.portal.PortalItemData data =
+				PortalDialogue.managedClothing.getPortalData();
+		for (int i = 0; i < data.getLocationCount(); i++) {
+			final int locIndex = i;
+
+			// Toggle enabled
+			String toggleLocId = PortalDialogue.btnToggleLoc(i);
+			if (MainController.document.getElementById(toggleLocId) != null) {
+				((EventTarget) MainController.document.getElementById(toggleLocId))
+						.addEventListener("click", e -> PortalDialogue.applyToggleLocation(locIndex), false);
+			}
+
+			// Toggle mode
+			String toggleModeId = PortalDialogue.btnToggleMode(i);
+			if (MainController.document.getElementById(toggleModeId) != null) {
+				((EventTarget) MainController.document.getElementById(toggleModeId))
+						.addEventListener("click", e -> PortalDialogue.applyToggleMode(locIndex), false);
+			}
+
+			// Search confirm (per-location search box)
+			String searchBtnId = PortalDialogue.BTN_SEARCH_CONFIRM + "_" + i;
+			if (MainController.document.getElementById(searchBtnId) != null) {
+				final String searchInputId = PortalDialogue.INPUT_SEARCH_ID + "_" + i;
+				((EventTarget) MainController.document.getElementById(searchBtnId))
+						.addEventListener("click", e -> {
+					if (Main.mainController.getWebEngine().executeScript(
+							"document.getElementById('" + searchInputId + "')") != null) {
+						Main.mainController.getWebEngine().executeScript(
+								"document.getElementById('" + PortalDialogue.HIDDEN_FIELD
+								+ "').innerHTML=document.getElementById('" + searchInputId + "').value;");
+						org.w3c.dom.Document doc2 = Main.mainController.getWebEngine().getDocument();
+						if (doc2 != null) {
+							String rawId = doc2.getElementById(PortalDialogue.HIDDEN_FIELD).getTextContent();
+							PortalDialogue.applySearch(rawId);
+						}
+					}
+				}, false);
+			}
+
+			// Connection buttons for the currently searched target
+			if (!PortalDialogue.searchedPortalId.isEmpty()) {
+				com.lilithsthrone.game.inventory.clothing.AbstractClothing target =
+						com.lilithsthrone.game.inventory.portal.PortalManager.getById(
+								PortalDialogue.searchedPortalId);
+				if (target != null && target.getPortalData() != null) {
+					for (int j = 0; j < target.getPortalData().getLocationCount(); j++) {
+						final int tLocIndex = j;
+						final String tPortalId = PortalDialogue.searchedPortalId;
+						String connectId = PortalDialogue.btnConnect(locIndex, j, tPortalId);
+						if (MainController.document.getElementById(connectId) != null) {
+							((EventTarget) MainController.document.getElementById(connectId))
+									.addEventListener("click",
+											e -> PortalDialogue.applyConnect(locIndex, tPortalId, tLocIndex),
+											false);
+						}
+					}
+				}
+			}
+
+			// Disconnect buttons for existing connections
+			for (com.lilithsthrone.game.inventory.portal.PortalConnection conn
+					: data.getLocationState(i).getConnections()) {
+				final String tId   = conn.getTargetPortalId();
+				final int    tLoc  = conn.getTargetLocationIndex();
+				String disconnectId = PortalDialogue.btnDisconnect(locIndex, tLoc, tId);
+				if (MainController.document.getElementById(disconnectId) != null) {
+					((EventTarget) MainController.document.getElementById(disconnectId))
+							.addEventListener("click",
+									e -> PortalDialogue.applyDisconnect(locIndex, tId, tLoc),
+									false);
+				}
+			}
+		}
+	}
+
 }

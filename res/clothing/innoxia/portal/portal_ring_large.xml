@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>4000</value>
+		<determiner><![CDATA[a]]></determiner>
+		<name appendColourName="false"><![CDATA[large portal ring]]></name>
+		<namePlural pluralByDefault="false" appendColourName="false"><![CDATA[large portal rings]]></namePlural>
+		<description><![CDATA[A broad, rigid ring of arcane alloy, large enough to encircle a limb or the neck. When activated and linked to a remote portal, the limb or head that passes through appears to vanish entirely from this side — emerging instead at wherever the connected output portal is located. The effect is disorienting and intensely restrictive: a person wearing this on their arm cannot use that arm; one worn around the neck renders the wearer unable to speak or see their surroundings normally.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>ANDROGYNOUS</femininity>
+		<equipSlots>
+			<slot>WRIST</slot>
+			<slot>ANKLE</slot>
+			<slot>HEAD</slot>
+			<slot>TAIL</slot>
+		</equipSlots>
+		<rarity>LEGENDARY</rarity>
+		<imageName>portal_ring_large.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="WRIST">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>WRIST</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="ANKLE">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>ANKLE</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="HEAD">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>HEAD</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+		<blockedPartsList slot="TAIL">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired/>
+				<blockedBodyParts/>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_SILVER</colour>
+			<colour>CLOTHING_GOLD</colour>
+			<colour>CLOTHING_BLACK</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours/>
+		<secondaryColoursDye/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>SOLD_BY_FINCH</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		Restrictive portal locations — output only.
+		ARM  (maps to WRIST slot) – portal amputates the arm
+		LEG  (maps to ANKLE slot) – portal amputates the leg
+		HEAD (maps to HEAD slot)  – portal amputates the head (prevents speech/sight)
+		TAIL (maps to TAIL slot)  – portal amputates the tail
+	-->
+	<portalLocationConfig bodyArea="ARM"  enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="LEG"  enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="HEAD" enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="TAIL" enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(slide)] the large portal ring into position. As the portal activates, the limb on the other side seems to vanish, leaving only the shimmering ring in its place.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(place)] the large portal ring onto [npc2.name]. The arcane aperture flares open and [npc2.her] limb appears to disappear into it.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(force)] the large portal ring into place on [npc2.name].]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(slide)] the large portal ring off, [npc.her] limb reappearing as the portal collapses.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(remove)] the large portal ring from [npc2.name], [npc2.her] displaced limb snapping back into existence.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(yank)] the large portal ring off [npc2.name].]]></otherRough>
+	</displacementText>
+</clothing>

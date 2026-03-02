@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>2000</value>
+		<determiner><![CDATA[a]]></determiner>
+		<name appendColourName="false"><![CDATA[portal facemask]]></name>
+		<namePlural pluralByDefault="false" appendColourName="false"><![CDATA[portal facemasks]]></namePlural>
+		<description><![CDATA[A form-fitting mask that covers the lower half of the face. A single shimmering portal aperture is set where the mouth would be, its surface swirling with arcane energy. The mask can be linked to another portal item, making whatever passes through the remote portal emerge — or disappear — here instead.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>ANDROGYNOUS</femininity>
+		<equipSlots>
+			<slot>MOUTH</slot>
+		</equipSlots>
+		<rarity>EPIC</rarity>
+		<imageName>portal_facemask.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="MOUTH">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>HEAD</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts>
+					<bodyPart>MOUTH</bodyPart>
+				</blockedBodyParts>
+				<clothingAccessBlocked/>
+				<concealedSlots/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_BLACK</colour>
+			<colour>CLOTHING_WHITE</colour>
+			<colour>CLOTHING_PURPLE</colour>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+		</secondaryColours>
+		<secondaryColoursDye values="ALL_WITH_METALS"/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>SOLD_BY_FINCH</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		Portal location:
+		  MOUTH – input/output (enabled by default)
+		  In OUTPUT mode the wearer's tongue can emerge from the remote portal.
+	-->
+	<portalLocationConfig bodyArea="MOUTH" enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(put)] on the portal facemask, the aperture over [npc.her] mouth shimmering as it comes to life.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(fasten)] the portal facemask over [npc2.namePos] lower face, the portal aperture activating with a faint hum.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(strap)] the portal facemask onto [npc2.namePos] face.]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(remove)] the portal facemask, the aperture fading as the portal goes dormant.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(take)] off [npc2.namePos] portal facemask.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(pull)] the portal facemask off [npc2.namePos] face.]]></otherRough>
+	</displacementText>
+</clothing>

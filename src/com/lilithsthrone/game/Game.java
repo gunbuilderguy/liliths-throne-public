@@ -278,6 +278,7 @@ import com.lilithsthrone.game.inventory.item.ItemType;
 import com.lilithsthrone.game.inventory.weapon.AbstractWeapon;
 import com.lilithsthrone.game.inventory.weapon.AbstractWeaponType;
 import com.lilithsthrone.game.inventory.weapon.WeaponType;
+import com.lilithsthrone.game.inventory.portal.PortalManager;
 import com.lilithsthrone.game.occupantManagement.MilkingRoom;
 import com.lilithsthrone.game.occupantManagement.OccupancyUtil;
 import com.lilithsthrone.game.occupantManagement.slave.SlaveJob;
@@ -418,6 +419,9 @@ public class Game implements XMLSaving {
 	private OccupancyUtil occupancyUtil = new OccupancyUtil();
 
 	public Game() {
+		// Clear portal registry so items re-register as they are loaded from the new game/save.
+		PortalManager.clearAll();
+
 		// Surely this will work as a unique id (unless someone creates two new games within the same second, but surely that will never happen...)
 		id = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 		

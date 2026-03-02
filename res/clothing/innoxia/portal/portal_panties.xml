@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clothing>
+	<coreAttributes>
+		<value>2500</value>
+		<determiner><![CDATA[a pair of]]></determiner>
+		<name appendColourName="false"><![CDATA[portal panties]]></name>
+		<namePlural pluralByDefault="true" appendColourName="false"><![CDATA[portal panties]]></namePlural>
+		<description><![CDATA[A sleek pair of panties woven from a shimmering arcane fabric. Subtle magical sigils line the waistband, and four glowing portal apertures are set into the fabric — each one a gateway that can be linked to a corresponding portal elsewhere. A small gemstone clasp on the waistband serves as the portal management interface.]]></description>
+		<physicalResistance>0</physicalResistance>
+		<femininity>FEMININE</femininity>
+		<equipSlots>
+			<slot>GROIN</slot>
+		</equipSlots>
+		<rarity>EPIC</rarity>
+		<imageName>portal_panties.svg</imageName>
+		<imageEquippedName/>
+		<effects/>
+
+		<blockedPartsList slot="GROIN">
+			<blockedParts>
+				<displacementType>REMOVE_OR_EQUIP</displacementType>
+				<clothingAccessRequired>
+					<clothingAccess>LEGS_UP_TO_GROIN_LOW_LEVEL</clothingAccess>
+					<clothingAccess>LEGS_UP_TO_GROIN</clothingAccess>
+					<clothingAccess>GROIN</clothingAccess>
+				</clothingAccessRequired>
+				<blockedBodyParts>
+					<bodyPart>ANUS</bodyPart>
+					<bodyPart>PENIS</bodyPart>
+					<bodyPart>VAGINA</bodyPart>
+				</blockedBodyParts>
+				<clothingAccessBlocked/>
+				<concealedSlots values="CONCEALED_GENITALS"/>
+			</blockedParts>
+		</blockedPartsList>
+
+		<incompatibleSlots/>
+
+		<primaryColours>
+			<colour>CLOTHING_BLACK</colour>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+			<colour>CLOTHING_PURPLE</colour>
+			<colour>CLOTHING_WHITE</colour>
+		</primaryColours>
+		<primaryColoursDye values="ALL_WITH_METALS"/>
+		<secondaryColours>
+			<colour>CLOTHING_BLUE_LIGHT</colour>
+		</secondaryColours>
+		<secondaryColoursDye values="ALL_WITH_METALS"/>
+		<tertiaryColours/>
+		<tertiaryColoursDye/>
+
+		<itemTags>
+			<tag>ENABLE_SEX_EQUIP</tag>
+			<tag>SOLD_BY_FINCH</tag>
+		</itemTags>
+	</coreAttributes>
+
+	<!--
+		Portal locations:
+		  VAGINA         – output only  (enabled by default)
+		  VAGINA_URETHRA – output only  (disabled by default; niche use)
+		  ANUS           – output only  (enabled by default)
+		  PENIS          – input/output (enabled by default)
+	-->
+	<portalLocationConfig bodyArea="VAGINA"          enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="VAGINA_URETHRA"  enabledByDefault="false"/>
+	<portalLocationConfig bodyArea="ANUS"            enabledByDefault="true"/>
+	<portalLocationConfig bodyArea="PENIS"           enabledByDefault="true"/>
+
+	<replacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(step)] into the portal panties and [npc.verb(pull)] them up, the sigils along the waistband flickering to life as the portals activate.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(ease)] the portal panties up [npc2.namePos] [npc2.legs], the arcane sigils glowing softly as the garment settles into place.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(yank)] the portal panties up [npc2.namePos] [npc2.legs].]]></otherRough>
+	</replacementText>
+
+	<displacementText type="REMOVE_OR_EQUIP">
+		<self><![CDATA[[npc.Name] [npc.verb(pull)] [npc.her] portal panties down and [npc.verb(step)] out of them, the sigils dimming as the portals go dormant.]]></self>
+		<other><![CDATA[[npc.Name] [npc.verb(slide)] the portal panties down [npc2.namePos] [npc2.legs] and [npc.verb(remove)] them.]]></other>
+		<otherRough><![CDATA[[npc.Name] roughly [npc.verb(yank)] the portal panties down [npc2.namePos] [npc2.legs].]]></otherRough>
+	</displacementText>
+</clothing>

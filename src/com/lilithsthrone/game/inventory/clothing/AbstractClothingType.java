@@ -150,6 +150,9 @@ public abstract class AbstractClothingType extends AbstractCoreType {
 
 	private Map<InventorySlot, Map<DisplacementType, Map<DisplacementDescriptionType, String>>> displacementDescriptions;
 
+	// Portal system:
+	private List<com.lilithsthrone.game.inventory.portal.PortalLocationConfig> portalLocationConfigs;
+
 //	@Deprecated
 	protected AbstractClothingType(
 			int baseValue,
@@ -318,9 +321,11 @@ public abstract class AbstractClothingType extends AbstractCoreType {
 		
 		this.authorDescription = ""; // Do not give attribution to Innoxia's items.
 
+		this.portalLocationConfigs = new ArrayList<>();
+
 		finalSetUp();
 	}
-	
+
 
 	@SuppressWarnings("deprecation")
 	public AbstractClothingType(File clothingXMLFile, String author) throws XMLLoadException { // Be sure to catch this exception correctly - if it's thrown mod is invalid and should not be continued to load
@@ -1135,7 +1140,27 @@ public abstract class AbstractClothingType extends AbstractCoreType {
 				}
 			} catch (XMLMissingTagException ex) {
 			}
-			
+
+			// Parse portal location configs (optional – only present on portal items)
+			this.portalLocationConfigs = new ArrayList<>();
+			for (Element portalLocEl : clothingElement.getAllOf("portalLocationConfig")) {
+				try {
+					com.lilithsthrone.game.inventory.portal.PortalBodyArea bodyArea =
+							com.lilithsthrone.game.inventory.portal.PortalBodyArea.valueOf(
+									portalLocEl.getAttribute("bodyArea"));
+					boolean enabledByDefault = true;
+					if (!portalLocEl.getAttribute("enabledByDefault").isEmpty()) {
+						enabledByDefault = Boolean.parseBoolean(portalLocEl.getAttribute("enabledByDefault"));
+					}
+					portalLocationConfigs.add(
+							new com.lilithsthrone.game.inventory.portal.PortalLocationConfig(
+									bodyArea, enabledByDefault));
+				} catch (Exception ex) {
+					System.err.println("Warning: Failed to load portalLocationConfig in "
+							+ clothingXMLFile.getName() + ": " + ex.getMessage());
+				}
+			}
+
 			finalSetUp();
 		}
 		catch(XMLMissingTagException ex){
@@ -2509,6 +2534,14 @@ public abstract class AbstractClothingType extends AbstractCoreType {
 
 	public List<ItemEffect> getEffects() {
 		return effects;
+	}
+
+	/**
+	 * Returns the list of portal location configurations defined for this clothing type.
+	 * Empty for non-portal clothing.
+	 */
+	public List<com.lilithsthrone.game.inventory.portal.PortalLocationConfig> getPortalLocationConfigs() {
+		return portalLocationConfigs != null ? portalLocationConfigs : new ArrayList<>();
 	}
 	
 	public boolean isAbleToBeSold() {
