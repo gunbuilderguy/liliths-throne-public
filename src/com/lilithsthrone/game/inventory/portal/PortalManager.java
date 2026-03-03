@@ -5,13 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
-
 /**
- * Static registry that maps portal IDs to the {@link AbstractClothing} instances
- * that carry them.  All portal items register here when they are generated or
- * loaded from a save, allowing any part of the game to resolve a portal ID to
- * a concrete item.
+ * Static registry that maps portal IDs to any object implementing
+ * {@link IPortalInterface}.  Currently only {@link PortalClothing} items
+ * register here, but the interface allows future non-clothing portals.
  *
  * <p>Call {@link #clearAll()} when a new game is started or a save is loaded,
  * then let items re-register themselves as they are restored from XML.
@@ -22,30 +19,27 @@ public final class PortalManager {
 
 	private PortalManager() { }
 
-	private static final Map<String, AbstractClothing> REGISTRY = new LinkedHashMap<>();
+	private static final Map<String, IPortalInterface> REGISTRY = new LinkedHashMap<>();
 	private static final Random RNG = new Random();
 
 	// ---- Registration ----------------------------------------------------
 
 	/**
-	 * Register a portal clothing item.  If the item has no portal data this
-	 * is a no-op.
+	 * Register a portal item.  If {@code portal} is {@code null} this is a no-op.
 	 */
-	public static void register(AbstractClothing clothing) {
-		PortalItemData data = clothing.getPortalData();
-		if (data != null) {
-			REGISTRY.put(data.getPortalId(), clothing);
+	public static void register(IPortalInterface portal) {
+		if (portal != null) {
+			REGISTRY.put(portal.getPortalId(), portal);
 		}
 	}
 
 	/**
-	 * Unregister a portal clothing item (e.g. when its ID is regenerated or
-	 * the item is destroyed).
+	 * Unregister a portal item (e.g. when its ID is regenerated or the item
+	 * is destroyed).
 	 */
-	public static void unregister(AbstractClothing clothing) {
-		PortalItemData data = clothing.getPortalData();
-		if (data != null) {
-			REGISTRY.remove(data.getPortalId());
+	public static void unregister(IPortalInterface portal) {
+		if (portal != null) {
+			REGISTRY.remove(portal.getPortalId());
 		}
 	}
 
@@ -57,12 +51,12 @@ public final class PortalManager {
 	// ---- Lookup ----------------------------------------------------------
 
 	/**
-	 * Retrieve the clothing item associated with the given portal ID.
+	 * Retrieve the portal associated with the given ID.
 	 *
 	 * @param id 6-character uppercase portal ID (without the leading {@code #}).
-	 * @return The clothing item, or {@code null} if not found.
+	 * @return The portal, or {@code null} if not found.
 	 */
-	public static AbstractClothing getById(String id) {
+	public static IPortalInterface getById(String id) {
 		if (id == null) return null;
 		return REGISTRY.get(id.toUpperCase());
 	}
@@ -72,7 +66,7 @@ public final class PortalManager {
 	}
 
 	/** Unmodifiable view of the full registry. */
-	public static Map<String, AbstractClothing> getAllPortals() {
+	public static Map<String, IPortalInterface> getAllPortals() {
 		return Collections.unmodifiableMap(REGISTRY);
 	}
 
@@ -80,15 +74,15 @@ public final class PortalManager {
 
 	/**
 	 * Generate a unique 6-character portal ID that is not currently in use.
-	 * Characters are drawn from {@link PortalItemData#ID_CHARSET}.
+	 * Characters are drawn from {@link IPortalInterface#ID_CHARSET}.
 	 */
 	public static String generateUniqueId() {
 		String id;
 		do {
-			StringBuilder sb = new StringBuilder(PortalItemData.ID_LENGTH);
-			for (int i = 0; i < PortalItemData.ID_LENGTH; i++) {
-				sb.append(PortalItemData.ID_CHARSET
-						.charAt(RNG.nextInt(PortalItemData.ID_CHARSET.length())));
+			StringBuilder sb = new StringBuilder(IPortalInterface.ID_LENGTH);
+			for (int i = 0; i < IPortalInterface.ID_LENGTH; i++) {
+				sb.append(IPortalInterface.ID_CHARSET
+						.charAt(RNG.nextInt(IPortalInterface.ID_CHARSET.length())));
 			}
 			id = sb.toString();
 		} while (REGISTRY.containsKey(id));
@@ -103,7 +97,7 @@ public final class PortalManager {
 	 */
 	public static boolean isValidCustomName(String name) {
 		return name != null && !name.isBlank()
-				&& name.matches(PortalItemData.NAME_PATTERN);
+				&& name.matches(IPortalInterface.NAME_PATTERN);
 	}
 
 	/**

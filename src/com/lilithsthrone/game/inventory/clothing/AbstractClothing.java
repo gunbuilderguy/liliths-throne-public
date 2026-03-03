@@ -44,8 +44,7 @@ import com.lilithsthrone.game.inventory.ColourReplacement;
 import com.lilithsthrone.game.inventory.InventorySlot;
 import com.lilithsthrone.game.inventory.ItemTag;
 import com.lilithsthrone.game.inventory.Rarity;
-import com.lilithsthrone.game.inventory.portal.PortalItemData;
-import com.lilithsthrone.game.inventory.portal.PortalManager;
+import com.lilithsthrone.game.inventory.portal.IPortalInterface;
 import com.lilithsthrone.game.inventory.enchanting.AbstractItemEffectType;
 import com.lilithsthrone.game.inventory.enchanting.ItemEffect;
 import com.lilithsthrone.game.inventory.enchanting.ItemEffectType;
@@ -88,9 +87,6 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 	
 	private List<DisplacementType> displacedList;
 
-	/** Portal data; {@code null} for non-portal clothing types. */
-	private PortalItemData portalData;
-
 	public AbstractClothing(AbstractClothingType clothingType, List<Colour> colours, boolean allowRandomEnchantment) {
 		super(clothingType.getName(),
 				clothingType.getNamePlural(),
@@ -126,14 +122,6 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		handleStickerCreation();
 
 		displacedList = new ArrayList<>();
-
-		// Initialise portal data if this clothing type defines portal locations
-		if (!clothingType.getPortalLocationConfigs().isEmpty()) {
-			this.portalData = new PortalItemData(clothingType.getPortalLocationConfigs());
-			PortalManager.register(this);
-		} else {
-			this.portalData = null;
-		}
 
 		if(allowRandomEnchantment
 				&& getClothingType().getRarity()!=Rarity.LEGENDARY
@@ -279,17 +267,17 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		}
 	}
 
+	/**
+	 * Creates a polymorphic copy of this item, preserving subclass state
+	 * (e.g. portal data in {@link com.lilithsthrone.game.inventory.portal.PortalClothing}).
+	 * Override in subclasses to return the appropriate subtype.
+	 */
+	protected AbstractClothing createCopy() {
+		return createCopy();
+	}
+
 	public AbstractClothing(AbstractClothing clothing) {
 		this(clothing.getClothingType(), clothing.getColours(), clothing.getEffects());
-
-		// The chained constructor does not initialise portal data.
-		// Copy the original's portal data and update the registry so the copy
-		// (which replaces the original) is the registered item.
-		this.portalData = clothing.portalData;
-		if (this.portalData != null) {
-			PortalManager.register(this);
-		}
-
 		this.setEnchantmentKnown(null, clothing.isEnchantmentKnown());
 		this.setHiddenName(clothing.getHiddenName());
 		
@@ -527,8 +515,8 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 			}
 		}
 
-		if (portalData != null) {
-			portalData.saveAsXML(element, doc);
+		if (this instanceof IPortalInterface) {
+			((IPortalInterface) this).savePortalData(element, doc);
 		}
 
 		return element;
@@ -1015,24 +1003,14 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		} catch(Exception ex) {
 		}
 
-		// Try to load portal data:
-		try {
-			if (!clothing.getClothingType().getPortalLocationConfigs().isEmpty()) {
-				org.w3c.dom.Element portalEl = (org.w3c.dom.Element)
-						parentElement.getElementsByTagName("portalData").item(0);
-				if (portalEl != null) {
-					clothing.portalData = PortalItemData.loadFromXML(
-							portalEl, clothing.getClothingType().getPortalLocationConfigs());
-				} else {
-					// No saved portal data – create fresh (item generated before portal system)
-					clothing.portalData = new PortalItemData(
-							clothing.getClothingType().getPortalLocationConfigs());
-				}
-				PortalManager.register(clothing);
+		// Let portal clothing (and any future IPortalInterface subtypes) load their own state.
+		if (clothing instanceof IPortalInterface) {
+			try {
+				((IPortalInterface) clothing).loadPortalData(parentElement);
+			} catch(Exception ex) {
+				System.err.println("Warning: Failed to load portal data for clothing ("
+						+ parentElement.getAttribute("id") + "): " + ex.getMessage());
 			}
-		} catch(Exception ex) {
-			System.err.println("Warning: Failed to load portal data for clothing ("
-					+ parentElement.getAttribute("id") + "): " + ex.getMessage());
 		}
 
 		return clothing;
@@ -2367,14 +2345,14 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		if(owner!=null) {
 			if(owner.getClothingCurrentlyEquipped().contains(this)) {
 //				System.out.println("1");
-				AbstractClothing c = new AbstractClothing(this) {};
+				AbstractClothing c = createCopy();
 				owner.forceUnequipClothingIntoVoid(owner, this);
 				c.dirty = dirty;
 				owner.equipClothingOverride(c, c.getSlotEquippedTo(), false, false);
 				
 			} else if(owner.removeClothing(this)) {
 //				System.out.println("2");
-				AbstractClothing c = new AbstractClothing(this) {};
+				AbstractClothing c = createCopy();
 				c.dirty = dirty;
 				owner.addClothing(c, false);
 //				enchantmentRemovedClothing = c;
@@ -2403,14 +2381,6 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		displacedList.clear();
 	}
 
-	/**
-	 * Returns the portal data for this clothing item, or {@code null} if this
-	 * is not a portal item.
-	 */
-	public PortalItemData getPortalData() {
-		return portalData;
-	}
-
 	public boolean isEnchantmentKnown() {
 		return enchantmentKnown;
 	}
@@ -2420,7 +2390,7 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 		StringBuilder sb = new StringBuilder();
 		
 		if(owner!=null && owner.removeClothing(this)) {
-			AbstractClothing c = new AbstractClothing(this) {};
+			AbstractClothing c = createCopy();
 			c.enchantmentKnown = enchantmentKnown;
 			if(this.getHiddenName()!=null && !this.getHiddenName().isEmpty()) {
 				c.setName(getHiddenName());

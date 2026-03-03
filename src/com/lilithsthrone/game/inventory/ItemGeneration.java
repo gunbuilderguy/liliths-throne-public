@@ -144,7 +144,7 @@ public class ItemGeneration {
 	// Clothing generation:
 	
 	public AbstractClothing generateClothing(AbstractClothing clothingToCopy) {
-		return new AbstractClothing(clothingToCopy) {};
+		return clothingToCopy.createCopy();
 	}
 	
 	public AbstractClothing generateClothing(String clothingTypeId, Colour primaryColour, Colour secondaryColour, Colour tertiaryColour, boolean allowRandomEnchantment) {
@@ -185,7 +185,7 @@ public class ItemGeneration {
 			colours.add(entry.getKey(), replacement);
 		}
 		
-		return new AbstractClothing(clothingType, colours, allowRandomEnchantment) {};
+		return clothingType.createInstance(colours, allowRandomEnchantment);
 	}
 
 	public AbstractClothing generateClothing(AbstractClothingType clothingType, Colour colourShade, boolean allowRandomEnchantment) {

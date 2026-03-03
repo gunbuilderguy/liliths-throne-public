@@ -2543,7 +2543,33 @@ public abstract class AbstractClothingType extends AbstractCoreType {
 	public List<com.lilithsthrone.game.inventory.portal.PortalLocationConfig> getPortalLocationConfigs() {
 		return portalLocationConfigs != null ? portalLocationConfigs : new ArrayList<>();
 	}
-	
+
+	/**
+	 * Factory: create a new clothing instance of the correct subtype for this type.
+	 * Portal clothing types return a {@link com.lilithsthrone.game.inventory.portal.PortalClothing};
+	 * all others return a plain {@link AbstractClothing}.
+	 */
+	public AbstractClothing createInstance(java.util.List<com.lilithsthrone.utils.colours.Colour> colours,
+			boolean allowRandomEnchantment) {
+		if (portalLocationConfigs != null && !portalLocationConfigs.isEmpty()) {
+			return new com.lilithsthrone.game.inventory.portal.PortalClothing(this, colours, allowRandomEnchantment);
+		}
+		return new AbstractClothing(this, colours, allowRandomEnchantment) {};
+	}
+
+	/**
+	 * Factory: create a new clothing instance for the load-from-save path.
+	 * Portal clothing types return a {@link com.lilithsthrone.game.inventory.portal.PortalClothing};
+	 * all others return a plain {@link AbstractClothing}.
+	 */
+	public AbstractClothing createLoadedInstance(java.util.List<com.lilithsthrone.utils.colours.Colour> colours,
+			java.util.List<com.lilithsthrone.game.inventory.enchanting.ItemEffect> effects) {
+		if (portalLocationConfigs != null && !portalLocationConfigs.isEmpty()) {
+			return new com.lilithsthrone.game.inventory.portal.PortalClothing(this, colours, effects);
+		}
+		return new AbstractClothing(this, colours, effects) {};
+	}
+
 	public boolean isAbleToBeSold() {
 		return getRarity()!=Rarity.QUEST;
 	}

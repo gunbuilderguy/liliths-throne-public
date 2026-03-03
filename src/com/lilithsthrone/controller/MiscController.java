@@ -1333,8 +1333,8 @@ public class MiscController {
 	 * ({@link PortalDialogue#PORTAL_MANAGE}).
 	 */
 	public static void initPortalListeners() {
-		if (PortalDialogue.managedClothing == null
-				|| PortalDialogue.managedClothing.getPortalData() == null) {
+		com.lilithsthrone.game.inventory.portal.PortalClothing pc = PortalDialogue.managedClothing;
+		if (pc == null) {
 			return;
 		}
 
@@ -1366,9 +1366,7 @@ public class MiscController {
 		}
 
 		// ---- Per-location buttons ----
-		com.lilithsthrone.game.inventory.portal.PortalItemData data =
-				PortalDialogue.managedClothing.getPortalData();
-		for (int i = 0; i < data.getLocationCount(); i++) {
+		for (int i = 0; i < pc.getLocationCount(); i++) {
 			final int locIndex = i;
 
 			// Toggle enabled
@@ -1407,11 +1405,11 @@ public class MiscController {
 
 			// Connection buttons for the currently searched target
 			if (!PortalDialogue.searchedPortalId.isEmpty()) {
-				com.lilithsthrone.game.inventory.clothing.AbstractClothing target =
+				com.lilithsthrone.game.inventory.portal.IPortalInterface target =
 						com.lilithsthrone.game.inventory.portal.PortalManager.getById(
 								PortalDialogue.searchedPortalId);
-				if (target != null && target.getPortalData() != null) {
-					for (int j = 0; j < target.getPortalData().getLocationCount(); j++) {
+				if (target != null) {
+					for (int j = 0; j < target.getLocationCount(); j++) {
 						final int tLocIndex = j;
 						final String tPortalId = PortalDialogue.searchedPortalId;
 						String connectId = PortalDialogue.btnConnect(locIndex, j, tPortalId);
@@ -1427,7 +1425,7 @@ public class MiscController {
 
 			// Disconnect buttons for existing connections
 			for (com.lilithsthrone.game.inventory.portal.PortalConnection conn
-					: data.getLocationState(i).getConnections()) {
+					: pc.getLocationState(i).getConnections()) {
 				final String tId   = conn.getTargetPortalId();
 				final int    tLoc  = conn.getTargetLocationIndex();
 				String disconnectId = PortalDialogue.btnDisconnect(locIndex, tLoc, tId);

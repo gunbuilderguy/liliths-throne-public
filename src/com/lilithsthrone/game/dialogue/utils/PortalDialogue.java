@@ -6,9 +6,10 @@ import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.DialogueNodeType;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
+import com.lilithsthrone.game.inventory.portal.IPortalInterface;
 import com.lilithsthrone.game.inventory.portal.PortalBodyArea;
+import com.lilithsthrone.game.inventory.portal.PortalClothing;
 import com.lilithsthrone.game.inventory.portal.PortalConnection;
-import com.lilithsthrone.game.inventory.portal.PortalItemData;
 import com.lilithsthrone.game.inventory.portal.PortalLocationConfig;
 import com.lilithsthrone.game.inventory.portal.PortalLocationState;
 import com.lilithsthrone.game.inventory.portal.PortalManager;
@@ -30,7 +31,7 @@ public class PortalDialogue {
 	// ---- Static state ----------------------------------------------------
 
 	/** The portal item currently open in the manager.  Set before opening. */
-	public static AbstractClothing managedClothing = null;
+	public static PortalClothing managedClothing = null;
 
 	/**
 	 * The raw ID string typed into the search box.  Read by the controller
@@ -69,7 +70,7 @@ public class PortalDialogue {
 
 		@Override
 		public String getContent() {
-			if (managedClothing == null || managedClothing.getPortalData() == null) {
+			if (managedClothing == null) {
 				return "<p>No portal item selected.</p>";
 			}
 			return buildManagementHTML(managedClothing);
@@ -86,8 +87,7 @@ public class PortalDialogue {
 
 	// ---- HTML builder ----------------------------------------------------
 
-	private static String buildManagementHTML(AbstractClothing clothing) {
-		PortalItemData data = clothing.getPortalData();
+	private static String buildManagementHTML(PortalClothing clothing) {
 		StringBuilder sb = new StringBuilder();
 
 		String accentColour = PresetColour.ARCANE.toWebHexString();
@@ -109,7 +109,7 @@ public class PortalDialogue {
 
 		sb.append("<div style='float:left; width:20%; font-weight:bold;'>Portal ID:</div>");
 		sb.append("<div style='float:left; width:20%; color:").append(accentColour).append(";'>")
-				.append(data.getFormattedId()).append("</div>");
+				.append(clothing.getFormattedId()).append("</div>");
 		sb.append("<div class='normal-button' id='").append(BTN_REGEN_ID)
 				.append("' style='float:left; width:12%; margin:0 0 0 1%; text-align:center;' "
 						+ "title='Generate a new random ID (existing connections to this ID will break)'>")
@@ -119,7 +119,7 @@ public class PortalDialogue {
 		sb.append("<div style='float:left; width:20%; font-weight:bold; margin-top:4px;'>Name:</div>");
 		sb.append("<form style='float:left; width:35%; margin:0; padding:0;'>"
 				+ "<input type='text' id='").append(INPUT_NAME)
-				.append("' value='").append(escapeHtml(data.getPortalName()))
+				.append("' value='").append(escapeHtml(clothing.getPortalName()))
 				.append("' style='width:100%; margin:0; padding:2px;' maxlength='32' "
 						+ "title=\"Allowed characters: A-Z a-z 0-9 space _ &#39;\"></form>");
 		sb.append("<div class='normal-button' id='").append(BTN_RENAME_CONFIRM)
@@ -132,9 +132,9 @@ public class PortalDialogue {
 		sb.append("<div class='container-full-width' style='padding:4px 16px;'>");
 		sb.append("<h6 style='color:").append(accentColour).append("; margin:0 0 4px 0;'>Portal Locations</h6>");
 
-		for (int i = 0; i < data.getLocationCount(); i++) {
-			PortalLocationConfig cfg   = data.getLocationConfig(i);
-			PortalLocationState  state = data.getLocationState(i);
+		for (int i = 0; i < clothing.getLocationCount(); i++) {
+			PortalLocationConfig cfg   = clothing.getLocationConfig(i);
+			PortalLocationState  state = clothing.getLocationState(i);
 			PortalBodyArea       area  = cfg.getBodyArea();
 
 			sb.append("<div style='border:1px solid ").append(dimColour)
@@ -178,14 +178,12 @@ public class PortalDialogue {
 					sb.append("<div style='margin-top:4px; font-size:0.85em; color:").append(dimColour)
 							.append(";'>Connected to:</div>");
 					for (PortalConnection conn : state.getConnections()) {
-						AbstractClothing target = PortalManager.getById(conn.getTargetPortalId());
+						IPortalInterface target = PortalManager.getById(conn.getTargetPortalId());
 						String targetName;
 						int tLoc = conn.getTargetLocationIndex();
-						if (target != null && target.getPortalData() != null
-								&& tLoc < target.getPortalData().getLocationCount()) {
-							PortalItemData tData = target.getPortalData();
-							String tArea = tData.getLocationConfig(tLoc).getBodyArea().getDisplayName();
-							targetName = tData.getPortalName() + " (" + tData.getFormattedId() + ") — " + tArea;
+						if (target != null && tLoc < target.getLocationCount()) {
+							String tArea = target.getLocationConfig(tLoc).getBodyArea().getDisplayName();
+							targetName = target.getPortalName() + " (" + target.getFormattedId() + ") — " + tArea;
 						} else {
 							targetName = "<span style='color:" + badColour + ";'>#"
 									+ conn.getTargetPortalId() + " (not found)</span>";
@@ -213,25 +211,24 @@ public class PortalDialogue {
 
 				// If a search result is active for this location, show available target locations
 				if (!searchedPortalId.isEmpty()) {
-					AbstractClothing foundClothing = PortalManager.getById(searchedPortalId);
-					if (foundClothing != null && foundClothing.getPortalData() != null
-							&& !foundClothing.equals(clothing)) {
-						PortalItemData tData = foundClothing.getPortalData();
+					IPortalInterface found = PortalManager.getById(searchedPortalId);
+					if (found != null && !(found instanceof AbstractClothing
+							&& ((AbstractClothing) found).equals(clothing))) {
 						sb.append("<div style='margin-top:4px; font-size:0.85em;'>")
-								.append("Found: <b>").append(escapeHtml(tData.getPortalName()))
-								.append("</b> (").append(tData.getFormattedId()).append(")<br/>");
+								.append("Found: <b>").append(escapeHtml(found.getPortalName()))
+								.append("</b> (").append(found.getFormattedId()).append(")<br/>");
 						sb.append("Select a location to connect to:</div>");
-						for (int j = 0; j < tData.getLocationCount(); j++) {
-							PortalLocationState tState = tData.getLocationState(j);
+						for (int j = 0; j < found.getLocationCount(); j++) {
+							PortalLocationState tState = found.getLocationState(j);
 							if (!tState.isEnabled()) continue;
-							String tArea = tData.getLocationConfig(j).getBodyArea().getDisplayName();
+							String tArea = found.getLocationConfig(j).getBodyArea().getDisplayName();
 							String tMode = tState.getCurrentMode() == PortalMode.INPUT ? "Input" : "Output";
 							sb.append("<div class='normal-button' id='")
 									.append(btnConnect(i, j, searchedPortalId))
 									.append("' style='margin:2px 8px; font-size:0.85em;'>")
 									.append(capitalise(tArea)).append(" (").append(tMode).append(")</div>");
 						}
-					} else if (foundClothing == null) {
+					} else if (found == null) {
 						sb.append("<div style='color:").append(badColour).append("; font-size:0.85em; margin-top:2px;'>")
 								.append("No portal found with ID #").append(searchedPortalId).append("</div>");
 					} else {
@@ -252,13 +249,15 @@ public class PortalDialogue {
 		sb.append("<div class='container-full-width' style='padding:4px 16px;'>");
 		sb.append("<h6 style='color:").append(dimColour).append("; margin:4px 0 2px 0;'>")
 				.append("All registered portals:</h6>");
-		for (Map.Entry<String, AbstractClothing> entry : PortalManager.getAllPortals().entrySet()) {
-			if (entry.getValue().equals(clothing)) continue;
-			PortalItemData d = entry.getValue().getPortalData();
-			if (d == null) continue;
+		for (Map.Entry<String, IPortalInterface> entry : PortalManager.getAllPortals().entrySet()) {
+			IPortalInterface p = entry.getValue();
+			if (p instanceof AbstractClothing && ((AbstractClothing) p).equals(clothing)) continue;
 			sb.append("<div style='font-size:0.8em; color:").append(dimColour).append(";'>")
-					.append(d.getFormattedId()).append(" — ").append(escapeHtml(d.getPortalName()))
-					.append(" (").append(entry.getValue().getName()).append(")</div>");
+					.append(p.getFormattedId()).append(" — ").append(escapeHtml(p.getPortalName()));
+			if (p instanceof AbstractClothing) {
+				sb.append(" (").append(((AbstractClothing) p).getName()).append(")");
+			}
+			sb.append("</div>");
 		}
 		sb.append("</div>");
 
@@ -270,14 +269,14 @@ public class PortalDialogue {
 	/** Apply rename from text input. */
 	public static void applyRename(String newName) {
 		if (managedClothing == null) return;
-		managedClothing.getPortalData().setPortalName(newName);
+		managedClothing.setPortalName(newName);
 		Main.game.setContent(new Response("Rename Portal", "", PORTAL_MANAGE) {});
 	}
 
 	/** Regenerate portal ID. */
 	public static void applyRegenId() {
 		if (managedClothing == null) return;
-		managedClothing.getPortalData().regenerateId(managedClothing);
+		managedClothing.regenerateId();
 		searchedPortalId = "";
 		Main.game.setContent(new Response("Regenerate ID", "", PORTAL_MANAGE) {});
 	}
@@ -285,7 +284,7 @@ public class PortalDialogue {
 	/** Toggle enabled/disabled for location at index. */
 	public static void applyToggleLocation(int locIndex) {
 		if (managedClothing == null) return;
-		PortalLocationState state = managedClothing.getPortalData().getLocationState(locIndex);
+		PortalLocationState state = managedClothing.getLocationState(locIndex);
 		state.setEnabled(!state.isEnabled());
 		Main.game.setContent(new Response("Toggle Location", "", PORTAL_MANAGE) {});
 	}
@@ -293,9 +292,8 @@ public class PortalDialogue {
 	/** Toggle mode for location at index. */
 	public static void applyToggleMode(int locIndex) {
 		if (managedClothing == null) return;
-		PortalItemData data  = managedClothing.getPortalData();
-		PortalLocationConfig cfg   = data.getLocationConfig(locIndex);
-		PortalLocationState  state = data.getLocationState(locIndex);
+		PortalLocationConfig cfg   = managedClothing.getLocationConfig(locIndex);
+		PortalLocationState  state = managedClothing.getLocationState(locIndex);
 		PortalMode newMode = (state.getCurrentMode() == PortalMode.INPUT)
 				? PortalMode.OUTPUT : PortalMode.INPUT;
 		state.setMode(cfg.getBodyArea(), newMode);
@@ -311,8 +309,8 @@ public class PortalDialogue {
 	/** Add a connection from this item's location to the target location. */
 	public static void applyConnect(int locIndex, String targetPortalId, int targetLocIndex) {
 		if (managedClothing == null) return;
-		PortalLocationState state = managedClothing.getPortalData().getLocationState(locIndex);
-		state.addConnection(new PortalConnection(targetPortalId, targetLocIndex));
+		managedClothing.getLocationState(locIndex)
+				.addConnection(new PortalConnection(targetPortalId, targetLocIndex));
 		searchedPortalId = "";
 		Main.game.setContent(new Response("Connect Portal", "", PORTAL_MANAGE) {});
 	}
@@ -320,7 +318,7 @@ public class PortalDialogue {
 	/** Remove a connection. */
 	public static void applyDisconnect(int locIndex, String targetPortalId, int targetLocIndex) {
 		if (managedClothing == null) return;
-		managedClothing.getPortalData().getLocationState(locIndex)
+		managedClothing.getLocationState(locIndex)
 				.removeConnection(targetPortalId, targetLocIndex);
 		Main.game.setContent(new Response("Disconnect Portal", "", PORTAL_MANAGE) {});
 	}

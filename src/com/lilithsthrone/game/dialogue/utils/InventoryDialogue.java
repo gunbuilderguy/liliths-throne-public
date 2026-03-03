@@ -4236,13 +4236,15 @@ public class InventoryDialogue {
 								}
 
 							} else if (index == 10) {
-								if (clothing.getPortalData() != null) {
+								if (clothing instanceof com.lilithsthrone.game.inventory.portal.PortalClothing) {
+									final com.lilithsthrone.game.inventory.portal.PortalClothing pc =
+											(com.lilithsthrone.game.inventory.portal.PortalClothing) clothing;
 									return new Response("Manage Portals",
 											"Open the portal management interface for the " + clothing.getName() + ".",
 											PortalDialogue.PORTAL_MANAGE) {
 										@Override
 										public void effects() {
-											PortalDialogue.managedClothing = clothing;
+											PortalDialogue.managedClothing = pc;
 											PortalDialogue.searchedPortalId = "";
 										}
 									};
@@ -4250,7 +4252,7 @@ public class InventoryDialogue {
 								return getQuickTradeResponse();
 
 							} else if (index == 11) {
-								if (clothing.getPortalData() != null) {
+								if (clothing instanceof com.lilithsthrone.game.inventory.portal.PortalClothing) {
 									return getQuickTradeResponse();
 								}
 								return null;
