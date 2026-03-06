@@ -112,7 +112,7 @@ public class PortalClothing extends AbstractClothing implements IPortalInterface
 	 * when {@code setDirty} / {@code setEnchantmentKnown} replaces the item.
 	 */
 	@Override
-	protected AbstractClothing createCopy() {
+	public AbstractClothing createCopy() {
 		return new PortalClothing(this);
 	}
 
