@@ -272,8 +272,8 @@ public abstract class AbstractClothing extends AbstractCoreItem implements XMLSa
 	 * (e.g. portal data in {@link com.lilithsthrone.game.inventory.portal.PortalClothing}).
 	 * Override in subclasses to return the appropriate subtype.
 	 */
-	protected AbstractClothing createCopy() {
-		return createCopy();
+	public AbstractClothing createCopy() {
+		return new AbstractClothing(this) {};
 	}
 
 	public AbstractClothing(AbstractClothing clothing) {

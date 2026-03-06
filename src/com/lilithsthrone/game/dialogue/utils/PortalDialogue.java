@@ -90,7 +90,7 @@ public class PortalDialogue {
 	private static String buildManagementHTML(PortalClothing clothing) {
 		StringBuilder sb = new StringBuilder();
 
-		String accentColour = PresetColour.ARCANE.toWebHexString();
+		String accentColour = PresetColour.GENERIC_ARCANE.toWebHexString();
 		String dimColour    = PresetColour.TEXT_GREY.toWebHexString();
 		String goodColour   = PresetColour.GENERIC_GOOD.toWebHexString();
 		String badColour    = PresetColour.GENERIC_BAD.toWebHexString();
