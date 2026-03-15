@@ -11,7 +11,6 @@ import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
-import com.lilithsthrone.utils.colours.PresetColour;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
@@ -111,6 +110,9 @@ public class DogmeatDialogue {
 						+ " His tag. His name. His property."
 						+ " He rises and presses his broad muzzle against the leather, inhaling once"
 						+ " &mdash; deep, satisfied, entirely possessive."
+						+ "</p>"
+						+ "<p>"
+						+ "His tail begins to wag. Slow. Utterly certain."
 						+ "</p>";
 			}
 
@@ -123,6 +125,10 @@ public class DogmeatDialogue {
 						+ "</p>"
 						+ "<p>"
 						+ "You still haven't had it engraved. He knows."
+						+ "</p>"
+						+ "<p>"
+						+ "[style.italicsQuest(Take the collar to Kate at Succubi's Secrets in the Shopping Arcade"
+						+ " to have it re-engraved.)]"
 						+ "</p>";
 			}
 
@@ -240,18 +246,8 @@ public class DogmeatDialogue {
 				};
 			}
 
-			// --- Index 2: Get collar engraved (only when quest active) ---
-			if (index == 2 && collarState == 1) {
-				return new Response("Get it engraved",
-						"Seek out a tattoo artist in the back streets to have the collar re-engraved."
-								+ "<br/>[style.italicsQuest(Your name on the front. 'Property of: Dogmeat' on the back.)]"
-								+ "<br/>[style.italicsMoney(This will cost 200 flames.)]",
-						DOGMEAT_TATTOOIST);
-			}
-
 			// --- Leave ---
-			int leaveIdx = (collarState == 1) ? 3 : 2;
-			if (index == leaveIdx) {
+			if (index == 2) {
 				return new Response("Leave",
 						count >= 3
 								? "Walk away &mdash; if he lets you."
@@ -265,8 +261,7 @@ public class DogmeatDialogue {
 			}
 
 			// --- Push past (count >= 3 only) ---
-			int resistIdx = (collarState == 1) ? 4 : 3;
-			if (index == resistIdx && count >= 3) {
+			if (index == 3 && count >= 3) {
 				return new Response("Push past him",
 						"Assert yourself. You're not his &mdash; not today."
 								+ "<br/>[style.italicsMinorBad(He won't be happy about this.)]",
@@ -379,138 +374,6 @@ public class DogmeatDialogue {
 					@Override
 					public void effects() {
 						setCollarState(1);
-						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
-					}
-				};
-			}
-			return null;
-		}
-	};
-
-	// =========================================================================
-	// TATTOOIST (collar engraving)
-	// =========================================================================
-
-	public static final DialogueNode DOGMEAT_TATTOOIST = new DialogueNode("The tattooist", ".", false) {
-
-		@Override
-		public int getSecondsPassed() {
-			return 30 * 60;
-		}
-
-		@Override
-		public String getContent() {
-			return "<p>"
-					+ "You don't have to look far."
-					+ " A few twists deeper into the back alleys and you find what you need:"
-					+ " a narrow shopfront wedged between two crumbling tenements, its sign reading"
-					+ " <i>'Needlework &mdash; Tattoos, Engravings, Body Art'</i> in peeling letters."
-					+ "</p>"
-					+ "<p>"
-					+ "Inside, a bored-looking artisan glances up from a workbench cluttered with inks and implements."
-					+ " You set the worn leather collar on the counter."
-					+ "</p>"
-					+ "<p>"
-					+ "\"I need this engraved. My name on the front. <i>Property of: Dogmeat</i> on the back.\""
-					+ "</p>"
-					+ "<p>"
-					+ "The artisan picks up the collar, turns it over, and gives you a long, appraising look."
-					+ " Whatever they're thinking, they keep it to themselves."
-					+ "</p>"
-					+ "<p>"
-					+ "\"Two hundred flames. Take a seat.\""
-					+ "</p>";
-		}
-
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			if (index == 1) {
-				if (Main.game.getPlayer().getMoney() < 200) {
-					return new Response("Pay ([style.moneyFormat(200, span)])",
-							"You don't have enough money for the engraving.",
-							null);
-				}
-				return new Response("Pay ([style.moneyFormat(200, span)])",
-						"Pay the tattooist 200 flames to engrave the collar.",
-						DOGMEAT_COLLAR_WORN) {
-					@Override
-					public void effects() {
-						Main.game.getPlayer().incrementMoney(-200);
-						setCollarState(2);
-						Main.game.getPlayer().equipClothingFromNowhere(
-								Main.game.getItemGen().generateClothing(
-										"innoxia_neck_dogmeat_collar_engraved",
-										PresetColour.CLOTHING_BLACK, false),
-								true, Main.game.getPlayer());
-					}
-				};
-			}
-			if (index == 2) {
-				return new Response("Not yet",
-						"You're not ready. Head back.",
-						Main.game.getDefaultDialogue(false)) {
-					@Override
-					public void effects() {
-						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
-					}
-				};
-			}
-			return null;
-		}
-	};
-
-	// =========================================================================
-	// COLLAR WORN (engraving complete)
-	// =========================================================================
-
-	public static final DialogueNode DOGMEAT_COLLAR_WORN = new DialogueNode("Collared", ".", false) {
-
-		@Override
-		public int getSecondsPassed() {
-			return 10 * 60;
-		}
-
-		@Override
-		public String getContent() {
-			String playerName = Main.game.getPlayer().getName();
-
-			return "<p>"
-					+ "You watch in silence as the artisan works &mdash; fine tools tracing careful lines into the metal tag."
-					+ " It doesn't take long."
-					+ " When they hand the collar back, the engraving catches the light:"
-					+ "</p>"
-					+ "<p style='text-align:center;'>"
-					+ "<i>Front: " + playerName + "</i>"
-					+ "<br/>"
-					+ "<i>Back: Property of: Dogmeat</i>"
-					+ "</p>"
-					+ "<p>"
-					+ "You fasten it around your neck."
-					+ " The leather is warm from the work, the tag resting against your collarbone."
-					+ " It fits perfectly. Of course it does."
-					+ "</p>"
-					+ "<p>"
-					+ "When you step back into the alley, he's there &mdash; as if he never left."
-					+ " His amber eyes find the collar instantly."
-					+ " He rises, crosses to you in three long strides,"
-					+ " and presses his muzzle against the tag, inhaling deeply."
-					+ "</p>"
-					+ "<p>"
-					+ "His tail begins to wag. Slow. Possessive. Utterly satisfied."
-					+ "</p>"
-					+ "<p>"
-					+ "[style.italicsQuest(Quest complete: Dogmeat's collar has been engraved and is now yours to wear.)]"
-					+ "</p>";
-		}
-
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			if (index == 1) {
-				return new Response("Continue",
-						"Continue on your way &mdash; wearing Dogmeat's collar.",
-						Main.game.getDefaultDialogue(false)) {
-					@Override
-					public void effects() {
 						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
 					}
 				};

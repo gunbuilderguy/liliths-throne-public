@@ -617,6 +617,32 @@ public class SuccubisSecrets {
 				}
 			};
 			
+		} else if (index == 12
+				&& Main.game.getDialogueFlags().getSavedLong("dogmeat_collar_state") == 1) {
+			if (Main.game.getPlayer().getMoney() < 200) {
+				return new Response("Re-engrave collar",
+						"You pull out the worn leather collar. Kate looks it over and names her price — 200 flames."
+								+ " You don't have enough money right now.",
+						null);
+			}
+			return new Response("Re-engrave collar",
+					"Show Kate the worn collar and ask her to re-engrave the tag:"
+							+ " your name on the front, 'Property of: Dogmeat' on the back."
+							+ "<br/>[style.italicsMoney(This will cost 200 flames.)]",
+					DOGMEAT_COLLAR_ENGRAVING) {
+				@Override
+				public void effects() {
+					Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
+					Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
+					Main.game.getTextEndStringBuilder().append(
+							Main.game.getPlayer().equipClothingFromNowhere(
+									Main.game.getItemGen().generateClothing(
+											"innoxia_neck_dogmeat_collar_engraved",
+											PresetColour.CLOTHING_BLACK, false),
+									true, Main.game.getPlayer()));
+				}
+			};
+
 		} else if (index == 0) {
 			return new Response("Leave", "Leave Kate's shop, heading back out into the Shopping Arcade.", EXTERIOR){
 				@Override
@@ -625,10 +651,49 @@ public class SuccubisSecrets {
 				}
 			};
 		}
-		
+
 		return null;
 	}
-	
+
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			String playerName = Main.game.getPlayer().getName();
+			return "<p>"
+					+ "You pull the worn collar out and set it on Kate's counter."
+					+ " She picks it up without a word, turns it over, and squints at the scratched-out tag."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Hm. Seen worse.)]")
+					+ " She opens a small drawer and selects an engraving needle."
+					+ " [style.italicsMoney(Two hundred flames change hands.)]"
+					+ "</p>"
+					+ "<p>"
+					+ "She works quickly, the needle tracing clean lines into the steel."
+					+ " When she's done, she slides the collar back across the counter."
+					+ " You hold it up to the light:"
+					+ "</p>"
+					+ "<p style='text-align:center;'>"
+					+ "<i>Front: " + playerName + "</i>"
+					+ "<br/>"
+					+ "<i>Back: Property of: Dogmeat</i>"
+					+ "</p>"
+					+ "<p>"
+					+ "The leather is soft and warm as you fasten it around your neck."
+					+ " Kate watches this process with an expression of profound neutrality."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(Now go back to Dogmeat and show him.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			return getMainResponse(index);
+		}
+	};
+
 	public static final DialogueNode SHOP_BEAUTY_SALON_CANDI_PERFUME = new DialogueNode("Succubi's Secrets", "-", true) {
 
 		@Override
