@@ -54,6 +54,7 @@ import com.lilithsthrone.game.character.markings.TattooType;
 import com.lilithsthrone.game.character.markings.TattooWriting;
 import com.lilithsthrone.game.character.markings.TattooWritingStyle;
 import com.lilithsthrone.game.character.npc.NPC;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.persona.NameTriplet;
 import com.lilithsthrone.game.character.persona.Occupation;
 import com.lilithsthrone.game.character.persona.PersonalityTrait;
@@ -400,6 +401,23 @@ public class Kate extends NPC {
 	@Override
 	public boolean isSleepingAtHour(int hour) {
 		return this.isAtHome(); // Always sleeping when on home tile
+	}
+
+	@Override
+	public void hourlyUpdate(int hour) {
+		super.hourlyUpdate(hour);
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
+			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
+				if (hour == 11) {
+					// Kate heads out to Dogmeat's location at 11:00 (arrives around 11:30 in-world)
+					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
+				} else if (hour == 13) {
+					// Kate returns to her shop after her lunch break
+					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+				}
+			}
+		}
 	}
 	
 	@Override

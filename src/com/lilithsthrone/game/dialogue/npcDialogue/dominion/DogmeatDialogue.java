@@ -4,6 +4,7 @@ import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.attributes.CorruptionLevel;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
+import com.lilithsthrone.game.character.npc.dominion.Kate;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseSex;
@@ -11,6 +12,7 @@ import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
+import com.lilithsthrone.utils.UtilText;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
@@ -34,6 +36,22 @@ public class DogmeatDialogue {
 
 	private static Dogmeat getDogmeat() {
 		return Main.game.getNpc(Dogmeat.class);
+	}
+
+	private static Kate getKate() {
+		return Main.game.getNpc(Kate.class);
+	}
+
+	/** Returns true when Kate is scheduled and currently at Dogmeat's location. */
+	private static boolean isKatePresent() {
+		Kate kate = getKate();
+		Dogmeat dogmeat = getDogmeat();
+		if (kate == null || dogmeat == null) {
+			return false;
+		}
+		return Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1
+				&& kate.getWorldLocation().equals(dogmeat.getWorldLocation())
+				&& kate.getPlaceLocation().equals(dogmeat.getPlaceLocation());
 	}
 
 	private static long getCollarState() {
@@ -73,10 +91,20 @@ public class DogmeatDialogue {
 		@Override
 		public void applyPreParsingEffects() {
 			Main.game.getDialogueFlags().setSavedLong("dogmeat_found", Main.game.getMinutesPassed());
+			// If Kate's hidden tracking enchantment is still on the collar, she now has a fix on his location.
+			if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_schedule_active", 1);
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
+			}
 		}
 
 		@Override
 		public String getContent() {
+			// If Kate is here on her daily visit, redirect to the discovery scene
+			if (isKatePresent()) {
+				return KATE_DOGMEAT_APPROACH.getContent();
+			}
+
 			int count = getDogmeat().getPlayerSurrenderCount();
 			long collarState = getCollarState();
 
@@ -160,6 +188,11 @@ public class DogmeatDialogue {
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
+			// If Kate is here, use the discovery scene responses instead
+			if (isKatePresent()) {
+				return KATE_DOGMEAT_APPROACH.getResponse(responseTab, index);
+			}
+
 			int count = getDogmeat().getPlayerSurrenderCount();
 			long collarState = getCollarState();
 
@@ -416,6 +449,445 @@ public class DogmeatDialogue {
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
 				return new Response("Leave", "Walk away.", Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// KATE DISCOVERY SCENES
+	// =========================================================================
+
+	/**
+	 * Player hears something before rounding the corner.
+	 * Gives the option to peek first or walk straight in.
+	 */
+	public static final DialogueNode KATE_DOGMEAT_APPROACH = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 2 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You slow down before you round the corner."
+					+ "</p>"
+					+ "<p>"
+					+ "Something sounds different."
+					+ " A voice &mdash; low and breathless, cut off by something that isn't quite a gasp."
+					+ " Familiar."
+					+ "</p>"
+					+ "<p>"
+					+ "You know that voice."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Peek around the corner",
+						"Angle yourself so you can see without being seen.",
+						KATE_DOGMEAT_VOYEUR);
+			}
+			if (index == 2) {
+				return new Response("Walk in",
+						"Round the corner. Whatever's happening in there, it's your alley.",
+						KATE_DOGMEAT_CAUGHT_ENTRY);
+			}
+			if (index == 3) {
+				return new Response("Leave",
+						"Walk away. You don't need to know.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Player peeks around the corner. Descriptive voyeur content leads into the sex scene.
+	 */
+	public static final DialogueNode KATE_DOGMEAT_VOYEUR = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
+			return "<p>"
+					+ "You angle yourself around the corner, staying in the shadow of the wall."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate is there."
+					+ " Not in her shop clothes &mdash; she's in considerably less."
+					+ " She has her hands braced against the alley wall, her hair loose,"
+					+ " and Dogmeat is behind her, forelegs locked around her hips with his"
+					+ " usual total, unhurried certainty."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(~Aah!~ &mdash; yeah &mdash; yeah, like &mdash; ~Mmm!~ &mdash; don't stop &mdash;)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She hasn't noticed you."
+					+ " Dogmeat has. His amber eyes find you across the alley."
+					+ " His tail moves &mdash; once, slow, satisfied &mdash; and he doesn't stop."
+					+ "</p>"
+					+ (kateTold
+						? "<p>She found him, just like she said she would.</p>"
+						: "<p>She found him. The tracking enchantment worked, and she found him.</p>");
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You step around the corner."
+						+ " Kate hears you a half-second before she sees you &mdash;"
+						+ " her head whips around, flushed and wide-eyed."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(kate, "[npc.speech(~Aah!~ &mdash; oh &mdash; oh, shit &mdash;)]")
+						+ "</p>"
+						+ "<p>"
+						+ "Dogmeat does not stop."
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"Step in. Dogmeat won't object. Kate clearly won't either.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_DOGMEAT_AFTER_SEX,
+						startContent);
+			}
+			if (index == 2) {
+				return new Response("Leave quietly",
+						"Back away before she sees you.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Player walks straight in. Kate is caught mid-act.
+	 */
+	public static final DialogueNode KATE_DOGMEAT_CAUGHT_ENTRY = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You round the corner."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate hears you a half-second before she sees you."
+					+ " The noise she makes is not dignified."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(~Aah!~ &mdash; oh &mdash; oh, shit &mdash;)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She turns, flushed and dishevelled, hair loose, and stares at you with the expression"
+					+ " of someone rapidly evaluating how bad this actually is."
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat's tail wags."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...Hi.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				return new Response("How did you find him?",
+						"Ask Kate how she got here.",
+						KATE_DOGMEAT_CAUGHT_HOW);
+			}
+			if (index == 2) {
+				return new Response("I knew I should have said no.",
+						"",
+						KATE_DOGMEAT_CAUGHT_KNEW_IT);
+			}
+			if (index == 3) {
+				String startContent = "<p>"
+						+ "You don't say anything. You step forward."
+						+ "</p>"
+						+ "<p>"
+						+ "Kate's expression does something that's mostly relief."
+						+ " "
+						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"Say nothing. Just step in.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_DOGMEAT_AFTER_SEX,
+						startContent);
+			}
+			return null;
+		}
+	};
+
+	public static final DialogueNode KATE_DOGMEAT_CAUGHT_HOW = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
+			return "<p>"
+					+ (kateTold
+						? UtilText.parse(getKate(), "[npc.speech(Y'know, you literally told me where he was.)]")
+								+ " She pushes her hair out of her face."
+								+ " "
+								+ UtilText.parse(getKate(), "[npc.speech(I just... I needed to, like, verify. In person.)]")
+						: UtilText.parse(getKate(), "[npc.speech(You had dog hair on the collar when you brought it in.)]")
+								+ " She sits up slightly and pushes her hair back."
+								+ " "
+								+ UtilText.parse(getKate(), "[npc.speech(I just... I needed to know. So I put a little something on the edge of it and...)]")
+								+ " She gestures at the general situation."
+								+ " "
+								+ UtilText.parse(getKate(), "[npc.speech(And here I am.)]"))
+					+ "</p>"
+					+ "<p>"
+					+ "She has the grace to look at least somewhat sheepish."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Sorry. Y'know, it's pretty hard for us demons sometimes...)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat licks her cheek. She doesn't seem to mind at all."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(He's very good, by the way. Just so you know.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You don't say anything else. You step forward."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"That's enough talking.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_DOGMEAT_AFTER_SEX,
+						startContent);
+			}
+			if (index == 2) {
+				return new Response("Fine. Just ask next time.",
+						"",
+						KATE_DOGMEAT_CAUGHT_FINE);
+			}
+			return null;
+		}
+	};
+
+	public static final DialogueNode KATE_DOGMEAT_CAUGHT_KNEW_IT = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Probably, yeah.)]")
+					+ " She doesn't sound particularly sorry."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(But you were being cagey, and I was curious, and &mdash;)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She gestures expressively at Dogmeat, at herself, at the general situation."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Look at him.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "You look at Dogmeat."
+					+ "</p>"
+					+ "<p>"
+					+ "He looks back."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Exactly,)]")
+					+ " Kate says."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You step forward."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_DOGMEAT_AFTER_SEX,
+						startContent);
+			}
+			if (index == 2) {
+				return new Response("Leave.",
+						"Walk away.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	public static final DialogueNode KATE_DOGMEAT_CAUGHT_FINE = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Deal.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She turns back around."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Now if you don't mind, I only have, like, forty minutes left of my lunch break.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You step forward."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_DOGMEAT_AFTER_SEX,
+						startContent);
+			}
+			if (index == 2) {
+				return new Response("Leave.",
+						"Walk away. She's made her feelings clear.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * After the Kate+Dogmeat(+player) sex scene ends.
+	 */
+	public static final DialogueNode KATE_DOGMEAT_AFTER_SEX = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "Dogmeat steps back, panting softly, tail sweeping the cobblestones in slow, satisfied arcs."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate leans against the wall for a moment, catching her breath. Then she straightens up,"
+					+ " pushes her hair back, and starts looking for her jacket with the air of someone"
+					+ " who has just finished a perfectly normal lunch break."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Thanks for that... Y'know, it's pretty hard for us demons sometimes...)]")
+					+ " She finds the jacket."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Anyway. I should get back.)]")
+					+ " A pause."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(I'll be here tomorrow. Just so you know.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat nudges her hand with his broad muzzle as she passes. She scratches behind his ear"
+					+ " without breaking stride."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Continue",
+						"Continue on your way.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+					}
+				};
 			}
 			return null;
 		}

@@ -629,19 +629,36 @@ public class SuccubisSecrets {
 					"Show Kate the worn collar and ask her to re-engrave the tag:"
 							+ " your name on the front, 'Property of: Dogmeat' on the back."
 							+ "<br/>[style.italicsMoney(This will cost 200 flames.)]",
-					DOGMEAT_COLLAR_ENGRAVING) {
+					DOGMEAT_COLLAR_DIALOGUE);
+
+		} else if (index == 13
+				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+			if (Main.game.getPlayer().getMoney() < 100) {
+				return new Response("Remove extra enchantment",
+						"There's a second line worked into the inner band of the collar &mdash; an enchantment Kate didn't mention."
+								+ " She'd remove it for 100 flames. You don't have enough right now.",
+						null);
+			}
+			return new Response("Remove extra enchantment",
+					"There's a second line worked into the inner band of the collar &mdash; an enchantment Kate didn't mention."
+							+ " Ask her to take it off."
+							+ "<br/>[style.italicsMoney(Removal fee: 100 flames.)]",
+					DOGMEAT_COLLAR_REMOVE_TRACKING) {
 				@Override
 				public void effects() {
-					Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
-					Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
-					Main.game.getTextEndStringBuilder().append(
-							Main.game.getPlayer().equipClothingFromNowhere(
-									Main.game.getItemGen().generateClothing(
-											"innoxia_neck_dogmeat_collar_engraved",
-											PresetColour.CLOTHING_BLACK, false),
-									true, Main.game.getPlayer()));
+					Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-100));
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 1);
 				}
 			};
+
+		} else if (index == 14
+				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_removed") == 1
+				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") != 1) {
+			return new Response("Tell her about Dogmeat",
+					"You removed the enchantment she hid on the collar."
+							+ " If you want her to know about Dogmeat, you'll have to tell her yourself.",
+					DOGMEAT_COLLAR_TELL_VOLUNTARILY);
 
 		} else if (index == 0) {
 			return new Response("Leave", "Leave Kate's shop, heading back out into the Shopping Arcade.", EXTERIOR){
@@ -655,11 +672,18 @@ public class SuccubisSecrets {
 		return null;
 	}
 
-	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING = new DialogueNode("Succubi's Secrets", "-", true) {
+	// =========================================================================
+	// DOGMEAT COLLAR DIALOGUE CHAIN
+	// =========================================================================
+
+	/**
+	 * Entry point: Kate sees the collar on the counter and asks about it.
+	 * Branches into TELL (player is honest) or EVADE (player stays vague).
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_DIALOGUE = new DialogueNode("Succubi's Secrets", "-", true) {
 
 		@Override
 		public String getContent() {
-			String playerName = Main.game.getPlayer().getName();
 			return "<p>"
 					+ "You pull out the worn collar and set it on the counter."
 					+ " Kate opens one eye &mdash; she had apparently been dozing."
@@ -672,28 +696,184 @@ public class SuccubisSecrets {
 					+ "You tell her what you need: your name on the front, <i>'Property of: Dogmeat'</i> on the back."
 					+ "</p>"
 					+ "<p>"
-					+ "There is a pause. Kate picks up the collar, squints at the scratched-out tag, and puts it back down."
-					+ " Her tail flicks once."
+					+ "There is a pause. Kate picks up the collar and holds it close, squinting at the scratched-out tag."
+					+ " Her thumb runs along the inside of the band &mdash; once, slowly."
+					+ " She puts it back down. Her tail sways, once."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in three hundred and sixty-one years, I've had some weird requests...)]")
-					+ " She squints at you."
+					+ " She looks up at you."
 					+ " "
 					+ UtilText.parse(getKate(), "[npc.speech(Is this seriously who's been keeping you busy? A dog?)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Tell her the whole story",
+						"Tell Kate that the collar belongs to a dog named Dogmeat, and what he means to you.",
+						DOGMEAT_COLLAR_TELL);
+			}
+			if (index == 2) {
+				return new Response("Keep it vague",
+						"Let Kate assume what she wants. Don't give details.",
+						DOGMEAT_COLLAR_EVADE);
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Player tells Kate the truth. She gets flustered, curious, and a little too interested.
+	 * Sets kate_dogmeat_informed and kate_dogmeat_schedule_active on confirm.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_TELL = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You tell her. The size of him, where you found him, what he is. What the collar means."
 					+ "</p>"
 					+ "<p>"
-					+ "She doesn't wait for an answer. She reaches under the counter for her engraving tools with the expression"
-					+ " of someone being asked to do two entire tasks in one day."
+					+ "Kate listens. For once she isn't half-asleep &mdash; she's very still, the collar still in her hand."
+					+ " When you finish, she's quiet for a moment."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Two hundred flames. And you're going to pretend you don't know me if we're ever in the same place at the same time.)]")
+					+ UtilText.parse(getKate(), "[npc.speech(...Like, an actual dog.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "[style.italicsMoney(Two hundred flames change hands.)]"
-					+ " She works with the lazy efficiency of someone who does actually know what she's doing,"
-					+ " the needle tracing clean lines into the steel without her even looking particularly engaged."
+					+ "Not a question. She's just saying it out loud."
 					+ "</p>"
 					+ "<p>"
+					+ "She picks up the collar again. Brings it close. You watch her breathe in, just once, and see"
+					+ " the precise moment she realises she's doing it because she can still smell him on the leather."
+					+ " Her expression goes somewhere complicated &mdash; a little caught-out, a little flushed &mdash;"
+					+ " and she sets it back down with slightly more care than necessary."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Okay.)]")
+					+ " A pause."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Okay, that's... Y'know what, I don't judge.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She sits up properly for the first time since you walked in and reaches for her engraving tools,"
+					+ " and it's very obvious she's thinking about something else and failing to pretend otherwise."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Is he... good?)]")
+					+ " She says it without looking at you, already setting the needle to the steel."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Like, is he actually...)]")
+					+ " She waves the stylus vaguely."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Y'know.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Yes. Very.",
+						"Let her draw her own conclusions.",
+						DOGMEAT_COLLAR_ENGRAVING) {
+					@Override
+					public void effects() {
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
+						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_informed", 1);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_schedule_active", 1);
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().equipClothingFromNowhere(
+										Main.game.getItemGen().generateClothing(
+												"innoxia_neck_dogmeat_collar_engraved",
+												PresetColour.CLOTHING_BLACK, false),
+										true, Main.game.getPlayer()));
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Player stays vague. Kate quietly adds a hidden tracking enchantment during engraving.
+	 * Sets kate_dogmeat_tracking_active. Schedule activates when player next visits Dogmeat.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_EVADE = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You give her the short version: it's personal, it's for someone who matters to you,"
+					+ " that's all she needs to know."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Sure. Whatever.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Kate picks up the collar and reaches for her engraving tools, and you're fairly sure that's the end of it."
+					+ "</p>"
+					+ "<p>"
+					+ "It isn't quite."
+					+ "</p>"
+					+ "<p>"
+					+ "She works quickly, efficiently &mdash; the main line, the names, clean and competent. Standard."
+					+ " Then, so briefly you almost miss it, the needle makes a second pass along the inner edge of the band."
+					+ " The line it traces is barely a hairsbreadth, following the curve of the first like a shadow,"
+					+ " worked into the grain of the leather where you'd have to know what you were looking for to find it."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate knows what she's looking for."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(There.)]")
+					+ " She holds the collar out."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Keyed to you, so additions are cheaper if you come back.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsBad(You notice a faint second line etched into the inner band of the collar."
+					+ " It looks like some kind of enchantment. Kate doesn't mention it.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Take it",
+						"Pay Kate and take the engraved collar.",
+						DOGMEAT_COLLAR_ENGRAVING) {
+					@Override
+					public void effects() {
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
+						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 1);
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().equipClothingFromNowhere(
+										Main.game.getItemGen().generateClothing(
+												"innoxia_neck_dogmeat_collar_engraved",
+												PresetColour.CLOTHING_BLACK, false),
+										true, Main.game.getPlayer()));
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Collar engraving complete. Text varies depending on whether Kate was told about Dogmeat.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			String playerName = Main.game.getPlayer().getName();
+			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
+
+			return "<p>"
 					+ "When she slides it back across the counter, you hold it up to the light:"
 					+ "</p>"
 					+ "<p style='text-align:center;'>"
@@ -702,14 +882,20 @@ public class SuccubisSecrets {
 					+ "<i>Back: Property of: Dogmeat</i>"
 					+ "</p>"
 					+ "<p>"
-					+ "You clasp it around your neck. Kate watches this with the expression of someone filing away a very"
-					+ " good piece of gossip. Her tail sways once, slow and thoughtful."
+					+ "You clasp it around your neck."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Huh.)]")
-					+ " She settles back into her chair."
-					+ " "
-					+ UtilText.parse(getKate(), "[npc.speech(Y'know what? It's not bad work. Now go find your dog.)]")
+					+ (kateTold
+						? UtilText.parse(getKate(), "[npc.speech(Huh.)]")
+								+ " Kate watches you fasten it, and there's that expression again &mdash;"
+								+ " the one doing a lot of work."
+								+ " Her tail sways once, slow and thoughtful."
+								+ " "
+								+ UtilText.parse(getKate(), "[npc.speech(Y'know what? I'm not saying anything. It's not bad work. Now go find your dog.)]")
+						: UtilText.parse(getKate(), "[npc.speech(Huh.)]")
+								+ " She settles back into her chair."
+								+ " "
+								+ UtilText.parse(getKate(), "[npc.speech(Y'know what? It's not bad work. Now go find whoever that is.)]"))
 					+ "</p>"
 					+ "<p>"
 					+ "[style.italicsQuest(Go back to Dogmeat and show him.)]"
@@ -719,6 +905,96 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			return getMainResponse(index);
+		}
+	};
+
+	/**
+	 * Player asks Kate to remove the hidden tracking enchantment she added.
+	 * Costs 100 flames (standard removal fee). Sets kate_dogmeat_tracking_removed.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_REMOVE_TRACKING = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You set the collar on the counter and point to the second line &mdash; the faint one worked into the inner"
+					+ " edge of the band, barely visible unless you knew to look."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...Hm.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Kate doesn't deny it. She picks up the stylus &mdash; she had it in her pocket, which says something"
+					+ " &mdash; and without any particular ceremony runs a quick counter-line along the enchantment until it dissolves."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in my defense, you were being very cagey.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She slides the collar back."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(There. Clean. And before you ask &mdash; I haven't followed it anywhere yet. You got here first.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsGood(The hidden enchantment has been removed from the collar.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			return getMainResponse(index);
+		}
+	};
+
+	/**
+	 * Player voluntarily tells Kate about Dogmeat after having removed her tracking enchantment.
+	 * Sets kate_dogmeat_informed and kate_dogmeat_schedule_active.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_TELL_VOLUNTARILY = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You tell her about Dogmeat. The size of him. Where he is."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate is quiet for a moment."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Huh.)]")
+					+ " A pause."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(So you knew about the tracking thing.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Not a question. She's processing."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(And you're telling me anyway.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Her tail sways once. She looks away &mdash; then back."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Okay. Y'know, that's actually kind of &mdash; anyway. Thanks.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("You're welcome.",
+						"",
+						SHOP_BEAUTY_SALON_MAIN) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_informed", 1);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_schedule_active", 1);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 0);
+					}
+				};
+			}
+			return null;
 		}
 	};
 
