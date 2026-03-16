@@ -661,18 +661,40 @@ public class SuccubisSecrets {
 		public String getContent() {
 			String playerName = Main.game.getPlayer().getName();
 			return "<p>"
-					+ "You pull the worn collar out and set it on Kate's counter."
-					+ " She picks it up without a word, turns it over, and squints at the scratched-out tag."
+					+ "You pull out the worn collar and set it on the counter."
+					+ " Kate opens one eye &mdash; she had apparently been dozing."
+					+ " She stares at the collar. Then at you. Then at the collar again."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Hm. Seen worse.)]")
-					+ " She opens a small drawer and selects an engraving needle."
-					+ " [style.italicsMoney(Two hundred flames change hands.)]"
+					+ UtilText.parse(getKate(), "[npc.speech(That's a dog collar.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She works quickly, the needle tracing clean lines into the steel."
-					+ " When she's done, she slides the collar back across the counter."
-					+ " You hold it up to the light:"
+					+ "You tell her what you need: your name on the front, <i>'Property of: Dogmeat'</i> on the back."
+					+ "</p>"
+					+ "<p>"
+					+ "There is a pause. Kate picks up the collar, squints at the scratched-out tag, and puts it back down."
+					+ " Her tail flicks once."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in three hundred and sixty-one years, I've had some weird requests...)]")
+					+ " She squints at you."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Is this seriously who's been keeping you busy? A dog?)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She doesn't wait for an answer. She reaches under the counter for her engraving tools with the expression"
+					+ " of someone being asked to do two entire tasks in one day."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Two hundred flames. And you're going to pretend you don't know me if we're ever in the same place at the same time.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsMoney(Two hundred flames change hands.)]"
+					+ " She works with the lazy efficiency of someone who does actually know what she's doing,"
+					+ " the needle tracing clean lines into the steel without her even looking particularly engaged."
+					+ "</p>"
+					+ "<p>"
+					+ "When she slides it back across the counter, you hold it up to the light:"
 					+ "</p>"
 					+ "<p style='text-align:center;'>"
 					+ "<i>Front: " + playerName + "</i>"
@@ -680,11 +702,17 @@ public class SuccubisSecrets {
 					+ "<i>Back: Property of: Dogmeat</i>"
 					+ "</p>"
 					+ "<p>"
-					+ "The leather is soft and warm as you fasten it around your neck."
-					+ " Kate watches this process with an expression of profound neutrality."
+					+ "You clasp it around your neck. Kate watches this with the expression of someone filing away a very"
+					+ " good piece of gossip. Her tail sways once, slow and thoughtful."
 					+ "</p>"
 					+ "<p>"
-					+ "[style.italicsQuest(Now go back to Dogmeat and show him.)]"
+					+ UtilText.parse(getKate(), "[npc.speech(Huh.)]")
+					+ " She settles back into her chair."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Y'know what? It's not bad work. Now go find your dog.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(Go back to Dogmeat and show him.)]"
 					+ "</p>";
 		}
 
