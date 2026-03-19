@@ -412,8 +412,11 @@ public class Kate extends NPC {
 				if (hour == 11) {
 					// Kate heads out to Dogmeat's location at the start of the window
 					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
-				} else if (hour == 13) {
-					// Fallback: return Kate to her shop at end of window in case the player didn't find her during it
+				} else if (hour == 13
+						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
+						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
+					// Fallback: only move Kate back if she's still at Dogmeat's tile.
+					// If the player found her during the window, KATE_DOGMEAT_AFTER_SEX already returned her.
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
