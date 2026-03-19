@@ -2,7 +2,9 @@ package com.lilithsthrone.game.character.npc.dominion;
 
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -421,18 +423,34 @@ public class Kate extends NPC {
 						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
 						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
 					// Player did not find her during the window -- simulate the sex off-screen.
-					// Vary the orifice each visit rather than always the same act.
-					double roll = Math.random();
-					SexAreaOrifice orifice = roll < 0.6
-							? SexAreaOrifice.VAGINA
-							: roll < 0.85 ? SexAreaOrifice.ANUS : SexAreaOrifice.MOUTH;
-					this.calculateGenericSexEffects(
-							true, true, dogmeat,
-							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
-							GenericSexFlag.NO_DESCRIPTION_NEEDED);
-					this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
+					// Orifice variety grows with experience; fetishes boost individual weights.
+					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
+
+					Map<SexAreaOrifice, Integer> orificeWeights = new LinkedHashMap<>();
+					orificeWeights.put(SexAreaOrifice.MOUTH,
+							4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0));
+					if (offscreenCount >= 2) {
+						orificeWeights.put(SexAreaOrifice.VAGINA,
+								5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0));
+					}
+					if (offscreenCount >= 5) {
+						orificeWeights.put(SexAreaOrifice.ANUS,
+								3 + (this.hasFetish(Fetish.FETISH_ANAL_RECEIVING) ? 4 : 0));
+					}
+
+					// Act count is based on orgasmsBeforeSatisfied, growing slightly with experience
+					int actCount = Math.max(1, this.getOrgasmsBeforeSatisfied() + (int)(offscreenCount / 4));
+					for (int i = 0; i < actCount; i++) {
+						SexAreaOrifice orifice = Util.getRandomObjectFromWeightedMap(orificeWeights);
+						this.calculateGenericSexEffects(
+								true, true, dogmeat,
+								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+								new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
+								GenericSexFlag.NO_DESCRIPTION_NEEDED);
+						this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
+					}
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
