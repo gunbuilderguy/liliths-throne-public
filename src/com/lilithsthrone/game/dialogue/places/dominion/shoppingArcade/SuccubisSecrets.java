@@ -660,6 +660,13 @@ public class SuccubisSecrets {
 							+ " If you want her to know about Dogmeat, you'll have to tell her yourself.",
 					DOGMEAT_COLLAR_TELL_VOLUNTARILY);
 
+		} else if (index == 15
+				&& Main.game.getDialogueFlags().getSavedLong("kate_collar_state") == 1
+				&& Main.game.getDialogueFlags().getSavedLong("kate_bring_active") != 1) {
+			return new Response("Offer to take her to meet Dogmeat",
+					"Kate said she wanted to meet him. Offer to take her there now.",
+					DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER);
+
 		} else if (index == 0) {
 			return new Response("Leave", "Leave Kate's shop, heading back out into the Shopping Arcade.", EXTERIOR){
 				@Override
@@ -777,19 +784,11 @@ public class SuccubisSecrets {
 			if (index == 1) {
 				return new Response("Yes. Very.",
 						"Let her draw her own conclusions.",
-						DOGMEAT_COLLAR_ENGRAVING) {
+						DOGMEAT_COLLAR_ENGRAVING_HAIR_REACTION) {
 					@Override
 					public void effects() {
-						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
-						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_informed", 1);
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_schedule_active", 1);
-						Main.game.getTextEndStringBuilder().append(
-								Main.game.getPlayer().equipClothingFromNowhere(
-										Main.game.getItemGen().generateClothing(
-												"innoxia_neck_dogmeat_collar_engraved",
-												PresetColour.CLOTHING_BLACK, false),
-										true, Main.game.getPlayer()));
 					}
 				};
 			}
@@ -844,18 +843,10 @@ public class SuccubisSecrets {
 			if (index == 1) {
 				return new Response("Take it",
 						"Pay Kate and take the engraved collar.",
-						DOGMEAT_COLLAR_ENGRAVING) {
+						DOGMEAT_COLLAR_ENGRAVING_HAIR_REACTION) {
 					@Override
 					public void effects() {
-						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
-						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 1);
-						Main.game.getTextEndStringBuilder().append(
-								Main.game.getPlayer().equipClothingFromNowhere(
-										Main.game.getItemGen().generateClothing(
-												"innoxia_neck_dogmeat_collar_engraved",
-												PresetColour.CLOTHING_BLACK, false),
-										true, Main.game.getPlayer()));
 					}
 				};
 			}
@@ -864,7 +855,9 @@ public class SuccubisSecrets {
 	};
 
 	/**
-	 * Collar engraving complete. Text varies depending on whether Kate was told about Dogmeat.
+	 * Collar engraving complete. Prefixed with Kate's reaction to the hair discovery
+	 * (stored in kate_hair_choice), then shows the engraved collar going on.
+	 * Leads into the "wants in" beat.
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING = new DialogueNode("Succubi's Secrets", "-", true) {
 
@@ -872,8 +865,38 @@ public class SuccubisSecrets {
 		public String getContent() {
 			String playerName = Main.game.getPlayer().getName();
 			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
+			long hairChoice = Main.game.getDialogueFlags().getSavedLong("kate_hair_choice");
 
-			return "<p>"
+			String hairReact;
+			if (hairChoice == 1) {
+				hairReact = "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(You have a dog.)]")
+						+ " Kate stares. A pause."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(And he &mdash;)]")
+						+ " She stops. Her tail flicks once, sharply."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(Okay.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She picks the tools back up. The subject appears closed."
+						+ " Her ears, however, have rotated slightly."
+						+ "</p>";
+			} else if (hairChoice == 2) {
+				hairReact = "<p>"
+						+ "Kate holds the silence for a long moment. Then: "
+						+ UtilText.parse(getKate(), "[npc.speech(Huh.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She picks the tools back up. Her expression is unreadable."
+						+ " Her tail is doing something complicated."
+						+ "</p>";
+			} else {
+				hairReact = "";
+			}
+
+			return hairReact
+					+ "<p>"
 					+ "When she slides it back across the counter, you hold it up to the light:"
 					+ "</p>"
 					+ "<p style='text-align:center;'>"
@@ -890,21 +913,286 @@ public class SuccubisSecrets {
 								+ " Kate watches you fasten it, and there's that expression again &mdash;"
 								+ " the one doing a lot of work."
 								+ " Her tail sways once, slow and thoughtful."
-								+ " "
-								+ UtilText.parse(getKate(), "[npc.speech(Y'know what? I'm not saying anything. It's not bad work. Now go find your dog.)]")
 						: UtilText.parse(getKate(), "[npc.speech(Huh.)]")
-								+ " She settles back into her chair."
-								+ " "
-								+ UtilText.parse(getKate(), "[npc.speech(Y'know what? It's not bad work. Now go find whoever that is.)]"))
-					+ "</p>"
-					+ "<p>"
-					+ "[style.italicsQuest(Go back to Dogmeat and show him.)]"
+								+ " She settles back into her chair, watching you."
+								+ " Her tail has gone still.")
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
-			return getMainResponse(index);
+			if (index == 1) {
+				return new Response("Continue",
+						"",
+						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN);
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Kate notices dog hair on the collar during engraving — a beat before the work is done.
+	 * Player can explain or stay silent; either way the engraving continues.
+	 * kate_hair_choice: 1 = explained, 2 = said nothing.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_HAIR_REACTION = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
+			return "<p>"
+					+ "Kate picks up the collar with practiced indifference. She's seen collars like this."
+					+ " She already has a read on what it is. Her tools are out before she's fully looked at it."
+					+ "</p>"
+					+ "<p>"
+					+ "Then she stops."
+					+ "</p>"
+					+ "<p>"
+					+ "She squints at the leather. Holds it up. Rolls something between her fingers &mdash;"
+					+ " a short, coarse strand still caught in the seam of the old tag."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...This is actual dog hair.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She puts the collar back down. Looks at you differently &mdash; not the look of someone who has seen everything,"
+					+ " but someone who has just found the edge of it."
+					+ "</p>"
+					+ (kateTold
+						? "<p>"
+								+ "She already knows, of course. You told her. But knowing it in the abstract and holding"
+								+ " a strand of his fur between her fingers are apparently different things."
+								+ "</p>"
+						: "");
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("\"His name is Dogmeat. He found me in the alley.\"",
+						"Matter-of-fact. Give her the short version.",
+						DOGMEAT_COLLAR_ENGRAVING) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_hair_choice", 1);
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
+						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().equipClothingFromNowhere(
+										Main.game.getItemGen().generateClothing(
+												"innoxia_neck_dogmeat_collar_engraved",
+												PresetColour.CLOTHING_BLACK, false),
+										true, Main.game.getPlayer()));
+					}
+				};
+			}
+			if (index == 2) {
+				return new Response("(Say nothing. Just hold her gaze.)",
+						"Let the silence answer for you.",
+						DOGMEAT_COLLAR_ENGRAVING) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_hair_choice", 2);
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
+						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().equipClothingFromNowhere(
+										Main.game.getItemGen().generateClothing(
+												"innoxia_neck_dogmeat_collar_engraved",
+												PresetColour.CLOTHING_BLACK, false),
+										true, Main.game.getPlayer()));
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Kate says "He put that on you himself?" — player chooses how to answer.
+	 * kate_wants_choice: 1 = "He shook it off", 2 = "More or less".
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...So.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She's looking at the collar, not at you."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(He put that on you himself?)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("\"He shook it off and offered it to me.\"",
+						"",
+						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_wants_choice", 1);
+						Main.game.getDialogueFlags().setSavedLong("kate_particular_response", 0);
+					}
+				};
+			}
+			if (index == 2) {
+				return new Response("\"More or less.\"",
+						"",
+						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_wants_choice", 2);
+						Main.game.getDialogueFlags().setSavedLong("kate_particular_response", 0);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Kate says "I want to meet him." Content varies based on prior choice and "particular" loop.
+	 * Three choices: bring her now, defer, or the "he's particular" loop.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			long wantsChoice = Main.game.getDialogueFlags().getSavedLong("kate_wants_choice");
+			long particular = Main.game.getDialogueFlags().getSavedLong("kate_particular_response");
+
+			String react;
+			if (particular == 1) {
+				react = "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Good.)]")
+						+ " Her tail sways once."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(So am I.)]")
+						+ " She waits."
+						+ "</p>";
+			} else if (wantsChoice == 1) {
+				react = "<p>"
+						+ "Kate absorbs this. Something in her expression shifts &mdash; not softness exactly,"
+						+ " but attention. Real attention, the kind she doesn't bother with for most things."
+						+ "</p>";
+			} else {
+				react = "<p>"
+						+ "Kate's eyes move from the collar to your face. She seems to be deciding something."
+						+ "</p>";
+			}
+
+			return react
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(I want to meet him.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Not a question. Her voice has the same flat certainty she used to quote 200 flames."
+					+ " This is just how things are going to be."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("\"I can take you there.\"",
+						"Offer to bring her to Dogmeat's alley right now.",
+						DOGMEAT_COLLAR_ENGRAVING_CLOSING_EARLY) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_collar_state", 1);
+						Main.game.getDialogueFlags().setSavedLong("kate_bring_active", 1);
+					}
+				};
+			}
+			if (index == 2) {
+				return new Response("\"Maybe another time.\"",
+						"Not today. But you know where to find each other.",
+						DOGMEAT_COLLAR_ENGRAVING_DEFERRED) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_collar_state", 1);
+					}
+				};
+			}
+			if (index == 3) {
+				return new Response("\"He's... particular about people.\"",
+						"Warn her gently.",
+						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_particular_response", 1);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Kate doesn't push when the player defers. "You know where I am."
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_DEFERRED = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Mm.)]")
+					+ " She doesn't push. She does, however, look at you for a beat longer than usual"
+					+ " before settling back into her chair."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(You know where I am.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(You can bring Kate to meet Dogmeat at any time by talking to her in the shop.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Continue",
+						"",
+						SHOP_BEAUTY_SALON_MAIN);
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Kate decides to close the shop early. Player heads to the alley.
+	 */
+	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_CLOSING_EARLY = new DialogueNode("Succubi's Secrets", "-", true) {
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "She gets up. One slow, unhurried movement that manages to be both catlike and deliberate."
+					+ " She produces a coat from somewhere that looks indifferent and put-together in equal measure."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(I'm closing early.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She has, apparently, never closed early. She doesn't comment on this."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuest(Head to Dogmeat's alley in the back streets of Dominion.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Go to the alley",
+						"Lead the way to Dogmeat.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
 		}
 	};
 

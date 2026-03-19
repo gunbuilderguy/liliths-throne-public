@@ -100,6 +100,10 @@ public class DogmeatDialogue {
 
 		@Override
 		public String getContent() {
+			// Player-initiated: player is bringing Kate to meet Dogmeat for the first time
+			if (Main.game.getDialogueFlags().getSavedLong("kate_bring_active") == 1) {
+				return DOGMEAT_ENCOUNTER_WITH_KATE.getContent();
+			}
 			// If Kate is here on her daily visit, redirect to the discovery scene
 			if (isKatePresent()) {
 				return KATE_DOGMEAT_APPROACH.getContent();
@@ -188,6 +192,10 @@ public class DogmeatDialogue {
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
+			// Player-initiated Kate introduction
+			if (Main.game.getDialogueFlags().getSavedLong("kate_bring_active") == 1) {
+				return DOGMEAT_ENCOUNTER_WITH_KATE.getResponse(responseTab, index);
+			}
 			// If Kate is here, use the discovery scene responses instead
 			if (isKatePresent()) {
 				return KATE_DOGMEAT_APPROACH.getResponse(responseTab, index);
@@ -884,6 +892,146 @@ public class DogmeatDialogue {
 			if (index == 1) {
 				return new Response("Continue",
 						"Continue on your way.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+						getKate().setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// PLAYER-INITIATED KATE INTRODUCTION
+	// =========================================================================
+
+	/**
+	 * Player brings Kate to meet Dogmeat for the first time.
+	 * Triggers when player visits the alley with kate_bring_active == 1.
+	 */
+	public static final DialogueNode DOGMEAT_ENCOUNTER_WITH_KATE = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "Dogmeat is in his usual spot. His ears come forward the moment he sees you &mdash;"
+					+ " then go flat."
+					+ "</p>"
+					+ "<p>"
+					+ "His gaze moves to Kate. His hackles rise, just slightly. He looks between the two of you"
+					+ " with a long, assessing stare, nostrils working."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate does not flinch. She looks back at him with the calm of someone who has met things"
+					+ " considerably more alarming than a feral dog morph. She does, after a moment,"
+					+ " tilt her chin slightly &mdash; not a challenge, just an acknowledgement."
+					+ "</p>"
+					+ "<p>"
+					+ "The two of them seem to reach some kind of arrangement without either of them speaking."
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat's hackles settle. His tail moves &mdash; once, slow, measuring."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(He's exactly what I pictured.)]")
+					+ " Kate says, to you."
+					+ " Then, almost to herself: "
+					+ UtilText.parse(getKate(), "[npc.speech(Hm.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You kneel. Kate, after a brief pause, lowers herself beside you."
+						+ " Dogmeat looks between you both &mdash; then, apparently deciding the situation is"
+						+ " entirely acceptable, steps forward."
+						+ "</p>";
+				return new ResponseSex("Present yourselves",
+						"Lower yourself beside Kate. Dogmeat will make his own decisions.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_SAVAGE,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null) {
+							@Override
+							public SexControl getSexControl(GameCharacter character) {
+								if (character.isPlayer() || character == kate) {
+									return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
+								}
+								return super.getSexControl(character);
+							}
+						},
+						DOGMEAT_ENCOUNTER_WITH_KATE_AFTER,
+						startContent);
+			}
+			if (index == 2) {
+				return new Response("Leave",
+						"This isn't the right moment.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * After the player-initiated threesome with Kate and Dogmeat.
+	 * Sets kate_collar_state to 2.
+	 */
+	public static final DialogueNode DOGMEAT_ENCOUNTER_WITH_KATE_AFTER = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public void applyPreParsingEffects() {
+			Main.game.getDialogueFlags().setSavedLong("kate_collar_state", 2);
+			Main.game.getDialogueFlags().setSavedLong("kate_bring_active", 0);
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "Kate straightens her coat. Smooths her skirt. Says nothing for a moment."
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat has settled onto his haunches beside her, tail sweeping the cobblestones with"
+					+ " slow, proprietary satisfaction. He leans against her leg. She lets him."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...He's welcome at the shop.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She means it. She doesn't explain it."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Continue",
+						"Head back into the city.",
 						Main.game.getDefaultDialogue(false)) {
 					@Override
 					public void effects() {
