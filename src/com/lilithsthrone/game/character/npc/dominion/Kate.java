@@ -53,8 +53,6 @@ import com.lilithsthrone.game.character.markings.TattooCounterType;
 import com.lilithsthrone.game.character.markings.TattooType;
 import com.lilithsthrone.game.character.markings.TattooWriting;
 import com.lilithsthrone.game.character.markings.TattooWritingStyle;
-import com.lilithsthrone.game.character.body.FluidCum;
-import com.lilithsthrone.game.character.body.types.FluidType;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.persona.NameTriplet;
@@ -423,21 +421,18 @@ public class Kate extends NPC {
 						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
 						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
 					// Player did not find her during the window -- simulate the sex off-screen.
+					// Vary the orifice each visit rather than always the same act.
+					double roll = Math.random();
+					SexAreaOrifice orifice = roll < 0.6
+							? SexAreaOrifice.VAGINA
+							: roll < 0.85 ? SexAreaOrifice.ANUS : SexAreaOrifice.MOUTH;
 					this.calculateGenericSexEffects(
 							true, true, null,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							new SexType(SexParticipantType.NORMAL, SexAreaOrifice.VAGINA, SexAreaPenetration.PENIS),
+							new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
 							GenericSexFlag.NO_DESCRIPTION_NEEDED);
-					if (this.getTotalFluidInArea(SexAreaOrifice.VAGINA) < 100) {
-						this.ingestFluid(
-								null,
-								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-								new FluidCum(FluidType.CUM_DOG_MORPH),
-								SexAreaOrifice.VAGINA,
-								400);
-					}
+					this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
