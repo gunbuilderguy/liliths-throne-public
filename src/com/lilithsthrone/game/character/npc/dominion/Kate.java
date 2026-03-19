@@ -427,20 +427,34 @@ public class Kate extends NPC {
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
 					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
 
+					// Bestiality fetish means she needs less warm-up before full variety
+					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
+					int vaginaThreshold = hasBestiality ? 1 : 2;
+					int analThreshold   = hasBestiality ? 3 : 5;
+
 					Map<SexAreaOrifice, Integer> orificeWeights = new LinkedHashMap<>();
 					orificeWeights.put(SexAreaOrifice.MOUTH,
-							4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0));
-					if (offscreenCount >= 2) {
+							4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0)
+							  + (this.hasFetish(Fetish.FETISH_CUM_ADDICT)     ? 2 : 0));
+					if (offscreenCount >= vaginaThreshold) {
 						orificeWeights.put(SexAreaOrifice.VAGINA,
-								5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0));
+								5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0)
+								  + (this.hasFetish(Fetish.FETISH_PREGNANCY)         ? 2 : 0)
+								  + (this.hasFetish(Fetish.FETISH_IMPREGNATION)      ? 2 : 0)
+								  + (this.hasFetish(Fetish.FETISH_BREEDER)           ? 3 : 0));
 					}
-					if (offscreenCount >= 5) {
+					if (offscreenCount >= analThreshold) {
 						orificeWeights.put(SexAreaOrifice.ANUS,
 								3 + (this.hasFetish(Fetish.FETISH_ANAL_RECEIVING) ? 4 : 0));
 					}
 
-					// Act count is based on orgasmsBeforeSatisfied, growing slightly with experience
-					int actCount = Math.max(1, this.getOrgasmsBeforeSatisfied() + (int)(offscreenCount / 4));
+					// Act count boosted by relevant fetishes and the nymphomaniac perk
+					int actCount = Math.max(1, this.getOrgasmsBeforeSatisfied()
+							+ (int)(offscreenCount / 4)
+							+ (hasBestiality                                    ? 1 : 0)
+							+ (this.hasFetish(Fetish.FETISH_CUM_ADDICT)         ? 1 : 0)
+							+ (this.hasFetish(Fetish.FETISH_SUBMISSIVE)         ? 1 : 0)
+							+ (this.hasTraitActivated(Perk.NYMPHOMANIAC)        ? 1 : 0));
 					for (int i = 0; i < actCount; i++) {
 						SexAreaOrifice orifice = Util.getRandomObjectFromWeightedMap(orificeWeights);
 						this.calculateGenericSexEffects(
