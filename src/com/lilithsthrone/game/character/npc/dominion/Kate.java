@@ -79,6 +79,7 @@ import com.lilithsthrone.game.inventory.enchanting.TFPotency;
 import com.lilithsthrone.game.inventory.item.AbstractItem;
 import com.lilithsthrone.game.inventory.item.AbstractItemType;
 import com.lilithsthrone.game.inventory.item.ItemType;
+import com.lilithsthrone.game.sex.GenericSexFlag;
 import com.lilithsthrone.game.sex.SexAreaOrifice;
 import com.lilithsthrone.game.sex.SexAreaPenetration;
 import com.lilithsthrone.game.sex.SexParticipantType;
@@ -426,14 +427,17 @@ public class Kate extends NPC {
 							true, true, null,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							new SexType(SexParticipantType.NORMAL, SexAreaOrifice.VAGINA, SexAreaPenetration.PENIS));
-					this.ingestFluid(
-							null,
-							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-							new FluidCum(FluidType.CUM_DOG_MORPH),
-							SexAreaOrifice.VAGINA,
-							400);
+							new SexType(SexParticipantType.NORMAL, SexAreaOrifice.VAGINA, SexAreaPenetration.PENIS),
+							GenericSexFlag.NO_DESCRIPTION_NEEDED);
+					if (this.getTotalFluidInArea(SexAreaOrifice.VAGINA) < 100) {
+						this.ingestFluid(
+								null,
+								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+								new FluidCum(FluidType.CUM_DOG_MORPH),
+								SexAreaOrifice.VAGINA,
+								400);
+					}
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
