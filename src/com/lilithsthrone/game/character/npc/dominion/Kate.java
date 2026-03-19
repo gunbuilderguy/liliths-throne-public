@@ -427,7 +427,7 @@ public class Kate extends NPC {
 							? SexAreaOrifice.VAGINA
 							: roll < 0.85 ? SexAreaOrifice.ANUS : SexAreaOrifice.MOUTH;
 					this.calculateGenericSexEffects(
-							true, true, null,
+							true, true, dogmeat,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
 							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
 							new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
