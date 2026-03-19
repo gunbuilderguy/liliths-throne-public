@@ -354,8 +354,48 @@ public class Kate extends NPC {
 	
 	@Override
 	public void turnUpdate() {
-		if(!Main.game.getCharactersPresent().contains(this)) {
-			if(Main.game.isExtendedWorkTime()) {
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
+			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+			if (dogmeat != null
+					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)
+					&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
+					&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
+
+				long arrivalMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute");
+				long now           = Main.game.getMinutesPassed();
+
+				if (arrivalMinute > 0 && now >= arrivalMinute) {
+					if (now < arrivalMinute + 120) {
+						// Within the visit window: fire any acts whose scheduled minute has passed.
+						long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+						long interval      = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_act_interval");
+						long nextActMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_next_act_minute");
+						while (actsRemaining > 0 && now >= nextActMinute) {
+							simulateOffscreenActs(dogmeat, 1);
+							actsRemaining--;
+							nextActMinute += interval;
+						}
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actsRemaining);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_next_act_minute", nextActMinute);
+					} else {
+						// Visit window expired: simulate any acts not yet fired, then send her home.
+						long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+						simulateOffscreenActs(dogmeat, (int) actsRemaining);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_arrival_minute", 0);
+
+						long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
+
+						this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+					}
+					return; // Skip normal shop presence logic during/after visit this turn.
+				}
+			}
+		}
+		// Normal shop presence logic.
+		if (!Main.game.getCharactersPresent().contains(this)) {
+			if (Main.game.isExtendedWorkTime()) {
 				this.returnToHome();
 			} else {
 				this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
@@ -417,7 +457,7 @@ public class Kate extends NPC {
 			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
-					// Kate heads out; pre-compute how many acts will happen this visit.
+					// Kate heads out; pre-compute act count and per-act interval for this visit.
 					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
 
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
@@ -428,29 +468,14 @@ public class Kate extends NPC {
 							+ (this.hasFetish(Fetish.FETISH_CUM_ADDICT)         ? 1 : 0)
 							+ (this.hasFetish(Fetish.FETISH_SUBMISSIVE)         ? 1 : 0)
 							+ (this.hasTraitActivated(Perk.NYMPHOMANIAC)        ? 1 : 0));
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actCount);
 
-				} else if (hour == 12
-						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
-						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
-					// First half of acts -- mid-visit.
-					long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
-					long actsNow = (actsRemaining + 1) / 2; // ceil
-					simulateOffscreenActs(dogmeat, (int) actsNow);
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actsRemaining - actsNow);
-
-				} else if (hour == 13
-						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
-						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
-					// Final acts, bookkeeping, and return.
-					long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
-					simulateOffscreenActs(dogmeat, (int) actsRemaining);
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
-
-					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
-
-					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+					// Divide the 2-hour window into (actCount+1) equal slots so acts are spaced evenly.
+					long arrivalMinute = Main.game.getMinutesPassed();
+					long interval      = 120L / (actCount + 1);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_arrival_minute",  arrivalMinute);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_act_interval",    interval);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining",  actCount);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_next_act_minute", arrivalMinute + interval);
 				}
 			}
 		}
