@@ -417,56 +417,88 @@ public class Kate extends NPC {
 			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
-					// Kate heads out to Dogmeat's location at the start of the window
+					// Kate heads out; pre-compute how many acts will happen this visit.
 					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
-				} else if (hour == 13
-						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
-						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
-					// Player did not find her during the window -- simulate the sex off-screen.
-					// Orifice variety grows with experience; fetishes boost individual weights.
+
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
-
-					// Bestiality fetish means she needs less warm-up before full variety
 					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
-					int vaginaThreshold = hasBestiality ? 1 : 2;
-					int analThreshold   = hasBestiality ? 3 : 5;
-
-					Map<SexAreaOrifice, Integer> orificeWeights = new LinkedHashMap<>();
-					orificeWeights.put(SexAreaOrifice.MOUTH,
-							4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0)
-							  + (this.hasFetish(Fetish.FETISH_CUM_ADDICT)     ? 2 : 0));
-					if (offscreenCount >= vaginaThreshold) {
-						orificeWeights.put(SexAreaOrifice.VAGINA,
-								5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0)
-								  + (this.hasFetish(Fetish.FETISH_PREGNANCY)         ? 2 : 0)
-								  + (this.hasFetish(Fetish.FETISH_IMPREGNATION)      ? 2 : 0)
-								  + (this.hasFetish(Fetish.FETISH_BREEDER)           ? 3 : 0));
-					}
-					if (offscreenCount >= analThreshold) {
-						orificeWeights.put(SexAreaOrifice.ANUS,
-								3 + (this.hasFetish(Fetish.FETISH_ANAL_RECEIVING) ? 4 : 0));
-					}
-
-					// Act count boosted by relevant fetishes and the nymphomaniac perk
 					int actCount = Math.max(1, this.getOrgasmsBeforeSatisfied()
-							+ (int)(offscreenCount / 4)
+							+ Math.min((int)(offscreenCount / 4), 3)
 							+ (hasBestiality                                    ? 1 : 0)
 							+ (this.hasFetish(Fetish.FETISH_CUM_ADDICT)         ? 1 : 0)
 							+ (this.hasFetish(Fetish.FETISH_SUBMISSIVE)         ? 1 : 0)
 							+ (this.hasTraitActivated(Perk.NYMPHOMANIAC)        ? 1 : 0));
-					for (int i = 0; i < actCount; i++) {
-						SexAreaOrifice orifice = Util.getRandomObjectFromWeightedMap(orificeWeights);
-						this.calculateGenericSexEffects(
-								true, true, dogmeat,
-								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-								Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
-								new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
-								GenericSexFlag.NO_DESCRIPTION_NEEDED);
-						this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
-					}
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actCount);
+
+				} else if (hour == 12
+						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
+						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
+					// First half of acts -- mid-visit.
+					long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+					long actsNow = (actsRemaining + 1) / 2; // ceil
+					simulateOffscreenActs(dogmeat, (int) actsNow);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actsRemaining - actsNow);
+
+				} else if (hour == 13
+						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
+						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
+					// Final acts, bookkeeping, and return.
+					long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+					simulateOffscreenActs(dogmeat, (int) actsRemaining);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
+
+					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
+
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Simulate {@code actCount} off-screen sex acts between Kate and Dogmeat,
+	 * applying all mechanical effects. Grants FETISH_BESTIALITY on vaginal acts.
+	 */
+	private void simulateOffscreenActs(Dogmeat dogmeat, int actCount) {
+		if (actCount <= 0) {
+			return;
+		}
+
+		long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+		boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
+		int vaginaThreshold = hasBestiality ? 1 : 2;
+		int analThreshold   = hasBestiality ? 3 : 5;
+
+		Map<SexAreaOrifice, Integer> orificeWeights = new LinkedHashMap<>();
+		orificeWeights.put(SexAreaOrifice.MOUTH,
+				4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0)
+				  + (this.hasFetish(Fetish.FETISH_CUM_ADDICT)     ? 2 : 0));
+		if (offscreenCount >= vaginaThreshold) {
+			orificeWeights.put(SexAreaOrifice.VAGINA,
+					5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0)
+					  + (this.hasFetish(Fetish.FETISH_PREGNANCY)         ? 2 : 0)
+					  + (this.hasFetish(Fetish.FETISH_IMPREGNATION)      ? 2 : 0)
+					  + (this.hasFetish(Fetish.FETISH_BREEDER)           ? 3 : 0));
+		}
+		if (offscreenCount >= analThreshold) {
+			orificeWeights.put(SexAreaOrifice.ANUS,
+					3 + (this.hasFetish(Fetish.FETISH_ANAL_RECEIVING) ? 4 : 0));
+		}
+
+		for (int i = 0; i < actCount; i++) {
+			SexAreaOrifice orifice = Util.getRandomObjectFromWeightedMap(orificeWeights);
+			this.calculateGenericSexEffects(
+					true, true, dogmeat,
+					Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+					Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+					new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
+					GenericSexFlag.NO_DESCRIPTION_NEEDED);
+			this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
+
+			// Grant bestiality fetish the first time a vaginal act occurs.
+			if (orifice == SexAreaOrifice.VAGINA && !this.hasFetish(Fetish.FETISH_BESTIALITY)) {
+				this.addFetish(Fetish.FETISH_BESTIALITY);
 			}
 		}
 	}
