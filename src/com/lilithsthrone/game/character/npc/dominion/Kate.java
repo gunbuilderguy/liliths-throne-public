@@ -53,6 +53,8 @@ import com.lilithsthrone.game.character.markings.TattooCounterType;
 import com.lilithsthrone.game.character.markings.TattooType;
 import com.lilithsthrone.game.character.markings.TattooWriting;
 import com.lilithsthrone.game.character.markings.TattooWritingStyle;
+import com.lilithsthrone.game.character.body.FluidCum;
+import com.lilithsthrone.game.character.body.types.FluidType;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.persona.NameTriplet;
@@ -77,6 +79,10 @@ import com.lilithsthrone.game.inventory.enchanting.TFPotency;
 import com.lilithsthrone.game.inventory.item.AbstractItem;
 import com.lilithsthrone.game.inventory.item.AbstractItemType;
 import com.lilithsthrone.game.inventory.item.ItemType;
+import com.lilithsthrone.game.sex.SexAreaOrifice;
+import com.lilithsthrone.game.sex.SexAreaPenetration;
+import com.lilithsthrone.game.sex.SexParticipantType;
+import com.lilithsthrone.game.sex.SexType;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Util.Value;
@@ -415,8 +421,19 @@ public class Kate extends NPC {
 				} else if (hour == 13
 						&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
 						&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
-					// Fallback: only move Kate back if she's still at Dogmeat's tile.
-					// If the player found her during the window, KATE_DOGMEAT_AFTER_SEX already returned her.
+					// Player did not find her during the window -- simulate the sex off-screen.
+					this.calculateGenericSexEffects(
+							true, true, null,
+							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+							new SexType(SexParticipantType.NORMAL, SexAreaOrifice.VAGINA, SexAreaPenetration.PENIS));
+					this.ingestFluid(
+							null,
+							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+							Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+							new FluidCum(FluidType.CUM_DOG_MORPH),
+							SexAreaOrifice.VAGINA,
+							400);
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
