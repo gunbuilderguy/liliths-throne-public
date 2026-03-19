@@ -537,8 +537,8 @@ public class DogmeatDialogue {
 					+ " His tail moves &mdash; once, slow, satisfied &mdash; and he doesn't stop."
 					+ "</p>"
 					+ (kateTold
-						? "<p>She found him, just like she said she would.</p>"
-						: "<p>She found him. The tracking enchantment worked, and she found him.</p>");
+						? "<p>Of course she's here. You told her where to find him.</p>"
+						: "<p>She found him. Of course she did.</p>");
 		}
 
 		@Override
@@ -602,7 +602,7 @@ public class DogmeatDialogue {
 					+ UtilText.parse(getKate(), "[npc.speech(~Aah!~ &mdash; oh &mdash; oh, shit &mdash;)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She turns, flushed and dishevelled, hair loose, and stares at you with the expression"
+					+ "She cranes her neck around, flushed and dishevelled, hair loose, with the expression"
 					+ " of someone rapidly evaluating how bad this actually is."
 					+ "</p>"
 					+ "<p>"
@@ -634,6 +634,9 @@ public class DogmeatDialogue {
 						+ "Kate's expression does something that's mostly relief."
 						+ " "
 						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "Dogmeat does not stop."
 						+ "</p>";
 				return new ResponseSex("Join them",
 						"Say nothing. Just step in.",
@@ -668,7 +671,7 @@ public class DogmeatDialogue {
 						? UtilText.parse(getKate(), "[npc.speech(Y'know, you literally told me where he was.)]")
 								+ " She pushes her hair out of her face."
 								+ " "
-								+ UtilText.parse(getKate(), "[npc.speech(I just... I needed to, like, verify. In person.)]")
+								+ UtilText.parse(getKate(), "[npc.speech(I just... I wanted to come and see him. Obviously.)]")
 						: UtilText.parse(getKate(), "[npc.speech(You had dog hair on the collar when you brought it in.)]")
 								+ " She sits up slightly and pushes her hair back."
 								+ " "
@@ -698,7 +701,7 @@ public class DogmeatDialogue {
 						+ "You don't say anything else. You step forward."
 						+ "</p>"
 						+ "<p>"
-						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "Kate's mouth curves, just slightly."
 						+ "</p>";
 				return new ResponseSex("Join them",
 						"That's enough talking.",
@@ -732,11 +735,14 @@ public class DogmeatDialogue {
 
 		@Override
 		public String getContent() {
+			boolean kateTold = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1;
 			return "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Probably, yeah.)]")
+					+ UtilText.parse(getKate(), "[npc.speech(Probably?)]")
 					+ " She doesn't sound particularly sorry."
 					+ " "
-					+ UtilText.parse(getKate(), "[npc.speech(But you were being cagey, and I was curious, and &mdash;)]")
+					+ (kateTold
+						? UtilText.parse(getKate(), "[npc.speech(But y'know, you literally told me where he was, so.)]")
+						: UtilText.parse(getKate(), "[npc.speech(But you were being cagey, and I was curious, and &mdash;)]"))
 					+ "</p>"
 					+ "<p>"
 					+ "She gestures expressively at Dogmeat, at herself, at the general situation."
@@ -761,10 +767,7 @@ public class DogmeatDialogue {
 			Kate kate = getKate();
 			if (index == 1) {
 				String startContent = "<p>"
-						+ "You step forward."
-						+ "</p>"
-						+ "<p>"
-						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "You step forward. She doesn't say anything. Neither do you."
 						+ "</p>";
 				return new ResponseSex("Join them",
 						"",
@@ -814,10 +817,7 @@ public class DogmeatDialogue {
 			Kate kate = getKate();
 			if (index == 1) {
 				String startContent = "<p>"
-						+ "You step forward."
-						+ "</p>"
-						+ "<p>"
-						+ UtilText.parse(kate, "[npc.speech(Oh, thank god.)]")
+						+ "You step forward. Kate turns back around, spine straightening."
 						+ "</p>";
 				return new ResponseSex("Join them",
 						"",
@@ -844,6 +844,8 @@ public class DogmeatDialogue {
 
 	/**
 	 * After the Kate+Dogmeat(+player) sex scene ends.
+	 * Kate always returns to her shop immediately after sex — the hour-13 hourlyUpdate is a fallback
+	 * only for days where the player doesn't encounter her during the window.
 	 */
 	public static final DialogueNode KATE_DOGMEAT_AFTER_SEX = new DialogueNode("The back alley", ".", false) {
 
@@ -886,6 +888,7 @@ public class DogmeatDialogue {
 					@Override
 					public void effects() {
 						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+						getKate().setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 					}
 				};
 			}

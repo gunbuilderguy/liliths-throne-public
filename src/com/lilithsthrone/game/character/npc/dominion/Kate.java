@@ -410,10 +410,10 @@ public class Kate extends NPC {
 			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
-					// Kate heads out to Dogmeat's location at 11:00 (arrives around 11:30 in-world)
+					// Kate heads out to Dogmeat's location at the start of the window
 					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
 				} else if (hour == 13) {
-					// Kate returns to her shop after her lunch break
+					// Fallback: return Kate to her shop at end of window in case the player didn't find her during it
 					this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 				}
 			}
