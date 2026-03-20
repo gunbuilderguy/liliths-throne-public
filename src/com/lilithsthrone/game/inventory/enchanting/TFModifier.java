@@ -315,6 +315,13 @@ public enum TFModifier {
 			PresetColour.BASE_PINK_LIGHT,
 			Rarity.LEGENDARY),
 
+	CLOTHING_TRACKING("tracking",
+			"Tracks the location of the wearer.",
+			"tracking",
+			"modifier_circle_special",
+			PresetColour.BASE_TEAL,
+			Rarity.LEGENDARY),
+
 	CLOTHING_CONDOM("condom strength",
 			"Provides underlying strength to the condom.",
 			"condom strength",

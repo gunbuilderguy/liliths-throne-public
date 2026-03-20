@@ -53,6 +53,11 @@ import com.lilithsthrone.game.dialogue.utils.CharacterModificationUtils;
 import com.lilithsthrone.game.dialogue.utils.CosmeticsDialogue;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.inventory.InventorySlot;
+import com.lilithsthrone.game.inventory.clothing.AbstractClothing;
+import com.lilithsthrone.game.inventory.enchanting.ItemEffect;
+import com.lilithsthrone.game.inventory.enchanting.ItemEffectType;
+import com.lilithsthrone.game.inventory.enchanting.TFModifier;
+import com.lilithsthrone.game.inventory.enchanting.TFPotency;
 import com.lilithsthrone.game.inventory.item.ItemType;
 import com.lilithsthrone.game.sex.ImmobilisationType;
 import com.lilithsthrone.game.sex.SexPace;
@@ -632,25 +637,11 @@ public class SuccubisSecrets {
 					DOGMEAT_COLLAR_DIALOGUE);
 
 		} else if (index == 13
-				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
-			if (Main.game.getPlayer().getMoney() < 100) {
-				return new Response("Remove extra enchantment",
-						"There's a second line worked into the inner band of the collar &mdash; an enchantment Kate didn't mention."
-								+ " She'd remove it for 100 flames. You don't have enough right now.",
-						null);
-			}
-			return new Response("Remove extra enchantment",
-					"There's a second line worked into the inner band of the collar &mdash; an enchantment Kate didn't mention."
-							+ " Ask her to take it off."
-							+ "<br/>[style.italicsMoney(Removal fee: 100 flames.)]",
-					DOGMEAT_COLLAR_REMOVE_TRACKING) {
-				@Override
-				public void effects() {
-					Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-100));
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
-					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 1);
-				}
-			};
+				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_removed") == 1
+				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_confronted") != 1) {
+			return new Response("About the enchantment on the collar",
+					"You found a hidden enchantment on the collar and removed it yourself. Bring it up.",
+					DOGMEAT_COLLAR_REMOVE_TRACKING);
 
 		} else if (index == 14
 				&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_removed") == 1
@@ -832,9 +823,6 @@ public class SuccubisSecrets {
 					+ " "
 					+ UtilText.parse(getKate(), "[npc.speech(Keyed to you, so additions are cheaper if you come back.)]")
 					+ "</p>"
-					+ "<p>"
-					+ "[style.italicsBad(You notice a faint second line etched into the inner band of the collar."
-					+ " It looks like some kind of enchantment. Kate doesn't mention it.)]"
 					+ "</p>";
 		}
 
@@ -977,12 +965,11 @@ public class SuccubisSecrets {
 						Main.game.getDialogueFlags().setSavedLong("kate_hair_choice", 1);
 						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
 						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
-						Main.game.getTextEndStringBuilder().append(
-								Main.game.getPlayer().equipClothingFromNowhere(
-										Main.game.getItemGen().generateClothing(
-												"innoxia_neck_dogmeat_collar_engraved",
-												PresetColour.CLOTHING_BLACK, false),
-										true, Main.game.getPlayer()));
+						AbstractClothing collarA = Main.game.getItemGen().generateClothing("innoxia_neck_dogmeat_collar_engraved", PresetColour.CLOTHING_BLACK, false);
+						if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+							collarA.addEffect(new ItemEffect(ItemEffectType.CLOTHING, TFModifier.CLOTHING_SPECIAL, TFModifier.CLOTHING_TRACKING, TFPotency.MINOR_BOOST, 0));
+						}
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().equipClothingFromNowhere(collarA, true, Main.game.getPlayer()));
 					}
 				};
 			}
@@ -995,12 +982,11 @@ public class SuccubisSecrets {
 						Main.game.getDialogueFlags().setSavedLong("kate_hair_choice", 2);
 						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().incrementMoney(-200));
 						Main.game.getDialogueFlags().setSavedLong("dogmeat_collar_state", 2);
-						Main.game.getTextEndStringBuilder().append(
-								Main.game.getPlayer().equipClothingFromNowhere(
-										Main.game.getItemGen().generateClothing(
-												"innoxia_neck_dogmeat_collar_engraved",
-												PresetColour.CLOTHING_BLACK, false),
-										true, Main.game.getPlayer()));
+						AbstractClothing collarB = Main.game.getItemGen().generateClothing("innoxia_neck_dogmeat_collar_engraved", PresetColour.CLOTHING_BLACK, false);
+						if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+							collarB.addEffect(new ItemEffect(ItemEffectType.CLOTHING, TFModifier.CLOTHING_SPECIAL, TFModifier.CLOTHING_TRACKING, TFPotency.MINOR_BOOST, 0));
+						}
+						Main.game.getTextEndStringBuilder().append(Main.game.getPlayer().equipClothingFromNowhere(collarB, true, Main.game.getPlayer()));
 					}
 				};
 			}
@@ -1197,40 +1183,50 @@ public class SuccubisSecrets {
 	};
 
 	/**
-	 * Player asks Kate to remove the hidden tracking enchantment she added.
-	 * Costs 100 flames (standard removal fee). Sets kate_dogmeat_tracking_removed.
+	 * Player brings up the tracking enchantment they found and removed themselves.
+	 * Kate's reaction to being caught. Sets kate_dogmeat_tracking_confronted.
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_REMOVE_TRACKING = new DialogueNode("Succubi's Secrets", "-", true) {
 
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "You set the collar on the counter and point to the second line &mdash; the faint one worked into the inner"
-					+ " edge of the band, barely visible unless you knew to look."
+					+ "You put the collar on the counter."
+					+ " You don't point to anything &mdash; there's nothing to point to."
+					+ " You just look at her."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(...Hm.)]")
+					+ "Kate looks back. A pause that stretches slightly longer than it needs to."
 					+ "</p>"
 					+ "<p>"
-					+ "Kate doesn't deny it. She picks up the stylus &mdash; she had it in her pocket, which says something"
-					+ " &mdash; and without any particular ceremony runs a quick counter-line along the enchantment until it dissolves."
+					+ UtilText.parse(getKate(), "[npc.speech(...You found it.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "Not a question. She's very still for a moment."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in my defense, you were being very cagey.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She slides the collar back."
+					+ "She glances at where the line used to be. Then back at you."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(There. Clean. And before you ask &mdash; I haven't followed it anywhere yet. You got here first.)]")
-					+ "</p>"
-					+ "<p>"
-					+ "[style.italicsGood(The hidden enchantment has been removed from the collar.)]"
+					+ UtilText.parse(getKate(), "[npc.speech(I hadn't actually used it yet. For what it's worth.)]")
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("...",
+						"Leave it there.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_confronted", 1);
+					}
+				};
+			}
 			return getMainResponse(index);
 		}
 	};

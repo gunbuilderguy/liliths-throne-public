@@ -354,6 +354,19 @@ public class Kate extends NPC {
 	
 	@Override
 	public void turnUpdate() {
+		// If the player has removed the tracking enchant from the collar, update state.
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+			AbstractClothing collar = Main.game.getPlayer().getClothingInSlot(InventorySlot.NECK);
+			boolean trackingPresent = collar != null
+					&& collar.getClothingType().getId().equals("innoxia_neck_dogmeat_collar_engraved")
+					&& collar.getEffects().stream().anyMatch(
+							e -> e.getSecondaryModifier() == TFModifier.CLOTHING_TRACKING);
+			if (!trackingPresent) {
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 1);
+			}
+		}
+
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null

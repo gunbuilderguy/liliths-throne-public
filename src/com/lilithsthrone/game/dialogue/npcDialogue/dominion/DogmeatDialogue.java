@@ -865,25 +865,36 @@ public class DogmeatDialogue {
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "Dogmeat steps back, panting softly, tail sweeping the cobblestones in slow, satisfied arcs."
+					+ "Dogmeat turns a slow circle and settles on the cobblestones, heavy and unhurried."
+					+ " His tail sweeps once against Kate's ankle as he does."
 					+ "</p>"
 					+ "<p>"
-					+ "Kate leans against the wall for a moment, catching her breath. Then she straightens up,"
-					+ " pushes her hair back, and starts looking for her jacket with the air of someone"
-					+ " who has just finished a perfectly normal lunch break."
+					+ "Kate doesn't move. She's sitting with her back against the alley wall, legs stretched out"
+					+ " in front of her, head tipped back. Her eyes are half-closed."
+					+ " She looks like someone who has just been talked into staying a little longer and"
+					+ " has decided not to argue with the logic."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Thanks for that... Y'know, it's pretty hard for us demons sometimes...)]")
-					+ " She finds the jacket."
-					+ " "
-					+ UtilText.parse(getKate(), "[npc.speech(Anyway. I should get back.)]")
-					+ " A pause."
-					+ " "
-					+ UtilText.parse(getKate(), "[npc.speech(I'll be here tomorrow. Just so you know.)]")
+					+ "After a while, without looking at either of you: "
+					+ UtilText.parse(getKate(), "[npc.speech(He's very warm.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Dogmeat nudges her hand with his broad muzzle as she passes. She scratches behind his ear"
-					+ " without breaking stride."
+					+ "She reaches over &mdash; not quite moving, just extending an arm &mdash;"
+					+ " and scratches slowly between Dogmeat's ears. He makes a low sound."
+					+ " His tail sweeps the cobblestones again."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(I know, I know.)]")
+					+ " She says this as though he asked her to stay. She doesn't move."
+					+ "</p>"
+					+ "<p>"
+					+ "Eventually &mdash; not immediately, but eventually &mdash; she collects herself."
+					+ " Jacket. Hair. The kind of unhurried straightening that makes it clear"
+					+ " she's leaving when she's ready and not before."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(Same time next week?)]")
+					+ " Not quite a question."
 					+ "</p>";
 		}
 
