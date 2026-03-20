@@ -2075,9 +2075,19 @@ public class Fetish {
 							+ PresetColour.RACE_DOG_MORPH.toWebHexString()
 							+ ";'>feral creatures</span>"),
 			null) {
+
 		@Override
-		public CorruptionLevel getCorruptionNeeded() {
-			return CorruptionLevel.THREE_DIRTY;
+		public String getDescription(GameCharacter owner) {
+			return "";
+		}
+
+		@Override
+		public String getFetishDesireDescription(GameCharacter target, FetishDesire desire) {
+			return "";
+		}
+		@Override
+		public CorruptionLevel getAssociatedCorruptionLevel() {
+			return CorruptionLevel.FIVE_CORRUPT;
 		}
 	};
 

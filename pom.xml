@@ -184,9 +184,9 @@
 						<phase>process-sources</phase>
 						<id>correct-imports</id>
 						<configuration>
-						<target>
-							<replace token= "${defaultNashornImport}" value="${correctNashornImport}" file="src/com/lilithsthrone/game/dialogue/utils/UtilText.java"/>
-						</target>
+							<target>
+								<replace token= "${defaultNashornImport}" value="${correctNashornImport}" file="src/com/lilithsthrone/game/dialogue/utils/UtilText.java"/>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -196,9 +196,9 @@
 						<phase>prepare-package</phase>
 						<id>restore-imports</id>
 						<configuration>
-						<target>
-							<replace token= "${correctNashornImport}" value="${defaultNashornImport}" file="src/com/lilithsthrone/game/dialogue/utils/UtilText.java"/>
-						</target>
+							<target>
+								<replace token= "${correctNashornImport}" value="${defaultNashornImport}" file="src/com/lilithsthrone/game/dialogue/utils/UtilText.java"/>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -230,9 +230,9 @@
 							</transformers>
 							<artifactSet>
 								<excludes>
-								  <exclude>org.openjfx:*:${exclude.platform}</exclude>
+									<exclude>org.openjfx:*:${exclude.platform}</exclude>
 								</excludes>
-							  </artifactSet>
+							</artifactSet>
 						</configuration>
 					</execution>
 				</executions>

@@ -8,11 +8,12 @@ import com.lilithsthrone.game.character.npc.dominion.Kate;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseSex;
+import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
-import com.lilithsthrone.utils.UtilText;
+import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
@@ -35,11 +36,11 @@ import com.lilithsthrone.world.places.PlaceType;
 public class DogmeatDialogue {
 
 	private static Dogmeat getDogmeat() {
-		return Main.game.getNpc(Dogmeat.class);
+		return (Dogmeat) Main.game.getNpc(Dogmeat.class);
 	}
 
 	private static Kate getKate() {
-		return Main.game.getNpc(Kate.class);
+		return (Kate) Main.game.getNpc(Kate.class);
 	}
 
 	/** Returns true when Kate is scheduled and currently at Dogmeat's location. */
@@ -51,7 +52,7 @@ public class DogmeatDialogue {
 		}
 		return Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1
 				&& kate.getWorldLocation().equals(dogmeat.getWorldLocation())
-				&& kate.getPlaceLocation().equals(dogmeat.getPlaceLocation());
+				&& kate.getLocationPlaceType().equals(dogmeat.getLocationPlaceType());
 	}
 
 	private static long getCollarState() {
@@ -568,7 +569,7 @@ public class DogmeatDialogue {
 						"Step in. Dogmeat won't object. Kate clearly won't either.",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(
@@ -650,7 +651,7 @@ public class DogmeatDialogue {
 						"Say nothing. Just step in.",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(
@@ -715,7 +716,7 @@ public class DogmeatDialogue {
 						"That's enough talking.",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(
@@ -781,7 +782,7 @@ public class DogmeatDialogue {
 						"",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(
@@ -831,7 +832,7 @@ public class DogmeatDialogue {
 						"",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(
@@ -966,7 +967,7 @@ public class DogmeatDialogue {
 						"Lower yourself beside Kate. Dogmeat will make his own decisions.",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
-						CorruptionLevel.FOUR_SAVAGE,
+						CorruptionLevel.FOUR_LUSTFUL,
 						null, null, null,
 						true, true,
 						new SMGeneric(

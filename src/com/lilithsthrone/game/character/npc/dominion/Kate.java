@@ -368,11 +368,11 @@ public class Kate extends NPC {
 		}
 
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
-			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null
 					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)
 					&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
-					&& this.getPlaceLocation().equals(dogmeat.getPlaceLocation())) {
+					&& this.getLocationPlaceType().equals(dogmeat.getLocationPlaceType())) {
 
 				long arrivalMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute");
 				long now           = Main.game.getMinutesPassed();
@@ -467,11 +467,11 @@ public class Kate extends NPC {
 	public void hourlyUpdate(int hour) {
 		super.hourlyUpdate(hour);
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
-			Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
 			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
 					// Kate heads out; pre-compute act count and per-act interval for this visit.
-					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getPlaceLocation(), false);
+					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getLocationPlaceType(), false);
 
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
 					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);

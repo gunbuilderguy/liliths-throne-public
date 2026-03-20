@@ -424,7 +424,7 @@ public class Encounter {
 			// provided he isn't already a companion and at least 2 hours have passed since
 			// the last time they crossed paths.
 			if(Main.game.isStarted()) {
-				Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+				Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
 				if(!Main.game.getPlayer().getCompanions().contains(dogmeat)) {
 					if(!Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
 						float dogmeatChance = Math.max(1f, 11f - Main.game.getDayNumber());
@@ -545,7 +545,7 @@ public class Encounter {
 				return SlaveEncountersDialogue.getSlaveUsingOtherSlaveAlleyway(slaves);
 
 			} else if(node == EncounterType.DOMINION_ALLEY_DOGMEAT) {
-				Dogmeat dogmeat = Main.game.getNpc(Dogmeat.class);
+				Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
 				dogmeat.setLocation(Main.game.getPlayer(), true);
 				Main.game.setActiveNPC(dogmeat);
 				return dogmeat.getEncounterDialogue();

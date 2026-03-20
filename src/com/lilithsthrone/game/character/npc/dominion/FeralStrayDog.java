@@ -94,7 +94,7 @@ public class FeralStrayDog extends NPC {
 		this.addPenisModifier(PenetrationModifier.KNOTTED);
 		this.addPenisModifier(PenetrationModifier.TAPERED);
 		this.setPenisSize(20);
-		this.setPenisGirth(PenetrationGirth.TWO_SLIM);
+		this.setPenisGirth(PenetrationGirth.TWO_NARROW);
 		this.setTesticleSize(TesticleSize.THREE_LARGE);
 		this.setInternalTesticles(false);
 		this.setPenisCumStorage(40);
