@@ -140,12 +140,11 @@ public class DogmeatDialogue {
 						+ "</p>"
 						+ "<p>"
 						+ "His amber eyes find the collar around your neck immediately."
-						+ " His tag. His name. His property."
 						+ " He rises and presses his broad muzzle against the leather, inhaling once"
 						+ " &mdash; deep, satisfied, entirely possessive."
 						+ "</p>"
 						+ "<p>"
-						+ "His tail begins to wag. Slow. Utterly certain."
+						+ "His tail begins a slow, deliberate wag."
 						+ "</p>";
 			}
 
@@ -157,11 +156,10 @@ public class DogmeatDialogue {
 						+ " &mdash; and a low, disapproving sound rumbles in his chest."
 						+ "</p>"
 						+ "<p>"
-						+ "You still haven't had it engraved. He knows."
+						+ "You still haven't had it engraved."
 						+ "</p>"
 						+ "<p>"
-						+ "[style.italicsQuest(Take the collar to Kate at Succubi's Secrets in the Shopping Arcade"
-						+ " to have it re-engraved.)]"
+						+ "[style.italicsQuestRelationship(Find someone to re-engrave the tag.)]"
 						+ "</p>";
 			}
 
@@ -176,7 +174,6 @@ public class DogmeatDialogue {
 						+ "</p>"
 						+ "<p>"
 						+ "His gaze drops to your hips, then returns to your face. He steps closer, nostrils flaring."
-						+ " He is not here to go for a walk."
 						+ "</p>";
 			}
 
@@ -186,8 +183,6 @@ public class DogmeatDialogue {
 					+ " amber eyes finding yours across the alley."
 					+ " His tail begins a slow, deliberate sweep."
 					+ "</p>"
-					+ "<p>"
-					+ "He remembers you."
 					+ "</p>";
 		}
 
@@ -394,16 +389,14 @@ public class DogmeatDialogue {
 					+ " Then he sits back and watches, amber eyes steady and expectant."
 					+ "</p>"
 					+ "<p>"
-					+ "You understand. He doesn't want it back."
+					+ "He doesn't want it back."
 					+ " He wants <i>you</i> to wear it."
 					+ "</p>"
 					+ "<p>"
 					+ "The tag is scratched beyond legibility &mdash; it'll need to be re-engraved."
-					+ " Your name on the front. And on the back..."
 					+ "</p>"
 					+ "<p>"
-					+ "[style.italicsQuest(Find a tattoo artist to engrave the collar:"
-					+ " your name on the front, 'Property of: Dogmeat' on the back.)]"
+					+ "[style.italicsQuestRelationship(Find someone to re-engrave the tag.)]"
 					+ "</p>";
 		}
 
@@ -447,10 +440,8 @@ public class DogmeatDialogue {
 					+ "But he doesn't stop you."
 					+ " He watches you go with the patient, unhurried look of something"
 					+ " that has all the time in the world."
-					+ " Whatever this cost you in his estimation, he's already decided you'll be back."
+					+ ""
 					+ "</p>"
-					+ "<p>"
-					+ "He's probably right."
 					+ "</p>";
 		}
 
@@ -484,12 +475,8 @@ public class DogmeatDialogue {
 					+ "You slow down before you round the corner."
 					+ "</p>"
 					+ "<p>"
-					+ "Something sounds different."
-					+ " A voice &mdash; low and breathless, cut off by something that isn't quite a gasp."
+					+ "A voice &mdash; low and breathless, cut off by something that isn't quite a gasp."
 					+ " Familiar."
-					+ "</p>"
-					+ "<p>"
-					+ "You know that voice."
 					+ "</p>";
 		}
 
@@ -546,8 +533,8 @@ public class DogmeatDialogue {
 					+ " His tail moves &mdash; once, slow, satisfied &mdash; and he doesn't stop."
 					+ "</p>"
 					+ (kateTold
-						? "<p>Of course she's here. You told her where to find him.</p>"
-						: "<p>She found him. Of course she did.</p>");
+						? "<p>You told her where to find him.</p>"
+						: "<p>She found him.</p>");
 		}
 
 		@Override
@@ -937,8 +924,7 @@ public class DogmeatDialogue {
 					+ "</p>"
 					+ "<p>"
 					+ "Kate does not flinch. She looks back at him with the calm of someone who has met things"
-					+ " considerably more alarming than a feral dog morph. She does, after a moment,"
-					+ " tilt her chin slightly &mdash; not a challenge, just an acknowledgement."
+					+ " considerably more alarming than a feral dog morph. She tilts her chin slightly &mdash; not a challenge, just an acknowledgement."
 					+ "</p>"
 					+ "<p>"
 					+ "The two of them seem to reach some kind of arrangement without either of them speaking."
@@ -1025,7 +1011,7 @@ public class DogmeatDialogue {
 					+ " Not going anywhere. Just keeping her hand there."
 					+ "</p>"
 					+ "<p>"
-					+ "She leans down after a moment and licks him clean &mdash; unhurried, thorough,"
+					+ "She leans down and licks him clean &mdash; unhurried, thorough,"
 					+ " like it's obvious. He stands very still for it."
 					+ "</p>"
 					+ "<p>"
@@ -1039,7 +1025,7 @@ public class DogmeatDialogue {
 					+ UtilText.parse(getKate(), "[npc.speech(...He's welcome at the shop.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She means it. She doesn't explain it."
+					+ "She means it."
 					+ "</p>";
 		}
 
