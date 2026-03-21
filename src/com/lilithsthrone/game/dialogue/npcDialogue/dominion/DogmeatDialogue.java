@@ -121,13 +121,8 @@ public class DogmeatDialogue {
 						+ " &mdash; watching you with steady, amber eyes."
 						+ "</p>"
 						+ "<p>"
-						+ "The dog doesn't growl or cower. It simply holds your gaze, tail giving one slow, measured wag,"
-						+ " as if it has been waiting for precisely <i>you</i> to come along."
+						+ "The dog doesn't growl or cower. It simply holds your gaze, tail giving one slow, measured wag."
 						+ " A worn collar hangs loose around its neck, the tag too scratched to read."
-						+ "</p>"
-						+ "<p>"
-						+ "Stray dogs aren't uncommon in Dominion, but something about this one feels different"
-						+ " &mdash; calm, intelligent, and utterly unafraid."
 						+ "</p>";
 			}
 
@@ -166,9 +161,8 @@ public class DogmeatDialogue {
 			// Returning (count >= 1, no collar yet)
 			if (count >= 3) {
 				return "<p>"
-						+ "He's waiting. That's the impression you get as you round the corner"
-						+ " &mdash; he was already watching the entrance of the alley,"
-						+ " already knew you'd come."
+						+ "He's already facing the entrance when you round the corner,"
+						+ " ears forward, watching."
 						+ " He rises before you've fully stopped walking, stretching once with languid confidence,"
 						+ " then fixes you with those amber eyes."
 						+ "</p>"
@@ -332,15 +326,13 @@ public class DogmeatDialogue {
 			if (collarState == 2) {
 				return "<p>"
 						+ "He steps back, panting softly, and nudges the tag hanging from your collar with his nose."
-						+ " Satisfied. His property, used as his property should be."
 						+ " His tail sweeps the cobblestones in slow, possessive arcs."
 						+ "</p>";
 			}
 
 			return "<p>"
 					+ "The dog steps back, panting softly, tail wagging in slow, satisfied sweeps."
-					+ " He regards you with those calm amber eyes &mdash; no judgement, only the quiet warmth"
-					+ " of an animal who has gotten exactly what he wanted."
+					+ " He regards you with those calm amber eyes."
 					+ "</p>"
 					+ "<p>"
 					+ "He nudges your hand with his broad muzzle, then sits, watching to see what you'll do next."
@@ -389,10 +381,6 @@ public class DogmeatDialogue {
 					+ " Then he sits back and watches, amber eyes steady and expectant."
 					+ "</p>"
 					+ "<p>"
-					+ "He doesn't want it back."
-					+ " He wants <i>you</i> to wear it."
-					+ "</p>"
-					+ "<p>"
 					+ "The tag is scratched beyond legibility &mdash; it'll need to be re-engraved."
 					+ "</p>"
 					+ "<p>"
@@ -438,8 +426,7 @@ public class DogmeatDialogue {
 					+ "</p>"
 					+ "<p>"
 					+ "But he doesn't stop you."
-					+ " He watches you go with the patient, unhurried look of something"
-					+ " that has all the time in the world."
+					+ " He watches you go."
 					+ ""
 					+ "</p>"
 					+ "</p>";
@@ -598,8 +585,7 @@ public class DogmeatDialogue {
 					+ UtilText.parse(getKate(), "[npc.speech(~Aah!~ &mdash; oh &mdash; oh, shit &mdash;)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She cranes her neck around, flushed and dishevelled, hair loose, with the expression"
-					+ " of someone rapidly evaluating how bad this actually is."
+					+ "She cranes her neck around, flushed and dishevelled, hair loose."
 					+ "</p>"
 					+ "<p>"
 					+ "Dogmeat's tail wags."
@@ -875,8 +861,7 @@ public class DogmeatDialogue {
 					+ " Then she stands, straightens her jacket, pushes her hair back."
 					+ "</p>"
 					+ "<p>"
-					+ UtilText.parse(getKate(), "[npc.speech(Same time next week?)]")
-					+ " Not quite a question."
+					+ UtilText.parse(getKate(), "[npc.speech(Same time next week.)]")
 					+ "</p>";
 		}
 
@@ -923,8 +908,7 @@ public class DogmeatDialogue {
 					+ " with a long, assessing stare, nostrils working."
 					+ "</p>"
 					+ "<p>"
-					+ "Kate does not flinch. She looks back at him with the calm of someone who has met things"
-					+ " considerably more alarming than a feral dog morph. She tilts her chin slightly &mdash; not a challenge, just an acknowledgement."
+					+ "Kate does not flinch. She looks back at him steadily. Tilts her chin slightly."
 					+ "</p>"
 					+ "<p>"
 					+ "The two of them seem to reach some kind of arrangement without either of them speaking."
@@ -1024,9 +1008,7 @@ public class DogmeatDialogue {
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(...He's welcome at the shop.)]")
 					+ "</p>"
-					+ "<p>"
-					+ "She means it."
-					+ "</p>";
+					;
 		}
 
 		@Override

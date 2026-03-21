@@ -741,12 +741,11 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(...Like, an actual dog.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's just saying it out loud."
+					+ "She's just saying it out loud."
 					+ "</p>"
 					+ "<p>"
-					+ "She picks up the collar again. Brings it close. You watch her breathe in, just once, and see"
-					+ " the precise moment she realises she's doing it because she can still smell him on the leather."
-					+ " Her expression goes somewhere complicated &mdash; a little caught-out, a little flushed &mdash;"
+					+ "She picks up the collar again. Brings it close. Breathes in, just once."
+					+ " Her expression shifts &mdash; a little caught-out, a little flushed &mdash;"
 					+ " and she sets it back down with slightly more care than necessary."
 					+ "</p>"
 					+ "<p>"
@@ -756,8 +755,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(Okay, that's... Y'know what, I don't judge.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She sits up properly for the first time since you walked in and reaches for her engraving tools,"
-					+ " and it's very obvious she's thinking about something else and failing to pretend otherwise."
+					+ "She sits up properly for the first time since you walked in and reaches for her engraving tools."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Is he... good?)]")
@@ -810,12 +808,9 @@ public class SuccubisSecrets {
 					+ "</p>"
 					+ "<p>"
 					+ "She works quickly, efficiently &mdash; the main line, the names, clean and competent. Standard."
-					+ " Then, so briefly you almost miss it, the needle makes a second pass along the inner edge of the band."
+					+ " Then the needle makes a second pass along the inner edge of the band."
 					+ " The line it traces is barely a hairsbreadth, following the curve of the first like a shadow,"
-					+ " worked into the grain of the leather where you'd have to know what you were looking for to find it."
-					+ "</p>"
-					+ "<p>"
-					+ "Kate knows what she's looking for."
+					+ " worked into the grain of the leather."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(There.)]")
@@ -1077,8 +1072,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(I want to meet him.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. Her voice has the same flat certainty she used to quote 200 flames."
-					+ " This is just how things are going to be."
+					+ "Her voice has the same flat certainty she used to quote 200 flames."
 					+ "</p>";
 		}
 
@@ -1202,7 +1196,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(...You found it.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's very still for a moment."
+					+ "She's very still for a moment."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in my defense, you were being very cagey.)]")
@@ -1252,7 +1246,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(So you knew about the tracking thing.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's processing."
+					+ "She's processing."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(And you're telling me anyway.)]")
