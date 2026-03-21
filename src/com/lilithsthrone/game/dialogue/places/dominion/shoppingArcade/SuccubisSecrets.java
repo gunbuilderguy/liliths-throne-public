@@ -709,7 +709,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Tell her the whole story",
+				return new Response("Tell her",
 						"Tell Kate that the collar belongs to a dog named Dogmeat, and what he means to you.",
 						DOGMEAT_COLLAR_TELL);
 			}
@@ -952,7 +952,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"His name is Dogmeat. He found me in the alley.\"",
+				return new Response("\"His name is...\"",
 						"Matter-of-fact. Give her the short version.",
 						DOGMEAT_COLLAR_ENGRAVING) {
 					@Override
@@ -969,7 +969,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 2) {
-				return new Response("(Say nothing. Just hold her gaze.)",
+				return new Response("Say nothing",
 						"Let the silence answer for you.",
 						DOGMEAT_COLLAR_ENGRAVING) {
 					@Override
@@ -991,7 +991,7 @@ public class SuccubisSecrets {
 
 	/**
 	 * Kate says "He put that on you himself?" — player chooses how to answer.
-	 * kate_wants_choice: 1 = "He shook it off", 2 = "More or less".
+	 * kate_wants_choice: 1 = "He offered it", 2 = "More or less".
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN = new DialogueNode("Succubi's Secrets", "-", true) {
 
@@ -1011,7 +1011,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"He shook it off and offered it to me.\"",
+				return new Response("\"He offered it\"",
 						"",
 						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
 					@Override
@@ -1038,7 +1038,7 @@ public class SuccubisSecrets {
 
 	/**
 	 * Kate says "I want to meet him." Content varies based on prior choice and "particular" loop.
-	 * Three choices: bring her now, defer, or the "he's particular" loop.
+	 * Three choices: bring her now, defer, or the "he's picky" loop.
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER = new DialogueNode("Succubi's Secrets", "-", true) {
 
@@ -1079,7 +1079,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"I can take you there.\"",
+				return new Response("\"I'll take you\"",
 						"Offer to bring her to Dogmeat's alley right now.",
 						DOGMEAT_COLLAR_ENGRAVING_CLOSING_EARLY) {
 					@Override
@@ -1090,7 +1090,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 2) {
-				return new Response("\"Maybe another time.\"",
+				return new Response("\"Another time\"",
 						"Not today. But you know where to find each other.",
 						DOGMEAT_COLLAR_ENGRAVING_DEFERRED) {
 					@Override
@@ -1100,7 +1100,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 3) {
-				return new Response("\"He's... particular about people.\"",
+				return new Response("\"He's picky\"",
 						"Warn her gently.",
 						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
 					@Override

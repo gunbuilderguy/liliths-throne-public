@@ -470,7 +470,7 @@ public class DogmeatDialogue {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Peek around the corner",
+				return new Response("Peek",
 						"Angle yourself so you can see without being seen.",
 						KATE_DOGMEAT_VOYEUR);
 			}
@@ -599,12 +599,12 @@ public class DogmeatDialogue {
 		public Response getResponse(int responseTab, int index) {
 			Kate kate = getKate();
 			if (index == 1) {
-				return new Response("How did you find him?",
+				return new Response("How'd you...?",
 						"Ask Kate how she got here.",
 						KATE_DOGMEAT_CAUGHT_HOW);
 			}
 			if (index == 2) {
-				return new Response("I knew I should have said no.",
+				return new Response("I knew it.",
 						"",
 						KATE_DOGMEAT_CAUGHT_KNEW_IT);
 			}
@@ -700,7 +700,7 @@ public class DogmeatDialogue {
 						startContent);
 			}
 			if (index == 2) {
-				return new Response("Fine. Just ask next time.",
+				return new Response("Just ask first.",
 						"",
 						KATE_DOGMEAT_CAUGHT_FINE);
 			}
@@ -933,7 +933,7 @@ public class DogmeatDialogue {
 						+ " Dogmeat looks between you both &mdash; then, apparently deciding the situation is"
 						+ " entirely acceptable, steps forward."
 						+ "</p>";
-				return new ResponseSex("Present yourselves",
+				return new ResponseSex("Present",
 						"Lower yourself beside Kate. Dogmeat will make his own decisions.",
 						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
 						null,
