@@ -56,7 +56,7 @@ public class DogmeatDialogue {
 	}
 
 	private static long getCollarState() {
-		return Main.game.getDialogueFlags().getSavedLong("dogmeat_collar_state");
+		return Math.max(0, Main.game.getDialogueFlags().getSavedLong("dogmeat_collar_state"));
 	}
 
 	private static void setCollarState(long state) {
