@@ -237,7 +237,7 @@ public class DogmeatDialogue {
 							+ "<br/>[style.italicsSex(He will mount you.)]";
 					startContent = "<p>"
 							+ "You sink to your knees without hesitation, feeling the weight of the engraved collar"
-							+ " against your throat. His. The tag says so. You say so."
+							+ " against your throat."
 							+ "</p>"
 							+ "<p>"
 							+ "He mounts you with the unhurried confidence of absolute ownership,"
