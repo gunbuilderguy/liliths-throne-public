@@ -25,6 +25,9 @@ import com.lilithsthrone.game.character.effects.Perk;
 import com.lilithsthrone.game.character.effects.StatusEffect;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.NPCFlagValue;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
+import com.lilithsthrone.game.character.npc.dominion.Kate;
+import com.lilithsthrone.game.dialogue.npcDialogue.dominion.DogmeatDialogue;
 import com.lilithsthrone.game.character.persona.SexualOrientation;
 import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.dialogue.DialogueFlagValue;
@@ -240,14 +243,30 @@ public class RoomPlayer {
 				}
 			}
 			
+			// Dogmeat companion interaction (index 11)
+			Dogmeat roomDogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+			boolean roomDogmeatHome = roomDogmeat != null && Main.game.getPlayer().getCompanions().contains(roomDogmeat);
+			if (index == 11 && roomDogmeatHome) {
+				return new Response("Dogmeat", "Go to him.", DogmeatDialogue.DOGMEAT_HOME_ENCOUNTER);
+			}
+
+			// Kate evening visit interaction (index 12)
+			Kate roomKate = (Kate) Main.game.getNpc(Kate.class);
+			boolean roomKateVisiting = roomKate != null
+					&& Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
+					&& Main.game.getCharactersPresent().contains(roomKate);
+			if (index == 12 && roomKateVisiting) {
+				return new Response("Kate", "Talk to Kate.", DogmeatDialogue.KATE_HOME_VISIT);
+			}
+
 			List<NPC> charactersPresent = LilayaHomeGeneric.getSlavesAndOccupantsPresent();
-			
-			int indexPresentStart = 11;
+
+			int indexPresentStart = 13;
 			if(index-indexPresentStart<charactersPresent.size() && index-indexPresentStart>=0) {
 				NPC character = charactersPresent.get(index-indexPresentStart);
 				return LilayaHomeGeneric.interactWithNPC(character);
 			}
-			
+
 		} else if(responseTab==2) {
 			if (index == 1) {
 				return new Response("Quick shower",
@@ -998,6 +1017,28 @@ public class RoomPlayer {
 					+ "</p>");
 			
 			sb.append(LilayaHomeGeneric.getRoomModificationsDescription(false));
+
+			// Dogmeat companion presence
+			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+			boolean dogmeatHome = dogmeat != null && Main.game.getPlayer().getCompanions().contains(dogmeat);
+			if (dogmeatHome) {
+				sb.append("<p>"
+						+ "Dogmeat is sprawled at the foot of your bed, ears flicking toward the door as you come in."
+						+ " He lifts his head, amber eyes finding yours, tail giving one slow sweep across the covers."
+						+ " He looks entirely at home."
+						+ "</p>");
+			}
+
+			// Kate evening visit presence
+			Kate kate = (Kate) Main.game.getNpc(Kate.class);
+			boolean kateVisiting = kate != null
+					&& Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
+					&& Main.game.getCharactersPresent().contains(kate);
+			if (kateVisiting) {
+				sb.append("<p>"
+						+ "Kate is perched on the edge of your armchair, legs crossed, looking entirely at home."
+						+ "</p>");
+			}
 
 			List<NPC> charactersPresent = LilayaHomeGeneric.getSlavesAndOccupantsPresent();
 			if(!charactersPresent.isEmpty()) {

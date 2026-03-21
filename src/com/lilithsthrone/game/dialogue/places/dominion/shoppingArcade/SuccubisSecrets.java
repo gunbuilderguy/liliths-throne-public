@@ -38,6 +38,7 @@ import com.lilithsthrone.game.character.body.valueEnums.PiercingType;
 import com.lilithsthrone.game.character.effects.StatusEffect;
 import com.lilithsthrone.game.character.markings.TattooCounterType;
 import com.lilithsthrone.game.character.markings.TattooType;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.npc.dominion.Kate;
 import com.lilithsthrone.game.character.quests.Quest;
 import com.lilithsthrone.game.character.quests.QuestLine;
@@ -658,7 +659,26 @@ public class SuccubisSecrets {
 					"Kate said she wanted to meet him. Offer to take her there now.",
 					DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER);
 
-		} else if (index == 0) {
+		} else if (index == 16
+			&& Main.game.getPlayer().getCompanions().stream().anyMatch(c -> c instanceof Dogmeat)
+			&& Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") != 1) {
+		return new Response("Invite Kate over",
+				"Ask Kate to stop by your place this evening.",
+				SHOP_BEAUTY_SALON_MAIN) {
+			@Override
+			public void effects() {
+				Main.game.getDialogueFlags().setSavedLong("kate_home_visit_active", 1);
+				Main.game.getTextEndStringBuilder().append(
+						UtilText.parse(getKate(),
+								"<p>"
+								+ "[npc.speech(Sure. Give me until evening.)]"
+								+ " She doesn't look up from whatever she's doing."
+								+ " [npc.speech(Don't make it weird.)]"
+								+ "</p>"));
+			}
+		};
+
+	} else if (index == 0) {
 			return new Response("Leave", "Leave Kate's shop, heading back out into the Shopping Arcade.", EXTERIOR){
 				@Override
 				public void effects() {

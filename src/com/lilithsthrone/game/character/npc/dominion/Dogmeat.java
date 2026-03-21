@@ -143,9 +143,13 @@ public class Dogmeat extends NPC {
 				if (!this.getWorldLocation().equals(WorldType.EMPTY)) {
 					this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
 				}
+			} else if (this.getHomeWorldLocation() != null) {
+				// Was a companion and has a home set — return home after dismissal
+				if (!this.getWorldLocation().equals(this.getHomeWorldLocation())) {
+					this.returnToHome();
+				}
 			}
-			// After the initial encounter, leave him wherever he was placed (the alley)
-			// so the player can run into him again.
+			// else: found but no home set → stays in the alley for repeat encounters
 		}
 		// When a companion, the standard companion following logic handles movement
 	}

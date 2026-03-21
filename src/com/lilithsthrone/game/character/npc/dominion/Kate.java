@@ -367,9 +367,29 @@ public class Kate extends NPC {
 			}
 		}
 
+		// Evening home visit: if invited and it's between 19:00–22:00, join the player at home.
+		if (Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1) {
+			int visitHour = Main.game.getHourOfDay();
+			if (visitHour >= 19 && visitHour < 22) {
+				boolean playerHome = Main.game.getPlayer().getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| Main.game.getPlayer().getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR);
+				boolean kateAlreadyThere = this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR);
+				if (playerHome && !kateAlreadyThere) {
+					this.setLocation(
+							Main.game.getPlayer().getWorldLocation(),
+							Main.game.getPlayer().getLocationPlace().getPlaceType(),
+							false);
+				}
+			}
+		}
+
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			if (dogmeat != null
+			// If Dogmeat is now a companion, skip the alley visit logic entirely.
+			if (dogmeat != null && Main.game.getPlayer().getCompanions().contains(dogmeat)) {
+				// fall through to normal shop-presence logic below
+			} else if (dogmeat != null
 					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)
 					&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
 					&& this.getLocationPlaceType().equals(dogmeat.getLocationPlaceType())) {
@@ -406,8 +426,11 @@ public class Kate extends NPC {
 				}
 			}
 		}
-		// Normal shop presence logic.
-		if (!Main.game.getCharactersPresent().contains(this)) {
+		// Normal shop presence logic — skip if Kate is currently on a home visit.
+		boolean onHomeVisit = Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
+				&& (this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR));
+		if (!onHomeVisit && !Main.game.getCharactersPresent().contains(this)) {
 			if (Main.game.isExtendedWorkTime()) {
 				this.returnToHome();
 			} else {
@@ -466,9 +489,19 @@ public class Kate extends NPC {
 	@Override
 	public void hourlyUpdate(int hour) {
 		super.hourlyUpdate(hour);
+
+		// Hour-22 departure for home visit.
+		if (hour == 22
+				&& Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1) {
+			this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+			Main.game.getDialogueFlags().setSavedLong("kate_home_visit_active", 0);
+		}
+
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			if (dogmeat != null && !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
+			// If Dogmeat is a companion, skip the alley visit schedule.
+			if (dogmeat != null && !Main.game.getPlayer().getCompanions().contains(dogmeat)
+					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
 					// Kate heads out; pre-compute act count and per-act interval for this visit.
 					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getLocationPlaceType(), false);

@@ -135,6 +135,10 @@ public enum QuestLine {
 	ROMANCE_MONICA("Monica's Milker", "You successfully retrieved Monica's personalised Moo Milker, and as a result she is very grateful to you.",
 			QuestType.RELATIONSHIP,
 			QuestTree.monicaTree),
+
+	SIDE_DOGMEAT_COMPANION("A Different Kind of Loyalty", "Dogmeat has a new home.",
+			QuestType.SIDE,
+			QuestTree.dogmeatCompanionTree),
 	;
 
 	private String name, completedDescription;

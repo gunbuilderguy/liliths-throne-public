@@ -1,10 +1,15 @@
 package com.lilithsthrone.game.dialogue.npcDialogue.dominion;
 
+import java.util.Map;
+
 import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.attributes.CorruptionLevel;
 import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.npc.dominion.Kate;
+import com.lilithsthrone.game.character.quests.Quest;
+import com.lilithsthrone.game.character.quests.QuestLine;
+import com.lilithsthrone.game.inventory.item.ItemType;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseSex;
@@ -13,7 +18,6 @@ import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
-import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
@@ -220,6 +224,10 @@ public class DogmeatDialogue {
 					tooltip = "Lower yourself before the powerful stray."
 							+ " Something about those amber eyes compels you."
 							+ "<br/>[style.italicsSex(Kneeling will lead to him mounting you.)]";
+					if (!Main.game.getPlayer().hasQuest(QuestLine.SIDE_DOGMEAT_COMPANION)
+							&& Main.game.getDialogueFlags().getSavedLong("dogmeat_companion_forfeited") != 1) {
+						tooltip += "<br/>[style.italicsMinorBad(Choosing this will close off the option to bring him home.)]";
+					}
 					startContent = "<p>"
 							+ "You slowly lower yourself to your knees. The dog watches you with calm, steady eyes,"
 							+ " then steps forward and sniffs along the side of your face &mdash; slow, deliberate, appraising."
@@ -278,6 +286,11 @@ public class DogmeatDialogue {
 						startContent) {
 					@Override
 					public void effects() {
+						// If companion quest is active and player submits, forfeit the quest.
+						if (Main.game.getPlayer().hasQuest(QuestLine.SIDE_DOGMEAT_COMPANION)
+								&& Main.game.getPlayer().getQuest(QuestLine.SIDE_DOGMEAT_COMPANION) == Quest.SIDE_DOGMEAT_COMPANION_START) {
+							Main.game.getDialogueFlags().setSavedLong("dogmeat_companion_forfeited", 1);
+						}
 						getDogmeat().incrementPlayerSurrenderCount(1);
 					}
 				};
@@ -308,6 +321,40 @@ public class DogmeatDialogue {
 						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
 					}
 				};
+			}
+
+			// --- Companion path (count == 0, never submitted, not forfeited) ---
+			if (index == 3 && count == 0
+					&& Main.game.getDialogueFlags().getSavedLong("dogmeat_companion_forfeited") != 1) {
+				boolean questStarted  = Main.game.getPlayer().hasQuest(QuestLine.SIDE_DOGMEAT_COMPANION);
+				boolean questActive   = questStarted
+						&& Main.game.getPlayer().getQuest(QuestLine.SIDE_DOGMEAT_COMPANION) == Quest.SIDE_DOGMEAT_COMPANION_START;
+				boolean questComplete = questStarted
+						&& Main.game.getPlayer().getQuest(QuestLine.SIDE_DOGMEAT_COMPANION) == Quest.SIDE_DOGMEAT_COMPANION_COMPLETE;
+
+				if (!questStarted && !questComplete) {
+					return new Response("Hold your ground",
+							"Don't kneel. You want him on your terms."
+									+ " You'll need something to earn his trust first.",
+							DOGMEAT_BRING_HOME_PROMPT);
+				}
+
+				if (questActive) {
+					int have = Main.game.getPlayer().getInventory().getAllItemsInInventory().entrySet().stream()
+							.filter(e -> e.getKey().getItemType().getId().equals("innoxia_race_dog_canine_crush"))
+							.mapToInt(Map.Entry::getValue)
+							.sum();
+					if (have >= 5) {
+						return new Response("Offer the drinks",
+								"You have five bottles of Canine Crush. Set them down and see what he does.",
+								DOGMEAT_BRING_HOME_COMPLETE);
+					} else {
+						return new Response("Offer the drinks",
+								"You only have " + have + " of 5 bottles of Canine Crush."
+										+ " Come back when you have enough.",
+								null);
+					}
+				}
 			}
 
 			return null;
@@ -409,7 +456,10 @@ public class DogmeatDialogue {
 					@Override
 					public void effects() {
 						setCollarState(1);
-						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+						// Only move Dogmeat back to the alley if he's not a companion
+						if (!Main.game.getPlayer().getCompanions().contains(getDogmeat())) {
+							getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+						}
 					}
 				};
 			}
@@ -1041,6 +1091,368 @@ public class DogmeatDialogue {
 						getKate().setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 					}
 				};
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// COMPANION PATH — QUEST NODES
+	// =========================================================================
+
+	/**
+	 * Quest start: player holds their ground rather than kneeling.
+	 * Requires count == 0 and the companion quest not yet started.
+	 */
+	public static final DialogueNode DOGMEAT_BRING_HOME_PROMPT = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You don't kneel."
+					+ "</p>"
+					+ "<p>"
+					+ "He tilts his head. His amber eyes move over you with that same measuring look,"
+					+ " and you hold it &mdash; not challenging, not yielding."
+					+ " You reach your hand out flat, the way you'd approach any large animal."
+					+ " He steps forward. Sniffs along your fingers, up your wrist, pausing at your pulse point."
+					+ " Then he steps back and sits."
+					+ "</p>"
+					+ "<p>"
+					+ "He's waiting to see what comes next."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuestSide(Bring five bottles of Canine Crush to the stray in the back alley.)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Leave for now",
+						"Come back when you have what you need.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().startQuest(QuestLine.SIDE_DOGMEAT_COMPANION));
+						getDogmeat().setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	/**
+	 * Quest completion: player returns with 5 Canine Crushes.
+	 * Removes items, adds Dogmeat as companion, prompts room choice.
+	 */
+	public static final DialogueNode DOGMEAT_BRING_HOME_COMPLETE = new DialogueNode("The back alley", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 10 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "You set the bottles down one by one on the ground in front of him."
+					+ " He watches each one, nose working."
+					+ " Then he looks up at you."
+					+ "</p>"
+					+ "<p>"
+					+ "You hold his gaze. You wait."
+					+ "</p>"
+					+ "<p>"
+					+ "He walks to the first bottle, sniffs along the neck, and sits back down."
+					+ " His tail moves once, low and deliberate."
+					+ " He looks at the alley entrance. Looks at you."
+					+ "</p>"
+					+ "<p>"
+					+ "You start walking. He falls into step beside you."
+					+ "</p>"
+					+ "<p>"
+					+ "[style.italicsQuestSide(Where will he sleep?)]"
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				// Consume the drinks and add companion first
+				return new Response("Take him home",
+						"Walk out of the alley together.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						Main.game.getPlayer().removeItemByType(
+								ItemType.getItemTypeFromId("innoxia_race_dog_canine_crush"), 5, false);
+						Main.game.getPlayer().addCompanion(getDogmeat());
+						Main.game.getTextEndStringBuilder().append(
+								Main.game.getPlayer().setQuestProgress(
+										QuestLine.SIDE_DOGMEAT_COMPANION,
+										Quest.SIDE_DOGMEAT_COMPANION_COMPLETE));
+					}
+				};
+			}
+			if (index == 2) {
+				return new Response("Bedroom", "He can sleep in your room.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						getDogmeat().setHomeLocation(
+								WorldType.LILAYAS_HOUSE_FIRST_FLOOR,
+								PlaceType.LILAYA_HOME_ROOM_PLAYER);
+					}
+				};
+			}
+			if (index == 3) {
+				return new Response("Kitchen", "He can sleep in the kitchen.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						getDogmeat().setHomeLocation(
+								WorldType.LILAYAS_HOUSE_GROUND_FLOOR,
+								PlaceType.LILAYA_HOME_KITCHEN);
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// HOME ENCOUNTER — bedroom/kitchen submission after becoming companion
+	// =========================================================================
+
+	public static final DialogueNode DOGMEAT_HOME_ENCOUNTER = new DialogueNode("Your bedroom", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 2 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			int count = getDogmeat().getPlayerSurrenderCount();
+			long collarState = getCollarState();
+
+			if (collarState == 2) {
+				return "<p>"
+						+ "He lifts his head when you come in &mdash; has been watching the door."
+						+ " His amber eyes find the collar around your neck immediately,"
+						+ " and the slow wag that starts is entirely possessive."
+						+ "</p>"
+						+ "<p>"
+						+ "He rises and presses his muzzle against the leather, inhaling once."
+						+ " Satisfied. His property, where it belongs."
+						+ "</p>";
+			}
+
+			if (collarState == 1) {
+				return "<p>"
+						+ "He's at the foot of the bed, watching you come in."
+						+ " His gaze drops to your bare neck &mdash; the spot where the collar should sit"
+						+ " &mdash; and a low, disapproving sound moves through his chest."
+						+ "</p>"
+						+ "<p>"
+						+ "You still haven't had it engraved."
+						+ "</p>"
+						+ "<p>"
+						+ "[style.italicsQuestRelationship(Find someone to re-engrave the tag.)]"
+						+ "</p>";
+			}
+
+			if (count == 0) {
+				return "<p>"
+						+ "He's made himself at home."
+						+ " Sprawled at the foot of the bed with the calm of an animal who has decided"
+						+ " this is his space and you are a welcome addition to it."
+						+ " His ears flick toward you as you come in, tail giving one slow, considering sweep."
+						+ "</p>"
+						+ "<p>"
+						+ "He watches you. Amber eyes, unhurried."
+						+ "</p>";
+			}
+
+			return "<p>"
+					+ "His head comes up as you enter &mdash; he was already watching the door."
+					+ " He rises, stretches once with easy confidence, and fixes you with those amber eyes."
+					+ " His tail begins a slow, deliberate wag."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			int count = getDogmeat().getPlayerSurrenderCount();
+			long collarState = getCollarState();
+
+			DialogueNode postSex;
+			if (count == 2 && collarState == 0) {
+				postSex = DOGMEAT_COLLAR_SCENE;
+			} else {
+				postSex = DOGMEAT_HOME_AFTER_SEX;
+			}
+
+			if (index == 1) {
+				String title;
+				String tooltip;
+				String startContent;
+
+				if (count == 0) {
+					title = "Kneel before him";
+					tooltip = "Lower yourself. You're on his territory now."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You sink to your knees. He watches you with steady eyes,"
+							+ " then steps forward and sniffs along your face and neck &mdash;"
+							+ " slow, deliberate, entirely sure of himself."
+							+ "</p>"
+							+ "<p>"
+							+ "Apparently satisfied, he moves behind you."
+							+ " His forelegs settle around your hips with the same unhurried certainty"
+							+ " he brings to everything."
+							+ " He mounts you like he owns you."
+							+ " In here, he might."
+							+ "</p>";
+				} else if (collarState == 2) {
+					title = "Present yourself";
+					tooltip = "The collar says what you are. He knows it."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You sink to your knees, the weight of the engraved collar"
+							+ " familiar against your throat."
+							+ " He's behind you before you've finished settling,"
+							+ " forelegs locking around your hips with absolute ease."
+							+ "</p>";
+				} else {
+					title = "Present yourself";
+					tooltip = "Lower yourself before him."
+							+ "<br/>[style.italicsSex(He will mount you.)]";
+					startContent = "<p>"
+							+ "You lower yourself to the floor. He crosses to you at once,"
+							+ " nose moving along your neck and shoulder, then settling into position"
+							+ " with the matter-of-fact efficiency of routine."
+							+ "</p>";
+				}
+
+				return new ResponseSex(title, tooltip,
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.THREE_DIRTY,
+						null, null, null,
+						true, false,
+						createMountingManager(),
+						postSex,
+						startContent) {
+					@Override
+					public void effects() {
+						getDogmeat().incrementPlayerSurrenderCount(1);
+					}
+				};
+			}
+
+			if (index == 2) {
+				return new Response("Not now",
+						"Leave him to it.",
+						Main.game.getDefaultDialogue(false));
+			}
+
+			return null;
+		}
+	};
+
+	public static final DialogueNode DOGMEAT_HOME_AFTER_SEX = new DialogueNode("Your bedroom", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			long collarState = getCollarState();
+
+			if (collarState == 2) {
+				return "<p>"
+						+ "He steps back, panting softly, and nudges the tag on your collar with his nose."
+						+ " Satisfied. He settles at the foot of the bed, tail sweeping the floor once."
+						+ "</p>";
+			}
+
+			return "<p>"
+					+ "He steps back, panting softly, tail moving in slow, satisfied arcs."
+					+ " He turns a circle on the rug and settles, chin resting on his paws,"
+					+ " watching you with those calm amber eyes."
+					+ "</p>"
+					+ "<p>"
+					+ "He looks entirely at home."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Leave him to rest",
+						"Let him settle.",
+						Main.game.getDefaultDialogue(false));
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// KATE HOME VISIT
+	// =========================================================================
+
+	/**
+	 * Short scene for when Kate is visiting the player's home in the evening.
+	 * Triggered from the bedroom response button when kate_home_visit_active == 1 and Kate is present.
+	 */
+	public static final DialogueNode KATE_HOME_VISIT = new DialogueNode("Your bedroom", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			return "<p>"
+					+ "Kate is perched on the edge of your armchair, legs crossed, looking entirely at home."
+					+ " She has a glass of something in one hand and is watching Dogmeat with the particular"
+					+ " attention of someone who hasn't quite decided whether to be affectionate or analytical."
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat, for his part, has not moved from his spot."
+					+ " He acknowledges her with a single slow blink and goes back to watching the door."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(He's very different here, you know,)]")
+					+ " Kate says, to no one in particular."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Calmer. I wasn't expecting that.)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She glances at you."
+					+ " "
+					+ UtilText.parse(getKate(), "[npc.speech(Good different.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Enjoy the company",
+						"Sit with them for a while.",
+						Main.game.getDefaultDialogue(false));
 			}
 			return null;
 		}
