@@ -341,16 +341,16 @@ public class DogmeatDialogue {
 
 				if (questActive) {
 					int have = Main.game.getPlayer().getInventory().getAllItemsInInventory().entrySet().stream()
-							.filter(e -> e.getKey().getItemType().getId().equals("innoxia_race_dog_canine_crush"))
+							.filter(e -> e.getKey().getItemType().getId().equals("innoxia_race_dog_canine_crunch"))
 							.mapToInt(Map.Entry::getValue)
 							.sum();
 					if (have >= 5) {
-						return new Response("Offer the drinks",
-								"You have five bottles of Canine Crush. Set them down and see what he does.",
+						return new Response("Offer the treats",
+								"You have five Canine Crunches. Set them down and see what he does.",
 								DOGMEAT_BRING_HOME_COMPLETE);
 					} else {
-						return new Response("Offer the drinks",
-								"You only have " + have + " of 5 bottles of Canine Crush."
+						return new Response("Offer the treats",
+								"You only have " + have + " of 5 Canine Crunches."
 										+ " Come back when you have enough.",
 								null);
 					}
@@ -1127,7 +1127,7 @@ public class DogmeatDialogue {
 					+ "He's waiting to see what comes next."
 					+ "</p>"
 					+ "<p>"
-					+ "[style.italicsQuestSide(Bring five bottles of Canine Crush to the stray in the back alley.)]"
+					+ "[style.italicsQuestSide(Bring five Canine Crunches to the stray in the back alley.)]"
 					+ "</p>";
 		}
 
@@ -1150,7 +1150,7 @@ public class DogmeatDialogue {
 	};
 
 	/**
-	 * Quest completion: player returns with 5 Canine Crushes.
+	 * Quest completion: player returns with 5 Canine Crunches.
 	 * Removes items, adds Dogmeat as companion, prompts room choice.
 	 */
 	public static final DialogueNode DOGMEAT_BRING_HOME_COMPLETE = new DialogueNode("The back alley", ".", false) {
@@ -1163,7 +1163,7 @@ public class DogmeatDialogue {
 		@Override
 		public String getContent() {
 			return "<p>"
-					+ "You set the bottles down one by one on the ground in front of him."
+					+ "You set the treats down one by one on the ground in front of him."
 					+ " He watches each one, nose working."
 					+ " Then he looks up at you."
 					+ "</p>"
@@ -1171,7 +1171,7 @@ public class DogmeatDialogue {
 					+ "You hold his gaze. You wait."
 					+ "</p>"
 					+ "<p>"
-					+ "He walks to the first bottle, sniffs along the neck, and sits back down."
+					+ "He walks to the first one, sniffs it carefully, and sits back down."
 					+ " His tail moves once, low and deliberate."
 					+ " He looks at the alley entrance. Looks at you."
 					+ "</p>"
@@ -1193,7 +1193,7 @@ public class DogmeatDialogue {
 					@Override
 					public void effects() {
 						Main.game.getPlayer().removeItemByType(
-								ItemType.getItemTypeFromId("innoxia_race_dog_canine_crush"), 5, false);
+								ItemType.getItemTypeFromId("innoxia_race_dog_canine_crunch"), 5, false);
 						Main.game.getPlayer().addCompanion(getDogmeat());
 						Main.game.getTextEndStringBuilder().append(
 								Main.game.getPlayer().setQuestProgress(

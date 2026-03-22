@@ -647,11 +647,11 @@ public enum Quest {
 		public String getDescription() {
 			return "The stray in the back alley isn't interested in submission."
 					+ " There might be another way to win his trust"
-					+ " \u2014 five bottles of Canine Crush, left as an offering.";
+					+ " \u2014 five Canine Crunches, left as an offering.";
 		}
 		@Override
 		public String getCompletedDescription() {
-			return "You brought him the drinks. He took them. Now he follows you home.";
+			return "You brought him the treats. He took them. Now he follows you home.";
 		}
 	},
 
