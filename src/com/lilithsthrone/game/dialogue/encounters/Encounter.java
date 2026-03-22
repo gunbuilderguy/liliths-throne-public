@@ -23,6 +23,7 @@ import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.npc.NPCGenerationFlag;
 import com.lilithsthrone.game.character.npc.dominion.Cultist;
 import com.lilithsthrone.game.character.npc.dominion.DominionAlleywayAttacker;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.npc.dominion.DominionSuccubusAttacker;
 import com.lilithsthrone.game.character.npc.dominion.HarpyNestsAttacker;
 import com.lilithsthrone.game.character.npc.dominion.Lumi;
@@ -417,6 +418,25 @@ public class Encounter {
 				}
 			}
 			
+			
+			// Dogmeat: first encounter has a 10% chance on day 1, decreasing by 1%/day (min 1%).
+			// After the first meeting, the player can run into him again with a 5% chance,
+			// provided he isn't already a companion and at least 2 hours have passed since
+			// the last time they crossed paths.
+			if(Main.game.isStarted()) {
+				Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+				if(!Main.game.getPlayer().getCompanions().contains(dogmeat)) {
+					if(!Main.game.getDialogueFlags().hasSavedLong("dogmeat_found")) {
+						float dogmeatChance = Math.max(1f, 11f - Main.game.getDayNumber());
+						map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, dogmeatChance);
+					} else {
+						long lastSeen = Main.game.getDialogueFlags().getSavedLong("dogmeat_found");
+						if(Main.game.getMinutesPassed() - lastSeen > 120) {
+							map.put(EncounterType.DOMINION_ALLEY_DOGMEAT, 5f);
+						}
+					}
+				}
+			}
 			return map;
 		}
 		
@@ -523,6 +543,12 @@ public class Encounter {
 					return null;
 				}
 				return SlaveEncountersDialogue.getSlaveUsingOtherSlaveAlleyway(slaves);
+
+			} else if(node == EncounterType.DOMINION_ALLEY_DOGMEAT) {
+				Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+				dogmeat.setLocation(Main.game.getPlayer(), true);
+				Main.game.setActiveNPC(dogmeat);
+				return dogmeat.getEncounterDialogue();
 			}
 			
 			return null;

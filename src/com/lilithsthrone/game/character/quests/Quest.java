@@ -638,6 +638,38 @@ public enum Quest {
 
 	// Side Quests:
 
+	SIDE_DOGMEAT_COMPANION_START(QuestType.SIDE, 25, 0) {
+		@Override
+		public String getName() {
+			return "A Different Kind of Loyalty";
+		}
+		@Override
+		public String getDescription() {
+			return "The stray in the back alley isn't interested in submission."
+					+ " There might be another way to win his trust"
+					+ " \u2014 five Canine Crunches, left as an offering.";
+		}
+		@Override
+		public String getCompletedDescription() {
+			return "You brought him the treats. He took them. Now he follows you home.";
+		}
+	},
+
+	SIDE_DOGMEAT_COMPANION_COMPLETE(QuestType.SIDE, 50, 0) {
+		@Override
+		public String getName() {
+			return "A Different Kind of Loyalty";
+		}
+		@Override
+		public String getDescription() {
+			return "Dogmeat is home.";
+		}
+		@Override
+		public String getCompletedDescription() {
+			return "Dogmeat is home.";
+		}
+	},
+
 	SIDE_UTIL_COMPLETE(QuestType.SIDE, 1, 0) {
 		@Override
 		public String getName() {

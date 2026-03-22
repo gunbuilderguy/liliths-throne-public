@@ -2,7 +2,9 @@ package com.lilithsthrone.game.character.npc.dominion;
 
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,6 +56,7 @@ import com.lilithsthrone.game.character.markings.TattooType;
 import com.lilithsthrone.game.character.markings.TattooWriting;
 import com.lilithsthrone.game.character.markings.TattooWritingStyle;
 import com.lilithsthrone.game.character.npc.NPC;
+import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.persona.NameTriplet;
 import com.lilithsthrone.game.character.persona.Occupation;
 import com.lilithsthrone.game.character.persona.PersonalityTrait;
@@ -76,6 +79,11 @@ import com.lilithsthrone.game.inventory.enchanting.TFPotency;
 import com.lilithsthrone.game.inventory.item.AbstractItem;
 import com.lilithsthrone.game.inventory.item.AbstractItemType;
 import com.lilithsthrone.game.inventory.item.ItemType;
+import com.lilithsthrone.game.sex.GenericSexFlag;
+import com.lilithsthrone.game.sex.SexAreaOrifice;
+import com.lilithsthrone.game.sex.SexAreaPenetration;
+import com.lilithsthrone.game.sex.SexParticipantType;
+import com.lilithsthrone.game.sex.SexType;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.Util.Value;
@@ -346,8 +354,84 @@ public class Kate extends NPC {
 	
 	@Override
 	public void turnUpdate() {
-		if(!Main.game.getCharactersPresent().contains(this)) {
-			if(Main.game.isExtendedWorkTime()) {
+		// If the player has removed the tracking enchant from the collar, update state.
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+			AbstractClothing collar = Main.game.getPlayer().getClothingInSlot(InventorySlot.NECK);
+			boolean trackingPresent = collar != null
+					&& collar.getClothingType().getId().equals("innoxia_neck_dogmeat_collar_engraved")
+					&& collar.getEffects().stream().anyMatch(
+							e -> e.getSecondaryModifier() == TFModifier.CLOTHING_TRACKING);
+			if (!trackingPresent) {
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 1);
+			}
+		}
+
+		// Evening home visit: if invited and it's between 19:00–22:00, join the player at home.
+		if (Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1) {
+			int visitHour = Main.game.getHourOfDay();
+			if (visitHour >= 19 && visitHour < 22) {
+				boolean playerHome = Main.game.getPlayer().getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| Main.game.getPlayer().getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR);
+				boolean kateAlreadyThere = this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR);
+				if (playerHome && !kateAlreadyThere) {
+					this.setLocation(
+							Main.game.getPlayer().getWorldLocation(),
+							Main.game.getPlayer().getLocationPlace().getPlaceType(),
+							false);
+				}
+			}
+		}
+
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
+			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+			// If Dogmeat is now a companion, skip the alley visit logic entirely.
+			if (dogmeat != null && Main.game.getPlayer().getCompanions().contains(dogmeat)) {
+				// fall through to normal shop-presence logic below
+			} else if (dogmeat != null
+					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)
+					&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
+					&& this.getLocationPlaceType().equals(dogmeat.getLocationPlaceType())) {
+
+				long arrivalMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute");
+				long now           = Main.game.getMinutesPassed();
+
+				if (arrivalMinute > 0 && now >= arrivalMinute) {
+					if (now < arrivalMinute + 120) {
+						// Within the visit window: fire any acts whose scheduled minute has passed.
+						long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+						long interval      = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_act_interval");
+						long nextActMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_next_act_minute");
+						while (actsRemaining > 0 && now >= nextActMinute) {
+							simulateOffscreenActs(dogmeat, 1);
+							actsRemaining--;
+							nextActMinute += interval;
+						}
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actsRemaining);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_next_act_minute", nextActMinute);
+					} else {
+						// Visit window expired: simulate any acts not yet fired, then send her home.
+						long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+						simulateOffscreenActs(dogmeat, (int) actsRemaining);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_arrival_minute", 0);
+
+						long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
+
+						this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+					}
+					return; // Skip normal shop presence logic during/after visit this turn.
+				}
+			}
+		}
+		// Normal shop presence logic — skip if Kate is currently on a home visit.
+		boolean onHomeVisit = Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
+				&& (this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
+						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR));
+		if (!onHomeVisit && !Main.game.getCharactersPresent().contains(this)) {
+			if (Main.game.isExtendedWorkTime()) {
 				this.returnToHome();
 			} else {
 				this.setLocation(WorldType.EMPTY, PlaceType.GENERIC_HOLDING_CELL, false);
@@ -400,6 +484,94 @@ public class Kate extends NPC {
 	@Override
 	public boolean isSleepingAtHour(int hour) {
 		return this.isAtHome(); // Always sleeping when on home tile
+	}
+
+	@Override
+	public void hourlyUpdate(int hour) {
+		super.hourlyUpdate(hour);
+
+		// Hour-22 departure for home visit.
+		if (hour == 22
+				&& Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1) {
+			this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+			Main.game.getDialogueFlags().setSavedLong("kate_home_visit_active", 0);
+		}
+
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
+			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+			// If Dogmeat is a companion, skip the alley visit schedule.
+			if (dogmeat != null && !Main.game.getPlayer().getCompanions().contains(dogmeat)
+					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
+				if (hour == 11) {
+					// Kate heads out; pre-compute act count and per-act interval for this visit.
+					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getLocationPlaceType(), false);
+
+					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
+					int actCount = Math.max(1, this.getOrgasmsBeforeSatisfied()
+							+ Math.min((int)(offscreenCount / 4), 3)
+							+ (hasBestiality                                    ? 1 : 0)
+							+ (this.hasFetish(Fetish.FETISH_CUM_ADDICT)         ? 1 : 0)
+							+ (this.hasFetish(Fetish.FETISH_SUBMISSIVE)         ? 1 : 0)
+							+ (this.hasTraitActivated(Perk.NYMPHOMANIAC)        ? 1 : 0));
+
+					// Divide the 2-hour window into (actCount+1) equal slots so acts are spaced evenly.
+					long arrivalMinute = Main.game.getMinutesPassed();
+					long interval      = 120L / (actCount + 1);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_arrival_minute",  arrivalMinute);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_act_interval",    interval);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining",  actCount);
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_next_act_minute", arrivalMinute + interval);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Simulate {@code actCount} off-screen sex acts between Kate and Dogmeat,
+	 * applying all mechanical effects. Grants FETISH_BESTIALITY on vaginal acts.
+	 */
+	private void simulateOffscreenActs(Dogmeat dogmeat, int actCount) {
+		if (actCount <= 0) {
+			return;
+		}
+
+		long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+		boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
+		int vaginaThreshold = hasBestiality ? 1 : 2;
+		int analThreshold   = hasBestiality ? 3 : 5;
+
+		Map<SexAreaOrifice, Integer> orificeWeights = new LinkedHashMap<>();
+		orificeWeights.put(SexAreaOrifice.MOUTH,
+				4 + (this.hasFetish(Fetish.FETISH_ORAL_RECEIVING) ? 3 : 0)
+				  + (this.hasFetish(Fetish.FETISH_CUM_ADDICT)     ? 2 : 0));
+		if (offscreenCount >= vaginaThreshold) {
+			orificeWeights.put(SexAreaOrifice.VAGINA,
+					5 + (this.hasFetish(Fetish.FETISH_VAGINAL_RECEIVING) ? 3 : 0)
+					  + (this.hasFetish(Fetish.FETISH_PREGNANCY)         ? 2 : 0)
+					  + (this.hasFetish(Fetish.FETISH_IMPREGNATION)      ? 2 : 0)
+					  + (this.hasFetish(Fetish.FETISH_BREEDER)           ? 3 : 0));
+		}
+		if (offscreenCount >= analThreshold) {
+			orificeWeights.put(SexAreaOrifice.ANUS,
+					3 + (this.hasFetish(Fetish.FETISH_ANAL_RECEIVING) ? 4 : 0));
+		}
+
+		for (int i = 0; i < actCount; i++) {
+			SexAreaOrifice orifice = Util.getRandomObjectFromWeightedMap(orificeWeights);
+			this.calculateGenericSexEffects(
+					true, true, dogmeat,
+					Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+					Subspecies.DOG_MORPH_GERMAN_SHEPHERD,
+					new SexType(SexParticipantType.NORMAL, orifice, SexAreaPenetration.PENIS),
+					GenericSexFlag.NO_DESCRIPTION_NEEDED);
+			this.ingestFluid(dogmeat, dogmeat.getCum(), orifice, dogmeat.getPenisRawOrgasmCumQuantity());
+
+			// Grant bestiality fetish the first time a vaginal act occurs.
+			if (orifice == SexAreaOrifice.VAGINA && !this.hasFetish(Fetish.FETISH_BESTIALITY)) {
+				this.addFetish(Fetish.FETISH_BESTIALITY);
+			}
+		}
 	}
 	
 	@Override

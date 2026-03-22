@@ -1106,6 +1106,22 @@ public class Perk {
 		}
 	};
 	
+	public static AbstractPerk JOB_STRAY_DOG = new AbstractPerk(20,
+			true,
+			"Street Survivor",
+			PerkCategory.JOB,
+			"perks/jobs/mugger",
+			PresetColour.BASE_TAN,
+			Util.newHashMapOfValues(
+					new Value<>(Attribute.DAMAGE_PHYSICAL, 10),
+					new Value<>(Attribute.HEALTH_MAXIMUM, 20)),
+			null) {
+		@Override
+		public String getDescription(GameCharacter owner) {
+			return UtilText.parse(owner, "[npc.Name] [npc.verb(live)] on the streets, surviving by [npc.her] own instincts.");
+		}
+	};
+
 	public static AbstractPerk JOB_MUGGER = new AbstractPerk(20,
 			true,
 			"Outlaw",

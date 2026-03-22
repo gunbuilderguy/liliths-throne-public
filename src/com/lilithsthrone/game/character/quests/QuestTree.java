@@ -44,6 +44,8 @@ public class QuestTree {
 	
 	public static TreeNode<Quest> rebelBaseTree = new TreeNode<Quest>(Quest.REBEL_BASE_EXPLORATION);
 	public static TreeNode<Quest> rebelBaseFirebombTree = new TreeNode<Quest>(Quest.REBEL_BASE_FIREBOMBS_START);
+
+	public static TreeNode<Quest> dogmeatCompanionTree = new TreeNode<Quest>(Quest.SIDE_DOGMEAT_COMPANION_START);
 	
 	
 	static {
@@ -105,8 +107,10 @@ public class QuestTree {
 		incubationTree.addChild(node1);
 		
 		accommodationTree.addChild(new TreeNode<Quest>(Quest.SIDE_UTIL_COMPLETE));
-		
+
 		dollStorageTree.addChild(new TreeNode<Quest>(Quest.SIDE_UTIL_COMPLETE));
+
+		dogmeatCompanionTree.addChild(new TreeNode<Quest>(Quest.SIDE_DOGMEAT_COMPANION_COMPLETE));
 		
 		node1 = new TreeNode<Quest>(Quest.SIDE_SLAVER_RECOMMENDATION_OBTAINED);
 		slaveryTree.addChild(node1);
