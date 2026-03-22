@@ -729,7 +729,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Tell her the whole story",
+				return new Response("Tell her",
 						"Tell Kate that the collar belongs to a dog named Dogmeat, and what he means to you.",
 						DOGMEAT_COLLAR_TELL);
 			}
@@ -761,12 +761,11 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(...Like, an actual dog.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's just saying it out loud."
+					+ "She's just saying it out loud."
 					+ "</p>"
 					+ "<p>"
-					+ "She picks up the collar again. Brings it close. You watch her breathe in, just once, and see"
-					+ " the precise moment she realises she's doing it because she can still smell him on the leather."
-					+ " Her expression goes somewhere complicated &mdash; a little caught-out, a little flushed &mdash;"
+					+ "She picks up the collar again. Brings it close. Breathes in, just once."
+					+ " Her expression shifts &mdash; a little caught-out, a little flushed &mdash;"
 					+ " and she sets it back down with slightly more care than necessary."
 					+ "</p>"
 					+ "<p>"
@@ -776,8 +775,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(Okay, that's... Y'know what, I don't judge.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "She sits up properly for the first time since you walked in and reaches for her engraving tools,"
-					+ " and it's very obvious she's thinking about something else and failing to pretend otherwise."
+					+ "She sits up properly for the first time since you walked in and reaches for her engraving tools."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Is he... good?)]")
@@ -830,12 +828,9 @@ public class SuccubisSecrets {
 					+ "</p>"
 					+ "<p>"
 					+ "She works quickly, efficiently &mdash; the main line, the names, clean and competent. Standard."
-					+ " Then, so briefly you almost miss it, the needle makes a second pass along the inner edge of the band."
+					+ " Then the needle makes a second pass along the inner edge of the band."
 					+ " The line it traces is barely a hairsbreadth, following the curve of the first like a shadow,"
-					+ " worked into the grain of the leather where you'd have to know what you were looking for to find it."
-					+ "</p>"
-					+ "<p>"
-					+ "Kate knows what she's looking for."
+					+ " worked into the grain of the leather."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(There.)]")
@@ -977,7 +972,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"His name is Dogmeat. He found me in the alley.\"",
+				return new Response("\"His name is...\"",
 						"Matter-of-fact. Give her the short version.",
 						DOGMEAT_COLLAR_ENGRAVING) {
 					@Override
@@ -994,7 +989,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 2) {
-				return new Response("(Say nothing. Just hold her gaze.)",
+				return new Response("Say nothing",
 						"Let the silence answer for you.",
 						DOGMEAT_COLLAR_ENGRAVING) {
 					@Override
@@ -1016,7 +1011,7 @@ public class SuccubisSecrets {
 
 	/**
 	 * Kate says "He put that on you himself?" — player chooses how to answer.
-	 * kate_wants_choice: 1 = "He shook it off", 2 = "More or less".
+	 * kate_wants_choice: 1 = "He offered it", 2 = "More or less".
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN = new DialogueNode("Succubi's Secrets", "-", true) {
 
@@ -1036,7 +1031,7 @@ public class SuccubisSecrets {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"He shook it off and offered it to me.\"",
+				return new Response("\"He offered it\"",
 						"",
 						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
 					@Override
@@ -1063,7 +1058,7 @@ public class SuccubisSecrets {
 
 	/**
 	 * Kate says "I want to meet him." Content varies based on prior choice and "particular" loop.
-	 * Three choices: bring her now, defer, or the "he's particular" loop.
+	 * Three choices: bring her now, defer, or the "he's picky" loop.
 	 */
 	public static final DialogueNode DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER = new DialogueNode("Succubi's Secrets", "-", true) {
 
@@ -1097,15 +1092,14 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(I want to meet him.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. Her voice has the same flat certainty she used to quote 200 flames."
-					+ " This is just how things are going to be."
+					+ "Her voice has the same flat certainty she used to quote 200 flames."
 					+ "</p>";
 		}
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("\"I can take you there.\"",
+				return new Response("\"I'll take you\"",
 						"Offer to bring her to Dogmeat's alley right now.",
 						DOGMEAT_COLLAR_ENGRAVING_CLOSING_EARLY) {
 					@Override
@@ -1116,7 +1110,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 2) {
-				return new Response("\"Maybe another time.\"",
+				return new Response("\"Another time\"",
 						"Not today. But you know where to find each other.",
 						DOGMEAT_COLLAR_ENGRAVING_DEFERRED) {
 					@Override
@@ -1126,7 +1120,7 @@ public class SuccubisSecrets {
 				};
 			}
 			if (index == 3) {
-				return new Response("\"He's... particular about people.\"",
+				return new Response("\"He's picky\"",
 						"Warn her gently.",
 						DOGMEAT_COLLAR_ENGRAVING_WANTS_IN_AFTER) {
 					@Override
@@ -1222,7 +1216,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(...You found it.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's very still for a moment."
+					+ "She's very still for a moment."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(Y'know, in my defense, you were being very cagey.)]")
@@ -1272,7 +1266,7 @@ public class SuccubisSecrets {
 					+ UtilText.parse(getKate(), "[npc.speech(So you knew about the tracking thing.)]")
 					+ "</p>"
 					+ "<p>"
-					+ "Not a question. She's processing."
+					+ "She's processing."
 					+ "</p>"
 					+ "<p>"
 					+ UtilText.parse(getKate(), "[npc.speech(And you're telling me anyway.)]")
