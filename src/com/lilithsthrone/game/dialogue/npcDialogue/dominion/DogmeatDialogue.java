@@ -18,7 +18,9 @@ import com.lilithsthrone.game.sex.SexControl;
 import com.lilithsthrone.game.sex.managers.universal.SMGeneric;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
+import com.lilithsthrone.world.AbstractWorldType;
 import com.lilithsthrone.world.WorldType;
+import com.lilithsthrone.world.places.AbstractPlaceType;
 import com.lilithsthrone.world.places.PlaceType;
 
 /**
@@ -888,6 +890,54 @@ public class DogmeatDialogue {
 
 		@Override
 		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (tier >= 4) {
+				return "<p>"
+						+ "Dogmeat steps back, panting softly. Kate doesn't move."
+						+ " She reaches for him as he settles beside her &mdash; her hand finds his cock,"
+						+ " wraps around it, thumb stroking slowly as he softens."
+						+ " She leans down and licks him clean &mdash; thoroughly, unhurriedly."
+						+ "</p>"
+						+ "<p>"
+						+ "When she's done she stays there. Doesn't get up."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(I hate going back to the shop after this.)]")
+						+ "</p>";
+			}
+
+			if (tier == 3) {
+				return "<p>"
+						+ "Dogmeat steps back, panting. Kate stays on the ground."
+						+ " She reaches for him &mdash; her hand finding his sheath,"
+						+ " two fingers working inside in slow circles while he softens."
+						+ " She leans over and licks him clean with careful attention."
+						+ "</p>"
+						+ "<p>"
+						+ "She doesn't rush to stand. Instead she pulls him closer,"
+						+ " his head settling against her side."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Five more minutes.)]")
+						+ "</p>";
+			}
+
+			if (tier == 2) {
+				return "<p>"
+						+ "Dogmeat steps back, panting, and shakes himself. Kate catches her breath,"
+						+ " then reaches for him &mdash; her hand finding his sheath,"
+						+ " fingers working in idle circles while he softens."
+						+ "</p>"
+						+ "<p>"
+						+ "She glances at you. Shrugs."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Same time tomorrow.)]")
+						+ "</p>";
+			}
+
+			// Tier 1 or 0
 			return "<p>"
 					+ "Dogmeat steps back, panting, and shakes himself. Kate is still on the ground."
 					+ " She doesn't get up immediately."
@@ -1407,6 +1457,62 @@ public class DogmeatDialogue {
 
 		@Override
 		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (tier >= 4) {
+				return "<p>"
+						+ "Kate has brought a bag. Not a large one, but the kind that says"
+						+ " she's thought about staying. She's kicked her shoes off by the door"
+						+ " and is sitting on the floor next to Dogmeat, her back against the bed,"
+						+ " one hand resting on his flank. She's changed into something that isn't her shop clothes."
+						+ "</p>"
+						+ "<p>"
+						+ "Dogmeat has his chin on her thigh. His tail sweeps the rug slowly."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(I was thinking I might stay tonight,)]")
+						+ " she says, not quite looking at you."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(If that's okay.)]")
+						+ "</p>";
+			}
+
+			if (tier == 3) {
+				return "<p>"
+						+ "Kate is on the floor with Dogmeat, cross-legged,"
+						+ " her hand moving through his fur in slow, absent strokes."
+						+ " He's lying on his side, completely relaxed, amber eyes half-closed."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(He likes it when you get the spot behind his left ear,)]")
+						+ " she says, demonstrating."
+						+ " His tail thumps the floor twice."
+						+ "</p>"
+						+ "<p>"
+						+ "She glances up at you with genuine warmth."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(Thanks for letting me come over.)]")
+						+ "</p>";
+			}
+
+			if (tier == 2) {
+				return "<p>"
+						+ "Kate is perched on the edge of your armchair, legs crossed."
+						+ " She has a glass of something in one hand and is watching Dogmeat"
+						+ " with casual, familiar attention."
+						+ "</p>"
+						+ "<p>"
+						+ "Dogmeat is in his usual spot. He acknowledges her with a slow blink."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(He's calmer here,)]")
+						+ " Kate says."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(I like it.)]")
+						+ "</p>";
+			}
+
+			// Tier 0-1
 			return "<p>"
 					+ "Kate is perched on the edge of your armchair, legs crossed, looking entirely at home."
 					+ " She has a glass of something in one hand and is watching Dogmeat with the particular"
@@ -1431,9 +1537,499 @@ public class DogmeatDialogue {
 
 		@Override
 		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
 			if (index == 1) {
 				return new Response("Enjoy the company",
 						"Sit with them for a while.",
+						Main.game.getDefaultDialogue(false));
+			}
+			if (index == 2) {
+				String startContent = "<p>"
+						+ "You kneel. Kate watches you for a moment, then lowers herself beside you."
+						+ " Dogmeat rises, stretches, and crosses to the two of you"
+						+ " with unhurried certainty."
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"You, Kate, and Dogmeat.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_LUSTFUL,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null) {
+							@Override
+							public SexControl getSexControl(GameCharacter character) {
+								if (character.isPlayer() || character == getKate()) {
+									return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
+								}
+								return super.getSexControl(character);
+							}
+						},
+						DOGMEAT_HOME_AFTER_SEX,
+						startContent);
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// APARTMENT HELPERS
+	// =========================================================================
+
+	private static AbstractWorldType getKateApartment() {
+		return WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment");
+	}
+
+	private static AbstractPlaceType getKateApartmentBedroom() {
+		return PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom");
+	}
+
+	/** Returns true when both Kate and Dogmeat are at Kate's apartment bedroom. */
+	public static boolean isBothAtApartment() {
+		Kate kate = getKate();
+		Dogmeat dogmeat = getDogmeat();
+		if (kate == null || dogmeat == null) {
+			return false;
+		}
+		AbstractWorldType apt = getKateApartment();
+		return kate.getWorldLocation().equals(apt) && dogmeat.getWorldLocation().equals(apt);
+	}
+
+	// =========================================================================
+	// APARTMENT DISCOVERY — player walks in on Kate & Dogmeat at her place
+	// =========================================================================
+
+	public static final DialogueNode KATE_APARTMENT_DISCOVERY = new DialogueNode("Kate's Bedroom", ".", true) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 2 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (tier >= 4) {
+				return "<p>"
+						+ "The bedroom door is ajar. You can hear them before you see them."
+						+ "</p>"
+						+ "<p>"
+						+ "Kate is on the bed, tangled in the sheets she clearly stopped caring about some time ago."
+						+ " Dogmeat is behind her with the same unhurried certainty he brings to everything."
+						+ " There's a large dog bed in the corner &mdash; clearly new, clearly expensive, clearly slept in."
+						+ "</p>"
+						+ "<p>"
+						+ "She looks over her shoulder when you come in. Doesn't stop. Doesn't flinch."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Took you long enough.)]")
+						+ "</p>";
+			}
+
+			if (tier == 3) {
+				return "<p>"
+						+ "The bedroom door is open. You step through."
+						+ "</p>"
+						+ "<p>"
+						+ "Kate is on the floor beside the bed, cross-legged, with Dogmeat's broad head resting"
+						+ " in her lap. Her hand is moving through his fur in slow, idle strokes."
+						+ " A folded blanket sits in the corner &mdash; his, clearly."
+						+ " The scene is almost domestic until you notice the state of her clothes."
+						+ "</p>"
+						+ "<p>"
+						+ "She looks up at you. No surprise, no embarrassment."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Hey.)]")
+						+ "</p>";
+			}
+
+			if (tier == 2) {
+				return "<p>"
+						+ "You push the bedroom door open."
+						+ "</p>"
+						+ "<p>"
+						+ "Kate glances over her shoulder. Dogmeat is behind her, forelegs locked"
+						+ " around her hips with that same unhurried authority."
+						+ " She's braced against the side of the bed, hair loose, breathing hard."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Door was unlocked.)]")
+						+ " She doesn't stop. Neither does he."
+						+ "</p>";
+			}
+
+			// Tier 1 — new & nervous
+			return "<p>"
+					+ "You push the bedroom door open."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate scrambles. There's a sound that's half-gasp, half-yelp"
+					+ " &mdash; hers, not his &mdash; and a flurry of limbs and tangled sheets."
+					+ " Dogmeat, for his part, does not scramble. He sits back on his haunches"
+					+ " and regards you with calm amber eyes, tail sweeping once across the floor."
+					+ "</p>"
+					+ "<p>"
+					+ "Kate's face is very red."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(This &mdash; I can &mdash; this isn't &mdash;)]")
+					+ "</p>"
+					+ "<p>"
+					+ "She gives up trying to form a sentence."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (index == 1) {
+				String startContent;
+				if (tier >= 3) {
+					startContent = "<p>"
+							+ "You step forward. Kate shifts to make room &mdash; not much,"
+							+ " but enough. Dogmeat's tail wags once, slow and approving."
+							+ "</p>";
+				} else {
+					startContent = "<p>"
+							+ "You step forward. Kate's expression does something complicated"
+							+ " that resolves mostly into relief."
+							+ "</p>"
+							+ "<p>"
+							+ "Dogmeat's tail wags."
+							+ "</p>";
+				}
+				return new ResponseSex("Join them",
+						tier >= 2
+								? "She's not going to stop. Neither should you."
+								: "Whatever this is, you're part of it now.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_LUSTFUL,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null) {
+							@Override
+							public SexControl getSexControl(GameCharacter character) {
+								if (character.isPlayer() || character == getKate()) {
+									return SexControl.ONGOING_PLUS_LIMITED_PENETRATIONS;
+								}
+								return super.getSexControl(character);
+							}
+						},
+						KATE_APARTMENT_AFTER_SEX,
+						startContent);
+			}
+
+			if (index == 2) {
+				return new Response("Watch",
+						"Stay in the doorway. See how this plays out.",
+						KATE_APARTMENT_VOYEUR);
+			}
+
+			if (index == 3) {
+				return new Response("Leave",
+						"Back out quietly.",
+						Main.game.getDefaultDialogue(false));
+			}
+
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// APARTMENT VOYEUR — watching from the doorway
+	// =========================================================================
+
+	public static final DialogueNode KATE_APARTMENT_VOYEUR = new DialogueNode("Kate's Bedroom", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			String core = "<p>"
+					+ "You lean against the door frame and watch."
+					+ "</p>"
+					+ "<p>"
+					+ "Dogmeat has her pinned with his weight, forelegs locked around her hips."
+					+ " Kate's hands are fisted in the sheets, her head down, her breathing"
+					+ " coming in sharp, broken sounds that she's not trying to control."
+					+ "</p>";
+
+			if (tier >= 3) {
+				core += "<p>"
+						+ "There's a familiarity to it. She pushes back into him with practised ease,"
+						+ " and his pace is steady &mdash; unhurried, thorough, possessive."
+						+ " At one point she reaches back and scratches behind his ear without breaking rhythm."
+						+ "</p>";
+			} else {
+				core += "<p>"
+						+ "She's louder than you expected. Dogmeat's pace is steady,"
+						+ " unhurried, entirely sure of himself."
+						+ "</p>";
+			}
+
+			core += "<p>"
+					+ "His amber eyes find you across the room. His tail moves &mdash; once, slow."
+					+ " He doesn't stop."
+					+ "</p>";
+
+			return core;
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			Kate kate = getKate();
+
+			if (index == 1) {
+				String startContent = "<p>"
+						+ "You step into the room. Kate lifts her head, sees you, and doesn't resist"
+						+ " when Dogmeat's next thrust pushes her forward."
+						+ "</p>";
+				return new ResponseSex("Join them",
+						"You've seen enough. Time to participate.",
+						Util.newArrayListOfValues(Fetish.FETISH_SUBMISSIVE),
+						null,
+						CorruptionLevel.FOUR_LUSTFUL,
+						null, null, null,
+						true, true,
+						new SMGeneric(
+								Util.newArrayListOfValues((GameCharacter) getDogmeat()),
+								Util.newArrayListOfValues((GameCharacter) kate, Main.game.getPlayer()),
+								null, null),
+						KATE_APARTMENT_AFTER_SEX,
+						startContent);
+			}
+
+			if (index == 2) {
+				return new Response("Leave",
+						"Slip away.",
+						Main.game.getDefaultDialogue(false));
+			}
+
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// APARTMENT AFTER SEX
+	// =========================================================================
+
+	public static final DialogueNode KATE_APARTMENT_AFTER_SEX = new DialogueNode("Kate's Bedroom", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (tier >= 4) {
+				return "<p>"
+						+ "Kate doesn't move for a long time. She's lying on her side, Dogmeat's"
+						+ " broad flank against her back, one hand resting loosely on his cock"
+						+ " as he softens. Her thumb moves in slow, idle circles."
+						+ "</p>"
+						+ "<p>"
+						+ "She leans down and licks him clean &mdash; thoroughly, unhurriedly,"
+						+ " as though this is the most natural thing in the world. He holds very still for it."
+						+ "</p>"
+						+ "<p>"
+						+ "When she's done, she stays where she is. Doesn't get up."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(I hate going back to the shop after this.)]")
+						+ "</p>";
+			}
+
+			if (tier == 3) {
+				return "<p>"
+						+ "Kate sits up slowly, one hand still on Dogmeat's side."
+						+ " She leans over and licks him clean with careful, unhurried attention."
+						+ " He breathes out, tail sweeping the floor once."
+						+ "</p>"
+						+ "<p>"
+						+ "She doesn't rush to get dressed. Instead she sits cross-legged on the floor,"
+						+ " pulling him closer, his broad head settling in her lap."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Five more minutes.)]")
+						+ "</p>";
+			}
+
+			if (tier == 2) {
+				return "<p>"
+						+ "Dogmeat steps back, panting softly. Kate rolls onto her back on the floor,"
+						+ " catching her breath, staring at the ceiling."
+						+ "</p>"
+						+ "<p>"
+						+ "She reaches over and strokes down his side once, absently."
+						+ " Then she sits up and starts pulling her clothes on with efficient, practised motions."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(Same time tomorrow.)]")
+						+ "</p>";
+			}
+
+			// Tier 1
+			return "<p>"
+					+ "Dogmeat steps back, panting softly, and shakes himself."
+					+ " Kate is on the floor, very still, not looking at you."
+					+ "</p>"
+					+ "<p>"
+					+ "She gets dressed quickly. Avoids eye contact. Her hands are shaking slightly"
+					+ " &mdash; not from fear, you notice, but from something else entirely."
+					+ "</p>"
+					+ "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(...Don't tell anyone about this.)]")
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Continue",
+						"Leave Kate's apartment.",
+						Main.game.getDefaultDialogue(false)) {
+					@Override
+					public void effects() {
+						// Don't move Kate or Dogmeat — they stay at the apartment until the window expires.
+					}
+				};
+			}
+			return null;
+		}
+	};
+
+	// =========================================================================
+	// ASK ABOUT DOGMEAT — conversation at Kate's shop
+	// =========================================================================
+
+	public static final DialogueNode KATE_TALK_ABOUT_DOGMEAT = new DialogueNode("Succubi's Secrets", ".", false) {
+
+		@Override
+		public int getSecondsPassed() {
+			return 5 * 60;
+		}
+
+		@Override
+		public String getContent() {
+			int tier = Kate.getDogmeatRelationshipTier();
+
+			if (tier >= 4) {
+				return "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(I've been thinking about closing early on Tuesdays,)]")
+						+ " she says, like it's the most natural thing in the world."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(He gets restless if I'm too long. I can tell.)]")
+						+ " She looks at you. Zero shame."
+						+ " "
+						+ UtilText.parse(getKate(), "[npc.speech(Don't.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She goes back to whatever she was doing."
+						+ " After a moment:"
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(I bought him a bed. A proper one. Memory foam.)]")
+						+ " She says it with the defensive tone of someone who knows"
+						+ " exactly how that sounds and doesn't care."
+						+ "</p>";
+			}
+
+			if (tier == 3) {
+				return "<p>"
+						+ "Kate actually smiles. It's a real one &mdash; not her usual smirk."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(He's really something, you know? He just... he knows.)]")
+						+ " She traces something on the counter absently."
+						+ " "
+						+ UtilText.parse(getKate(),
+								"[npc.speech(I got him a blanket. For the bedroom. He likes the spot by the window.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She catches herself and shrugs."
+						+ " "
+						+ UtilText.parse(getKate(),
+								"[npc.speech(Anyway. He waits at the back door now. Every day, same time."
+								+ " I don't even have to go get him anymore.)]")
+						+ "</p>";
+			}
+
+			if (tier == 2) {
+				return "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(He's good.)]")
+						+ " She doesn't look up from what she's doing."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(Showed up right on time today. Knows the routine now.)]")
+						+ " A pause."
+						+ " "
+						+ UtilText.parse(getKate(),
+								"[npc.speech(...He waits at the back door.)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She turns a nail file over in her fingers."
+						+ " "
+						+ UtilText.parse(getKate(),
+								"[npc.speech(It's nice. Having something that's just... simple, y'know?)]")
+						+ "</p>";
+			}
+
+			if (tier == 1) {
+				return "<p>"
+						+ UtilText.parse(getKate(),
+								"[npc.speech(It's just &mdash; look, it's a thing. Don't make it weird.)]")
+						+ " She fidgets with a nail file."
+						+ "</p>"
+						+ "<p>"
+						+ UtilText.parse(getKate(), "[npc.speech(He's... fine. It's fine.)]")
+						+ " Her cheeks are slightly flushed."
+						+ " "
+						+ UtilText.parse(getKate(),
+								"[npc.speech(It's a demon thing, okay? We get... urges."
+								+ " And he's &mdash; he's very &mdash;)]")
+						+ "</p>"
+						+ "<p>"
+						+ "She waves a hand vaguely and changes the subject."
+						+ "</p>";
+			}
+
+			// Tier 0 — shouldn't normally reach here, but fallback
+			return "<p>"
+					+ UtilText.parse(getKate(), "[npc.speech(What about him?)]")
+					+ " Kate looks at you blankly."
+					+ "</p>";
+		}
+
+		@Override
+		public Response getResponse(int responseTab, int index) {
+			if (index == 1) {
+				return new Response("Back",
+						"Return to the shop.",
 						Main.game.getDefaultDialogue(false));
 			}
 			return null;

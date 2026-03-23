@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dialogue>
+
+	<htmlContent tag="ENTRANCE"><![CDATA[
+	<p>
+		A narrow staircase from the arcade leads up to a small landing.
+		Kate's apartment door is right there &mdash; scuffed wood, a peeling succubus sticker on the knocker, and a welcome mat that reads 'Go Away'.
+	</p>
+	<p>
+		The entrance is barely a hallway: a coat hook with a leather jacket slung over it,
+		a pair of low-top skater shoes kicked into the corner,
+		and the faint smell of incense and something sharper underneath it.
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="BEDROOM"><![CDATA[
+	<p>
+		Kate's bedroom is exactly what you'd expect and nothing you'd admit to expecting.
+		A large bed dominates the space, sheets tangled and half-pulled off.
+		The walls are covered in a chaotic mix of band posters, sketches, and a few framed tattoo designs.
+		Candles in various states of melt sit on every flat surface.
+	</p>
+	<p>
+		A vanity mirror is propped against one wall, its surface smudged with lipstick marks.
+		Clothes are draped over a chair that hasn't been sat in for its intended purpose in weeks.
+	</p>
+	]]>
+	</htmlContent>
+
+</dialogue>

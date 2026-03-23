@@ -98,6 +98,25 @@ import com.lilithsthrone.world.places.PlaceType;
  */
 public class Kate extends NPC {
 
+	/**
+	 * Returns the relationship tier between Kate and Dogmeat based on off-screen visit count.
+	 * <ul>
+	 *   <li>0 — Not started</li>
+	 *   <li>1 — New &amp; Nervous (1-3 visits)</li>
+	 *   <li>2 — Comfortable (4-8 visits)</li>
+	 *   <li>3 — Attached (9-15 visits)</li>
+	 *   <li>4 — Devoted (16+ visits)</li>
+	 * </ul>
+	 */
+	public static int getDogmeatRelationshipTier() {
+		long count = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+		if (count >= 16) return 4;
+		if (count >= 9)  return 3;
+		if (count >= 4)  return 2;
+		if (count >= 1)  return 1;
+		return 0;
+	}
+
 	public Kate() {
 		this(false);
 	}
@@ -386,13 +405,11 @@ public class Kate extends NPC {
 
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			// If Dogmeat is now a companion, skip the alley visit logic entirely.
+			// If Dogmeat is now a companion, skip the apartment visit logic entirely.
 			if (dogmeat != null && Main.game.getPlayer().getCompanions().contains(dogmeat)) {
 				// fall through to normal shop-presence logic below
 			} else if (dogmeat != null
-					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)
-					&& this.getWorldLocation().equals(dogmeat.getWorldLocation())
-					&& this.getLocationPlaceType().equals(dogmeat.getLocationPlaceType())) {
+					&& this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))) {
 
 				long arrivalMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute");
 				long now           = Main.game.getMinutesPassed();
@@ -411,7 +428,7 @@ public class Kate extends NPC {
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", actsRemaining);
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_next_act_minute", nextActMinute);
 					} else {
-						// Visit window expired: simulate any acts not yet fired, then send her home.
+						// Visit window expired: simulate remaining acts, then send both home.
 						long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
 						simulateOffscreenActs(dogmeat, (int) actsRemaining);
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
@@ -421,16 +438,18 @@ public class Kate extends NPC {
 						Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
 
 						this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+						dogmeat.setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
 					}
 					return; // Skip normal shop presence logic during/after visit this turn.
 				}
 			}
 		}
-		// Normal shop presence logic — skip if Kate is currently on a home visit.
+		// Normal shop presence logic — skip if Kate is currently on a home visit or at her apartment.
 		boolean onHomeVisit = Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
 				&& (this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
 						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR));
-		if (!onHomeVisit && !Main.game.getCharactersPresent().contains(this)) {
+		boolean atApartment = this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"));
+		if (!onHomeVisit && !atApartment && !Main.game.getCharactersPresent().contains(this)) {
 			if (Main.game.isExtendedWorkTime()) {
 				this.returnToHome();
 			} else {
@@ -497,14 +516,30 @@ public class Kate extends NPC {
 			Main.game.getDialogueFlags().setSavedLong("kate_home_visit_active", 0);
 		}
 
+		// Hour-13 safety fallback: return both NPCs from apartment if still there.
+		if (hour == 13) {
+			Dogmeat dogmeatFallback = (Dogmeat) Main.game.getNpc(Dogmeat.class);
+			if (this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))) {
+				this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+			}
+			if (dogmeatFallback != null
+					&& dogmeatFallback.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))
+					&& !Main.game.getPlayer().getCompanions().contains(dogmeatFallback)) {
+				dogmeatFallback.setLocation(WorldType.DOMINION, PlaceType.DOMINION_BACK_ALLEYS, false);
+			}
+		}
+
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			// If Dogmeat is a companion, skip the alley visit schedule.
+			// If Dogmeat is a companion, skip the apartment visit schedule.
 			if (dogmeat != null && !Main.game.getPlayer().getCompanions().contains(dogmeat)
 					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
-					// Kate heads out; pre-compute act count and per-act interval for this visit.
-					this.setLocation(dogmeat.getWorldLocation(), dogmeat.getLocationPlaceType(), false);
+					// Both head to Kate's apartment for the visit.
+					this.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
+							PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
+					dogmeat.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
+							PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
 
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
 					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);

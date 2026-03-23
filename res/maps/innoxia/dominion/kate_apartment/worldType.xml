@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<worldType>
+	<worldRegion>DOMINION</worldRegion>
+	<name><![CDATA[Kate's Apartment]]></name>
+	<colour>BASE_PINK_LIGHT</colour>
+	<sexBlockedReason><![CDATA[]]></sexBlockedReason>
+	<furniturePresent>true</furniturePresent>
+	<wallsPresent>true</wallsPresent>
+	<loiteringEnabled>false</loiteringEnabled>
+	<flightEnabled>false</flightEnabled>
+	<visibleFromStart>true</visibleFromStart>
+	<fullyRevealedFromStart>false</fullyRevealedFromStart>
+	<globalMapLocation>WORLD_MAP_DOMINION</globalMapLocation>
+	<standardPlace>innoxia_dominion_kate_apartment_entrance</standardPlace>
+	<entryFromGlobalMapLocation>innoxia_dominion_kate_apartment_entrance</entryFromGlobalMapLocation>
+	<teleportPermissions>NONE</teleportPermissions>
+	<places>
+		<place colour="#ffffff">GENERIC_IMPASSABLE</place>
+		<place colour="#00ff00">innoxia_dominion_kate_apartment_entrance</place>
+		<place colour="#ff0000">innoxia_dominion_kate_apartment_bedroom</place>
+	</places>
+</worldType>

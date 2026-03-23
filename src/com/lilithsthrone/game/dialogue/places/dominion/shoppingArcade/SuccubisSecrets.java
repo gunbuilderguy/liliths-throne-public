@@ -40,6 +40,7 @@ import com.lilithsthrone.game.character.markings.TattooCounterType;
 import com.lilithsthrone.game.character.markings.TattooType;
 import com.lilithsthrone.game.character.npc.dominion.Dogmeat;
 import com.lilithsthrone.game.character.npc.dominion.Kate;
+import com.lilithsthrone.game.dialogue.npcDialogue.dominion.DogmeatDialogue;
 import com.lilithsthrone.game.character.quests.Quest;
 import com.lilithsthrone.game.character.quests.QuestLine;
 import com.lilithsthrone.game.character.race.AbstractRace;
@@ -677,6 +678,22 @@ public class SuccubisSecrets {
 								+ "</p>"));
 			}
 		};
+
+	} else if (index == 17
+			&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1
+			&& DogmeatDialogue.isBothAtApartment()) {
+		return new Response("Visit Kate's apartment",
+				"Kate left for her apartment with Dogmeat. You could stop by.",
+				DogmeatDialogue.KATE_APARTMENT_DISCOVERY);
+
+	} else if (index == 18
+			&& (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1
+					|| Main.game.getDialogueFlags().getSavedLong("kate_collar_state") >= 1)
+			&& !DogmeatDialogue.isBothAtApartment()
+			&& Kate.getDogmeatRelationshipTier() >= 1) {
+		return new Response("Ask about Dogmeat",
+				"Ask Kate how things are going with her four-legged visitor.",
+				DogmeatDialogue.KATE_TALK_ABOUT_DOGMEAT);
 
 	} else if (index == 0) {
 			return new Response("Leave", "Leave Kate's shop, heading back out into the Shopping Arcade.", EXTERIOR){
