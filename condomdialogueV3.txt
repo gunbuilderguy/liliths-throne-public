@@ -1,0 +1,812 @@
+    if(!user.getMaterial().equals(Material.Slime)){
+		switch (level){
+			case ZERO_NONE:
+				if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(lift)] the condom, squinting to see the negligible amount of fluid within.",
+									"The condom in [npc.name]'s hand [npc.verb(contains)] a mere smattering of fluid, hardly even worth noting.")
+									+ UtilText.returnStringAtRandom(
+									" Nonetheless, [npc.she] [npc.verb(bring)] it to [npc.her] lips, consuming the minuscule volume eagerly. [npc.she] [npc.verb(go)] so far as to invert the condom, ensuring every last trace is collected with [npc.her] eager tongue.",
+									" [npc.She] [npc.verb(drink)] the pitiful amount with fervor, even inverting the condom to ensure not a single drop is wasted, [npc.her] tongue eagerly lapping up every trace.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] [npc.verb(discard)] the now-empty condom, unsatisfied and longing for more.",
+									" [npc.She] [npc.verb(crave)] more after the short-lived experience, left unsatisfied by the paltry offering.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(eye)] the condom in [npc.her] hand, its contents almost nonexistent.",
+									"[npc.Name] [npc.verb(hold)] the condom, the barely-visible droplet of fluid within it causing [npc.her] stomach to churn.")
+									+ UtilText.returnStringAtRandom(
+									" Taking a deep breath, [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(drink)] the meager fluid.",
+									" [npc.She] [npc.verb(force)] [npc.herself] to drink the tiny amount, relieved that there's so little of it.")
+									+ "<p>"
+									+ "In a blink of an eye, it's done, and [npc.she] [npc.verb(toss)] the empty condom away, glad to be done with it."
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case ONE_TRICKLE:
+				if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(lift)] the condom, its sparse contents barely visible.",
+									"[npc.Name] [npc.verb(inspect)] the condom, a thin sheen of fluid barely coating the bottom.")
+									+ UtilText.returnStringAtRandom(
+									" Nonetheless, [npc.She] [npc.verb(put)] it to [npc.her] lips, eagerly consuming the scarce offering, even going so far as to lick the insides to gather every last drop.",
+									" [npc.She] [npc.verb(drink)] the very modest amount with enthusiasm, savoring every drop, [npc.her] tongue darting inside the condom to ensure [npc.she]doesn't miss any.")
+									+ UtilText.returnStringAtRandom(
+									" Within moments, the condom is empty, and [npc.she] [npc.verb(discard)] it, already longing for more.",
+									" [npc.She] [npc.verb(find)] [npc.herself] disappointed by the brief experience, [npc.her] craving for more still unfulfilled.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(pick)] up the condom, the scant fluid within it barely perceptible.",
+									"[npc.Name] [npc.verb(eye)] the condom and its very modest contents with a sense of unease.")
+									+ UtilText.returnStringAtRandom(
+									" Taking a breath to steady [npc.herself], [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(start)] to drink.",
+									" [npc.She] [npc.verb(drink)] the small amount of fluid with a grimace, glad for the small quantity.")
+									+ "<p>"
+									+ "In an instant, it's over, and [npc.she] [npc.verb(toss)] the empty condom away, relieved to be done with it."
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case TWO_SMALL_AMOUNT:
+				if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(hold)] up the condom, the small amount of fluid inside barely sloshing around.",
+									"With anticipation, [npc.name] [npc.verb(observe)] the contents of the condom, the small measure of fluid eager to be released.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] eagerly [npc.verb(bring)] it to [npc.her] lips, [npc.her] tongue darting inside to lap up the meager volume and the inner walls, ensuring every drop is savored.",
+									" [npc.She] [npc.verb(drink)] the sparse amount, [npc.her] tongue flicking around inside the condom to catch every droplet and stain, enjoying every second of the brief experience.")
+									+ UtilText.returnStringAtRandom(
+									" The contents disappear into [npc.her] mouth almost instantly, leaving [npc.her] craving for more.",
+									" Barely a moment passes before the condom is emptied, leaving [npc.her] lips slick and [npc.her] palate longing for another taste.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(pick)] up the condom, [npc.her] gaze focused on the small pool of fluid it contains.",
+									"Holding the condom, [npc.name] [npc.verb(glance)] at the small reservoir of fluid, a sense of dread creeping over [npc.herHim].")
+									+ UtilText.returnStringAtRandom(
+									" With a breath to steady [npc.herself], [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(prepare)] to drink.",
+									" [npc.She] hesitantly [npc.verb(place)] the condom against [npc.her] lips, taking a moment before [npc.verb(beginning)] to drink.")
+									+ "<p>"
+									+ "The taste makes [npc.herHim] wrinkle [npc.her] nose in distaste, but [npc.she] quickly [npc.verb(finish)] the small amount,"
+									+ " hoping to be done with it as soon as possible. The empty condom is quickly discarded, a sign of [npc.her] completed task."
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+
+			case THREE_AVERAGE:
+				if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(hold)] up the condom, inspecting the liquid it carries.",
+									"The condom, filled to the middle, is examined by [npc.name] with interest.")
+									+ UtilText.returnStringAtRandom(
+									" Eagerly, [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(start)] to ingest its contents.",
+									" Without wasting any time, [npc.she] [npc.verb(place)] it to [npc.her] lips and [npc.verb(begin)] to drink.")
+									+ UtilText.returnStringAtRandom(
+									" The contents are consumed swiftly, leaving [npc.her] lips with a wet sheen.",
+									" [npc.Her] thirst quenched, [npc.she] [npc.verb(discard)] the now-empty condom.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(pick)] up the condom, [npc.her] eyes warily observing the contained fluid.",
+									"Holding up the partially filled condom, [npc.name] [npc.verb(stare)] at its contents with mild revulsion.")
+									+ UtilText.returnStringAtRandom(
+									" Hesitatingly, [npc.she] [npc.verb(bring)] it to [npc.her] lips, preparing to drink.",
+									" [npc.She] [npc.verb(place)] it on [npc.her] lips, pausing momentarily before beginning to drink.")
+									+ "<p>"
+									+ "[npc.Name] [npc.verb(grimace)] as the fluid fills [npc.her] mouth, [npc.her] eyes squinting as [npc.she] [npc.verb(force)] [npc.herself] to swallow."
+									+ " As quickly as [npc.she] can, [npc.she] [npc.verb(discard)] the now-empty condom, trying to forget what [npc.sheHas] just done..."
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case FOUR_LARGE:
+				if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(gaze)] at the moderately filled condom in [npc.her] [npc.hand], noticing that it has expanded slightly.",
+									"Holding up the condom, [npc.name] [npc.verb(examine)] its slightly expanded form, filled with a large amount of cum.")
+									+ UtilText.returnStringAtRandom(
+									" With a certain amount of eagerness, [npc.she] [npc.verb(bring)] it to [npc.her] lips, and the familiar taste of cum immediately fills [npc.her] mouth as [npc.she] [npc.verb(start)] to drink.",
+									" [npc.She] [npc.verb(place)] it on [npc.her] lips, the taste of cum instantly filling [npc.her] mouth as [npc.she] [npc.verb(begin)] to drink.")
+									+ UtilText.returnStringAtRandom(
+									" The quantity is enough to give [npc.her] a decent gulp, but it's nothing [npc.she] can't handle.",
+									" There's a good amount of cum, but it's nothing overwhelming for [npc.herHim].")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] [npc.verb(drink)] it all with no difficulty, feeling just a tiny bit more full.",
+									" [npc.She] [npc.verb(manage)] to down it all without a problem, feeling slightly more filled.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(look)] at the condom in [npc.her] [npc.hand], filled with a large amount of cum, and [npc.verb(suck)] in a breath.",
+									"Holding up the condom, [npc.name] [npc.verb(examine)] its slightly expanded form, filled with a noticeable amount of cum, and [npc.verb(take)] a deep breath.")
+									+ UtilText.returnStringAtRandom(
+									" With some reluctance, [npc.she] [npc.verb(bring)] it to [npc.her] lips, the taste of cum immediately fills [npc.her] mouth as [npc.she] [npc.verb(start)] to drink.",
+									" [npc.She] hesitantly [npc.verb(place)] it on [npc.her] lips, the taste of cum instantly filling [npc.her] mouth as [npc.she] [npc.verb(begin)] to drink.")
+									+ UtilText.returnStringAtRandom(
+									" The quantity is enough to give [npc.herHim] a good gulp, but it's nothing [npc.she] can't handle, despite [npc.her] reluctance.",
+									" There's a decent amount of cum, but it's nothing too much for [npc.herHim], even though [npc.sheIs] not particularly eager.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] [npc.verb(drink)] it all with little difficulty, feeling just a bit more full, trying not to think about what [npc.sheIs] just done.",
+									" [npc.She] [npc.verb(manage)] to down it all without a problem, feeling slightly more filled, attempting to push the thought of what [npc.sheIs] done to the back of [npc.her] mind.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case FIVE_HUGE:
+				if (user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(eye)] the hefty condom in [npc.her] [npc.hand], brimming with a large load of cum, with eager anticipation.",
+									"In [npc.her] [npc.hand], [npc.name] [npc.verb(hold)] a condom filled to capacity with cum, a thrill of anticipation running through [npc.herHim].",
+									"The condom in [npc.namePos] [npc.hand] [npc.verb(bulge)] noticeably from the sizable amount of cum inside, filling [npc.her] with excitement.")
+									+ UtilText.returnStringAtRandom(
+									" Without a moment's hesitation, [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(begin)] to drink the thick fluid.",
+									" [npc.She] [npc.verb(take)] a deep breath, readying [npc.herself] before starting to gulp down the large load.",
+									" Eagerness clear in [npc.her] eyes, [npc.she] [npc.verb(start)] to swallow, quickly setting a rhythm as [npc.she] [npc.verb(drink)] the cum.")
+									+ UtilText.returnStringAtRandom(
+									" The volume of cum proves to be quite sizable, requiring [npc.herHim] to take a second gulp, but [npc.she] [npc.verb(manage)] to keep the rhythm.",
+									" [npc.She] [npc.verb(find)] [npc.herself] having to swallow more often than expected, the amount of cum surprising [npc.herHim], but [npc.she] [npc.verb(keep)] up.",
+									" Despite the larger-than-expected load, [npc.she] [npc.verb(manage)] to drink it all down, the taste of cum filling [npc.her] mouth.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.Her] stomach [npc.verb(start)] to feel a bit full as the cum [npc.verb(settle)] within.",
+									" [npc.Her] belly feels comfortably full as [npc.she] [npc.verb(swallow)] down the last of the cum.",
+									" The cum fills [npc.her] stomach, leaving [npc.herHim] feeling satisfyingly full.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(eye)] the hefty condom in [npc.her] [npc.hand], brimming with a large load of cum, with a mild unease.",
+									"In [npc.her] [npc.hand], [npc.name] [npc.verb(hold)] a condom filled to capacity with cum, feeling a little reluctant about what [npc.she]'s about to do.",
+									"The condom in [npc.namePos] [npc.hand] [npc.verb(bulge)] noticeably from the sizable amount of cum inside, making [npc.herHim] feel slightly apprehensive.")
+									+ UtilText.returnStringAtRandom(
+									" Despite [npc.her] hesitation, [npc.she] [npc.verb(bring)] it to [npc.her] lips and [npc.verb(begin)] to drink the thick fluid, trying not to think about what [npc.she]'s doing.",
+									" [npc.She] [npc.verb(take)] a deep breath, preparing [npc.herself] mentally before starting to gulp down the large load, [npc.her] face contorting slightly as [npc.she] [npc.verb(forces)] [npc.herself] to continue.",
+									" Reluctantly, [npc.she] [npc.verb(start)] to swallow, trying to ignore the taste as [npc.she] [npc.verb(drink)] the cum.")
+									+ UtilText.returnStringAtRandom(
+									" The volume of cum proves to be quite sizable, causing [npc.herHim] to choke and splutter. [npc.She] [npc.verb(force)] [npc.herself] to continue, but it's clearly a struggle.",
+									" [npc.She] [npc.verb(find)] [npc.herself] having to swallow more often than comfortable, the amount of cum surprising [npc.herHim], making it a bit of a struggle to get it all down.",
+									" Despite the larger-than-expected load, [npc.she] [npc.verb(manage)] to drink it all down, the taste of cum leaving a lingering flavor in [npc.her] mouth that [npc.she] quickly [npc.verb(try)] to forget.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.Her] stomach [npc.verb(start)] to feel a bit full as the cum [npc.verb(settle)] within, making [npc.herHim] feel somewhat bloated.",
+									" [npc.Her] belly feels uncomfortably full as [npc.she] [npc.verb(swallow)] down the last of the cum, the feeling reminding [npc.herHim] of what [npc.she]'s just done.",
+									" The cum fills [npc.her] stomach, leaving [npc.herHim] feeling slightly bloated, a sensation that [npc.she] finds rather unpleasant.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case SIX_EXTREME:
+				if(target.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(cradle)] the heavily distended condom in [npc.her] [npc.hand], its sheer weight surprising [npc.herHim].",
+									"With a firm grip, [npc.name] [npc.verb(hold)] the stretched-out condom up to the light, its translucency revealing the substantial quantity of cum within.",
+									"[npc.Name] [npc.verb(examine)] the cum-filled condom, its tight skin a testament to the extreme amount of fluid it contains.")
+									+ UtilText.returnStringAtRandom(
+									" Squaring [npc.her] shoulders, [npc.she] [npc.verb(bring)] it to [npc.her] lips, the potent scent of cum filling [npc.her] nostrils as [npc.she] [npc.verb(begin)] to drink.",
+									" [npc.Her] resolve firming, [npc.she] [npc.verb(lift)] the rim of the condom to [npc.her] lips, taking a moment to brace [npc.herself] before [npc.she] [npc.verb(begin)] to consume the fluid.",
+									" Gathering [npc.her] courage, [npc.she] [npc.verb(prepare)] to take the first gulp, the rich scent of cum momentarily overwhelming [npc.herHim].")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] [npc.verb(swallow)] mouthful after mouthful, the pace steady but a hint of struggle starting to show as the volume of the fluid [npc.verb(become)] more apparent.",
+									" [npc.Her] rhythm slows down slightly as [npc.she] [npc.verb(deal)] with the task at hand, a few strangled coughs escaping [npc.herHim] between gulps.",
+									" Despite the effort needed, [npc.she] [npc.verb(persist)], the slow but consistent intake causing a noticeable roundness in [npc.her] stomach.")
+									+ UtilText.returnStringAtRandom(
+									" Eventually, [npc.she] [npc.verb(manage)] to finish it off, a sense of satisfaction washing over [npc.herHim] as [npc.she] [npc.verb(gaze)] at [npc.her] slightly distended stomach.",
+									" With the final gulp, [npc.she] [npc.verb(complete)] [npc.her] task, setting the now empty condom aside and rubbing [npc.her] fuller belly with a sense of accomplishment.",
+									" In the end, [npc.she] [npc.verb(conquer)] the task, a newfound fullness in [npc.her] belly as [npc.she] [npc.verb(lean)] back, catching [npc.her] breath.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				} else {
+					return UtilText.parse(target, user,
+							"<p>"
+									+ UtilText.returnStringAtRandom(
+									"[npc.Name] [npc.verb(stare)] uncertainly at the heavily distended condom in [npc.her] [npc.hand], its weight leaving [npc.herHim] mildly unnerved.",
+									"With a hesitant grip, [npc.name] [npc.verb(hold)] up the cum-filled condom, the sight of the stretched translucent skin making [npc.herHim] gulp in apprehension.",
+									"[npc.Name] [npc.verb(eye)] the brimming condom with trepidation, the extreme amount of fluid within making [npc.her] stomach churn slightly.")
+									+ UtilText.returnStringAtRandom(
+									" Sighing softly, [npc.she] [npc.verb(lift)] it to [npc.her] lips, quickly closing [npc.her] eyes as [npc.she] [npc.verb(begin)] to drink, trying not to think about the taste.",
+									" Pushing down [npc.her] discomfort, [npc.she] [npc.verb(bring)] the rim of the condom to [npc.her] lips, taking a moment to brace [npc.herself] before [npc.she] [npc.verb(start)] to drink.",
+									" Gritting [npc.her] teeth, [npc.she] [npc.verb(take)] the first gulp, trying to ignore the potent scent and taste of the cum.")
+									+ UtilText.returnStringAtRandom(
+									" [npc.She] [npc.verb(continue)] to swallow, a slight grimace on [npc.her] face as the volume of the fluid [npc.verb(become)] evident, [npc.her] pace wavering as [npc.she] [npc.verb(struggle)] a bit.",
+									" [npc.Her] rhythm is uneven, choked coughs punctuating the scene as [npc.she] [npc.verb(try)] to manage the substantial fluid intake, [npc.her] stomach slowly bulging in response.",
+									" Despite the unsettling task, [npc.she] [npc.verb(persist)], the consistent gulps gradually creating a soft roundness in [npc.her] stomach.")
+									+ UtilText.returnStringAtRandom(
+									" Eventually, [npc.she] [npc.verb(manage)] to finish it off, a sigh of relief escaping [npc.herHim] as [npc.she] [npc.verb(set)] the now empty condom aside, quickly trying to erase the experience from [npc.her] mind.",
+									" With the final gulp, [npc.she] [npc.verb(conclude)] the unpleasant task, putting the condom down and consciously not looking at [npc.her] fuller belly, preferring to ignore what [npc.she] just did.",
+									" In the end, [npc.she] [npc.verb(complete)] the task, a muted discomfort in [npc.her] belly as [npc.she] [npc.verb(rub)] it absentmindedly, [npc.her] mind already working to forget the whole experience.")
+									+ "</p>"
+									+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+				}
+			case SEVEN_MONSTROUS:
+				if(getMillilitresStored()<3000){
+					if (user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+						return UtilText.parse(target, user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"[npc.Name] [npc.verb(look)] at the alarmingly swollen condom in [npc.her] [npc.hand], its skin stretched almost transparent from the monumental amount of cum within.",
+										"In [npc.her] [npc.hand], [npc.name] [npc.verb(hold)] a condom so swollen with cum that it's nearly see-through, its form barely containing the sheer amount of fluid.",
+										"The condom [npc.name] [npc.verb(hold)] is a sight to behold, the semi-transparent skin revealing a hefty amount of cum, the volume bordering on intimidating.")
+										+ UtilText.returnStringAtRandom(
+										" A rush of excitement [npc.verb(fill)] [npc.her] as [npc.she] [npc.verb(bring)] it to [npc.her] lips, beginning to gulp down the substantial load.",
+										" [npc.She] [npc.verb(feel)] a thrill of anticipation as [npc.she] [npc.verb(start)] drinking, the taste of cum flooding [npc.her] mouth in a continuous stream.",
+										" Eagerly, [npc.she] [npc.verb(begin)] to drink, the powerful taste of cum filling [npc.her] senses as [npc.she] [npc.verb(handle)] the enormous fluid intake.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.Her] pace [npc.verb(slow)] as the magnitude of the task [npc.verb(become)] apparent, the cum flooding [npc.her] mouth faster than [npc.she] can swallow.",
+										" The enormity of the task soon [npc.verb(become)] apparent, as [npc.she] [npc.verb(struggle)] to keep up with the deluge of fluid entering [npc.her] mouth.",
+										" Despite [npc.her] initial enthusiasm, [npc.she] soon [npc.verb(find)] [npc.herself] overwhelmed by the sheer volume of cum, [npc.her] rhythm breaking as [npc.she] [npc.verb(gasp)] for breath.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.Her] belly [npc.verb(start)] to swell noticeably, the enormous amount of cum [npc.sheIs] ingesting making [npc.herHim] look several months pregnant.",
+										" The sheer quantity of fluid [npc.she] [npc.verb(ingest)] causes [npc.her] stomach to distend noticeably, giving [npc.herHim] the appearance of early pregnancy.",
+										" With each gulp, [npc.her] stomach [npc.verb(bloat)] further, the monumental amount of cum [npc.she] [npc.verb(drink)] making [npc.herHim] resemble an expectant mother.")
+										+ UtilText.returnStringAtRandom(
+										" Eventually, [npc.she] [npc.verb(manage)] to drain the condom completely, leaving [npc.herHim] panting and [npc.her] belly severely distended, the sheer volume of cum making [npc.herHim] look as though [npc.sheIs] heavily pregnant.",
+										" Panting and bloated, [npc.she] [npc.verb(finish)] off the final drops, [npc.her] stomach visibly swollen and taut from the huge amount of cum [npc.sheIs] ingested.",
+										" At last, [npc.she] [npc.verb(finish)], the emptied condom falling from [npc.her] lips as [npc.she]rubs [npc.her] heavily pregnant belly, filled to the brim with the swallowed cum.")
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					} else {
+						return UtilText.parse(target, user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"[npc.Name] [npc.verb(look)] at the excessively bloated condom in [npc.her] [npc.hand], the skin stretched taut from the massive amount of cum within, filling [npc.herHim] with unease.",
+										"In [npc.her] [npc.hand], [npc.name] [npc.verb(hold)] a condom so full of cum it's near bursting, its appearance stirring a sense of reluctant dread within [npc.herHim].",
+										"The condom [npc.name] [npc.verb(hold)] looks alarmingly swollen, the enormous amount of contained cum making [npc.her] stomach churn with apprehension.")
+										+ UtilText.returnStringAtRandom(
+										" Hesitant, [npc.she] [npc.verb(bring)] it to [npc.her] lips, struggling to begin the daunting task of drinking the intimidating load.",
+										" [npc.She] [npc.verb(take)] a deep breath, trying to steel [npc.herself] before starting to drink, the taste of cum making [npc.her] face scrunch up.",
+										" Reluctantly, [npc.she] [npc.verb(start)] to drink, the strong taste of cum proving difficult to bear.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.She] [npc.verb(blink)] in surprise as the amount of cum [npc.she] [npc.verb(need)] to swallow becomes evident, [npc.her] rhythm faltering as [npc.she] [npc.verb(start)] to choke.",
+										" The large volume of cum soon [npc.verb(become)] overwhelming, making [npc.herHim] gag and splutter, struggling to keep up with the flow.",
+										" [npc.Her] stomach churns as [npc.she] [npc.verb(realize)] the enormity of [npc.her] task, choking and gagging as the cum floods [npc.her] mouth.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.Her] belly [npc.verb(start)] to distend slightly, the volume of cum [npc.she] [npc.verb(ingest)] causing it to bloat outward.",
+										" The flow of cum into [npc.her] stomach causes [npc.her] belly to bloat slightly, making [npc.her] feel full and heavy.",
+										" As [npc.she] [npc.verb(swallow)] more and more cum, [npc.her] stomach [npc.verb(bloat)] from the volume, leaving [npc.herHim] feeling uncomfortably stuffed.")
+										+ UtilText.returnStringAtRandom(
+										" Eventually, [npc.she] [npc.verb(manage)] to finish, [npc.her] face pale and [npc.her] stomach visibly bloated from the daunting task.",
+										" Finally, with a last choking swallow, [npc.she] [npc.verb(finish)], dropping the emptied condom as [npc.she] [npc.verb(rub)] [npc.her] swollen belly.",
+										" At last, the flow stops. Panting and bloated, [npc.she] [npc.verb(finish)] off the final drops, setting aside the empty condom as [npc.she] [npc.verb(rub)] [npc.her] distended stomach.")
+										+ " Trying not to think about what [npc.she] just did, [npc.she] [npc.verb(try)] to ignore the feeling of fullness in [npc.her] belly."
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					}
+				}
+				if(getMillilitresStored()<10000){
+
+					if (target.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+						return UtilText.parse(target, user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"[npc.Name]'s eyes are wide with fervent anticipation as [npc.she] [npc.verb(gaze)] at the condom in [npc.her] hand, stretched to near-translucency revealing an ocean of viscous fluid within. The sight of it, the weight of it in [npc.her] hand, sparks anticipation.",
+										"An expression of near-reverence crosses [npc.Name]'s face as [npc.she] [npc.verb(scrutinize)] the condom in [npc.her] hand, the latex barely containing the monstrous volume of cum within, strained thin, translucent, showcasing the vast quantity of cum within and causing a thrill of excitement to run through [npc.herHim].",
+										"[npc.Name] can't help but gasp at the sight of the condom in [npc.her] hand, filled to the brink with an obscene amount of cum, causing the latex to stretch thin and become nearly translucent, stirring a hungry desire within [npc.herHim].")
+										+ UtilText.returnStringAtRandom(
+										" Without hesitation, [npc.She] [npc.verb(bring)] it to [npc.her] lips, the distinctive taste of cum immediately inundating [npc.her] senses as [npc.she] [npc.verb(start)] to drink.",
+										" Eagerly lifting the condom to [npc.her] mouth, [npc.she] is instantly hit by the strong, salty taste of cum as [npc.she] [npc.verb(begin)] drinking with fervor.",
+										" [npc.She] [npc.verb(raise)] the condom to [npc.her] lips, the pungent taste of cum instantly filling [npc.her] mouth as [npc.she] eagerly [npc.verb(start)] to drink.")
+										+ UtilText.returnStringAtRandom(
+										" Yet, with each gulp, the magnitude of the task [npc.she] has undertaken becomes clear. It's a veritable feast for a cum addict like [npc.herHim], but even [npc.she] is pushed to [npc.her] limit.",
+										" With every swallow, the enormity of the challenge before [npc.herHim] [npc.verb(become)] evident. It's an extravagant feast, testing even [npc.her] insatiable desire.",
+										" But as [npc.she] [npc.verb(continue)] to drink, the daunting task ahead of [npc.herHim] [npc.verb(become)] clear. It's a lavish banquet, pushing even a cum addict like [npc.herHim] to [npc.her] extremes.")
+										+ UtilText.returnStringAtRandom(
+										" Despite [npc.her] enthusiasm, the colossal volume of fluid is too much for [npc.herHim]. [npc.She] [npc.verb(choke)] and [npc.verb(splutter)], but [npc.verb(force)] [npc.herself] to carry on, struggling against the overwhelming tide of cum.",
+										" [npc.She] is soon overwhelmed by the massive quantity of cum, coughing and gasping, but determinedly pushing on, forcing down gulp after gulp despite the clear struggle.",
+										" [npc.Her] struggle is evident as [npc.she] [npc.verb(try)] to keep up with the torrent of cum. [npc.She] splutters and coughs, but [npc.verb(persist)], struggling to swallow every last drop.")
+										+ UtilText.returnStringAtRandom(
+										" With each forced swallow, [npc.her] stomach starts to bulge out, rapidly accommodating the torrent of cum [npc.she]'s consuming. [npc.She] feels as if [npc.she] were visibly entering the late stages of pregnancy.",
+										" [npc.Her] belly begins to swell noticeably with each gulp, the cum accumulating at an alarming pace. [npc.She] can't help but touch [npc.her] distended stomach, looking as if [npc.she] were pregnant.",
+										" Each mouthful [npc.she] [npc.verb(consume)] causes [npc.her] stomach to expand noticeably, quickly bloating under the massive intake of cum. [npc.She] [npc.verb(sroke)] [npc.her] belly, the swelling making [npc.herHim] look pregnant.")
+										+ UtilText.returnStringAtRandom(
+										" Finally, [npc.she] [npc.verb(drink)] the last drop, leaving [npc.her] belly heavily bloated and causing [npc.herHim] to pant from the exertion and satisfaction. [npc.She] rubs [npc.her] swollen stomach, feeling heavily pregnant.",
+										" At last, after an arduous effort, [npc.she] [npc.verb(finish)] the monstrous load of cum. [npc.Her] stomach is so distended it's as if [npc.she] were heavily pregnant, leading [npc.herHim] to pant in exhaustion and pleasure.",
+										" In the end, [npc.she] [npc.verb(manage)] to consume the last bit of cum, leaving [npc.her] belly massively bloated and [npc.herHim] panting from the exertion, the satisfaction evident on [npc.her] face, looking heavily pregnant.")
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					} else {
+						return UtilText.parse(target, user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"A look of mild discomfort passes over [npc.Name]'s face as [npc.she] [npc.verb(take)] in the sight of the condom in [npc.her] hand, stretched almost transparent by the monstrous volume of cum within.",
+										"[npc.Name]'s expression reveals [npc.her] unease as [npc.she] holds the condom, the latex barely holding the tremendous amount of cum it contains, stretched thin and nearly translucent.",
+										"The sight of the condom filled to the brink with an excessive quantity of cum [npc.verb(make)] [npc.Name] apprehensive, its once opaque latex now stretched and nearly see-through.")
+										+ UtilText.returnStringAtRandom(
+										" Despite [npc.her] reluctance, [npc.she] [npc.verb(place)] it against [npc.her] lips, grimacing as the taste of cum fills [npc.her] mouth as [npc.she] starts to drink.",
+										" Holding back [npc.her] disgust, [npc.she] brings the condom to [npc.her] mouth and begins to drink, the potent taste of cum immediate and hard to ignore.",
+										" [npc.She] tentatively [npc.verb(raise)] the condom to [npc.her] lips, the strong taste of cum instantly filling [npc.her] mouth as [npc.she] starts drinking.")
+										+ UtilText.returnStringAtRandom(
+										" The overwhelming volume of the fluid [npc.verb(make)] [npc.herHim] choke and splutter, but [npc.she] [npc.verb(force)] [npc.herself] to continue, each gulp an uphill battle.",
+										" The enormous amount of cum is difficult to handle, causing [npc.herHim] to cough and gasp. Yet, [npc.she] persists, swallowing mouthful after mouthful despite [npc.her] discomfort.",
+										" It's clear that [npc.she] is struggling with the sheer volume of cum, as [npc.she] coughs and chokes. However, [npc.she] [npc.verb(manage)] to push [npc.herself], forcing down gulp after reluctant gulp.")
+										+ UtilText.returnStringAtRandom(
+										" Each swallow causes [npc.her] stomach to expand visibly, quickly bloating under the massive intake of cum. The sensation is strange, almost as if [npc.she] were in the early stages of pregnancy.",
+										" With every gulp, [npc.her] belly begins to swell noticeably, accommodating the tremendous amount of cum. [npc.She] runs a hand over [npc.her] distended stomach, feeling akin to being pregnant.",
+										" [npc.Her] stomach expands with each mouthful [npc.she]consumes, the cum accumulating quickly. [npc.She] lightly [npc.verb(touch)] [npc.her] swollen belly, it's as if [npc.she] looks to be in the early stages of pregnancy.")
+										+ UtilText.returnStringAtRandom(
+										" Eventually, [npc.she] [npc.verb(manage)] to finish off the last of it, [npc.her] stomach heavily bloated. [npc.She] pants in exhaustion, trying not to think too much about what [npc.she] just did.",
+										" Finally, after what feels like an eternity, [npc.she] [npc.verb(finish)] the massive load of cum. [npc.Her] belly is distended, and [npc.she]pants in exhaustion, quickly pushing the thought of what [npc.she]'s done out of [npc.her] mind.",
+										" In the end, [npc.she] [npc.verb(manage)] to down the last of the cum, leaving [npc.her] stomach round and full. [npc.She] pants from the effort, promptly trying to forget about the act [npc.she] just committed.")
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+						//write a comment that's the return string of the above:
+
+					}
+				} else {//endpoint, over 10L
+
+					if (target.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+						return UtilText.parse(target,user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"Left utterly speechless at the sheer magnitude of the filled condom, [npc.name] cautiously [npc.verb(take)] hold of it. The condom groans ominously, the arcane seal sparking under the strain of the colossal load, sending an anticipatory thrill through [npc.herHim].",
+										"Staring in silent awe at the titanic, straining condom, [npc.name] tentatively [npc.verb(take)] it into [npc.her] hands. The condom creaks under the weight, the struggling enchantment sending sporadic flickers of magical energy, sparking a tingling anticipation within [npc.herHim].",
+										"[npc.Name]'s mouth falls agape at the sight of the monstrous condom. Carefully picking it up, [npc.she] can feel the strain of the condom, the enchantment flickering as it attempts to hold the colossal volume, a thrill of eager anticipation rushing through [npc.herHim].")
+										+ UtilText.returnStringAtRandom(
+										" The condom's once-opaque material now presents a translucent window into the vast reservoir of viscous fluid within, stirring a fervent hunger within [npc.herHim].",
+										" The latex is stretched thin and near transparent, displaying the colossal volume of cum, which provokes an instinctive thrill of excitement in [npc.herHim].",
+										" The intimidating sight of the cum-filled condom, visible through the strained latex, stirs an intense longing within [npc.herHim], one that only a cum addict could understand.")
+										+ UtilText.returnStringAtRandom(
+										" Lost in a trance, [npc.she] [npc.verb(bring)] the condom to [npc.her] lips, with the intoxicating scent of the cum filling [npc.her] senses even before the first taste hits [npc.her] tongue.",
+										" In a daze of desire, [npc.she] raises the condom to [npc.her] lips, the aroma of the cum clouding [npc.her] mind before the first delectable drop touches [npc.her] tongue.",
+										" Enthralled by the enticing scent, [npc.she] [npc.verb(raise)] the condom to [npc.her] lips, the powerful aroma overwhelming [npc.her] senses before the first taste of cum crosses [npc.her] lips.")
+										+ UtilText.returnStringAtRandom(
+										" As [npc.she] [npc.verb(consume)] the first few mouthfuls, [npc.her] conscious mind seems to recede, replaced by an almost primal craving for the tantalizing fluid. The world around [npc.herHim] blurs into insignificance; only the taste of cum matters now.",
+										" With each gulp, a wave of blissful satisfaction washes over [npc.herHim], submerging [npc.her] thoughts in an ocean of pure, undiluted pleasure. All concerns and inhibitions are swept away, leaving only [npc.her] insatiable need for more.",
+										" As [npc.she] [npc.verb(drink)], [npc.she] [npc.verb(find)] [npc.her] mind emptying of all but the task at hand. The world outside the cum-filled condom fades away, leaving only the rhythm of swallow after swallow.")
+										+ UtilText.returnStringAtRandom(
+										" The magnitude of the task starts to dawn on [npc.her] with each gulp, but for a cum enthusiast like [npc.her], it only serves to make the challenge all the more appealing.",
+										" With each gulp, the enormity of [npc.her] undertaking becomes clear. It's a feast beyond imagining, pushing [npc.her] to [npc.her] very limits, but [npc.she] wouldn't have it any other way.",
+										" However, the task ahead of [npc.her] doesn't daunt [npc.her]. Instead, the challenge only stokes the fires of [npc.her] fervor, pushing [npc.her] to drink faster, to drink more.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.Her] pace gradually slows, the effort of consuming such an unbelievable amount taking its toll. Yet, [npc.she] persists, [npc.her] belly stretching to accommodate the ceaseless deluge.",
+										" [npc.Her] swallowing becomes more labored, the sheer quantity of cum becoming a strain. But [npc.she] continues, each gulp making [npc.her] belly swell a little more.",
+										" [npc.Her] rate of drinking reduces to a crawl, but undeterred, [npc.she] keeps gulping down the viscous cum, [npc.her] belly visibly expanding with each swallow.")
+										+ UtilText.returnStringAtRandom(
+										" When the last drops are consumed, [npc.she] collapses in exhaustion, the potent scent of the fluid seeping into every pore, immersing [npc.her] in a state of pure bliss. [npc.Her] belly, full to bursting, serves as a triumphant, albeit aching, trophy.",
+										" After consuming the final drop, [npc.she] slumps, spent. The heavy aroma of the fluid pervades all [npc.her] senses, cloaking [npc.her] in a euphoric haze. [npc.Her] stomach, swollen to its limits, stands as a proud, though strenuous, testament.",
+										" When [npc.she] finally drains the last of the fluid, [npc.she] sags with exhaustion. The heady scent of the fluid suffuses [npc.her] senses, cocooning [npc.her] in a state of supreme satisfaction. [npc.Her] belly, stretched and filled, is a painful but rewarding badge of [npc.her] devotion.")
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					} else {
+						return UtilText.parse(target, user,
+								"<p>"
+										+ UtilText.returnStringAtRandom(
+										"In [npc.her] [npc.hand], [npc.Name] [npc.verb(hold)] a condom swollen to its physical limits with an astounding volume of cum. The sight alone sends a dizzying sensation washing over [npc.her]. As [npc.her] gaze fixates on the pulsating enchantment, [npc.she] [npc.verb(notice)] the seal strained nearly to the point of breaking.",
+										"[npc.Name] finds [npc.her] [npc.eyes] drawn wide at the sight of the distended condom clutched in [npc.her] hand. The cum it contains surpasses anything [npc.she] ever thought [npc.she] would confront. As [npc.she] contemplates the daunting task, [npc.she] can't help but notice the arcane enchantment visibly stretched to its breaking point.",
+										"[npc.Name] [npc.verb(stare)] at the titanically bloated condom in [npc.her] [npc.hand]. Filled to its limit with an almost unthinkable amount of cum, [npc.her] heart races in [npc.her] chest. The strain on the arcane seal is alarmingly clear, reflecting the magnitude of the task before [npc.her].")
+										+ UtilText.returnStringAtRandom(
+										" The condom's once-opaque latex has been strained to translucency, revealing the vast amount of fluid within. A pit forms in [npc.her] stomach, and [npc.she] swallows nervously.",
+										" The latex looks dangerously thin, as if it might burst at any moment. The sight is enough to give [npc.her] pause, but [npc.she] quickly shakes off the apprehension, preparing [npc.herself] self to get this over with.",
+										" The sight of the condom, bulging and straining to contain its contents, fills [npc.her] with dread. [npc.She] lets out a sigh, knowing that there's no turning back now.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.She] [npc.verb(bring)] the condom to [npc.her] lips with a heavy sigh, the strong scent of the fluid making [npc.her] head spin.",
+										" With a resigned sigh, [npc.she] [npc.verb(bring)] the condom to [npc.her] lips. The scent of the cum is almost overpowering, and [npc.she] has to close [npc.her] eyes to focus.",
+										" [npc.She] [npc.verb(bring)] the condom hesitantly to [npc.her] lips, the scent of the cum making [npc.her] head swim.")
+										+ UtilText.returnStringAtRandom(
+										" As [npc.she] [npc.verb(take)] the first few sips, [npc.her] mind [npc.verb(reel)]. [npc.She] [npc.verb(force)] [npc.herself] to continue, focusing on getting through this rather than the overwhelming task at hand.",
+										" [npc.She] [npc.verb(gulp)] down the first mouthfuls with a shudder, [npc.her] mind racing. [npc.She] [npc.verb(force)] [npc.herself] to continue, not wanting to dwell on what [npc.she] is actually doing.",
+										" The first sips are a struggle, and not because of the taste. [npc.She] [npc.verb(force)] [npc.herself] to continue, trying to block out everything else.")
+										+ UtilText.returnStringAtRandom(
+										" The potent scent invades [npc.her] senses with every gulp, causing [npc.her] belly to swell with the constant influx of fluid. [npc.She] finds [npc.herself] self struggling to maintain focus, trying to ignore the intoxicating aroma as [npc.she]continues to drink.",
+										" With every mouthful, [npc.her] belly noticeably inflates, and the overwhelming scent permeates [npc.her] senses. The effort to ignore it and persist in drinking is significant, but [npc.she]determinedly pushes [npc.herself] self.",
+										" Each swallow brings a wave of inflation to [npc.her] belly, and the heavy aroma assaults [npc.her] senses. Despite the distraction, [npc.she] fights to keep [npc.herself] self focused on the daunting task of drinking the massive volume.")
+										+ UtilText.returnStringAtRandom(
+										" [npc.Her] pace stutters as [npc.her] belly begins to protrude, each gulp of cum stretching [npc.her] further. [npc.She] tries to catch [npc.her] breath, but with the thick aroma surrounding [npc.herself] , each inhalation only amplifies the sensory assault. [npc.her] efforts to maintain focus are in vain, the task overwhelming [npc.herself] . Unable to push forward, [npc.she] finds [npc.herself] self immersed in the situation, a captive to the potent scent.",
+										" As [npc.her] belly swells with each successive swallow, [npc.sheIs] forced to slow [npc.her] pace. In an attempt to regain [npc.her] composure, [npc.she] [npc.verb(take)] deep, steadying breaths, but the potent scent permeating the air only [npc.verb(cloud)] [npc.her] concentration further. [npc.her] efforts to refocus are largely futile, with the daunting task overpowering [npc.her] ability to press on.",
+										" With every gulp, [npc.her] belly noticeably expands, causing [npc.her] to reduce [npc.her] pace. [npc.she] [npc.verb(take)] deep breaths in an attempt to steady [npc.herself] self, but the potent aroma in the air intensifies it threatening to overcome [npc.her] senses. [npc.her] struggles to maintain focus prove unfruitful, [npc.her] strength to continue wanes, overwhelmed by the colossal challenge at hand.")
+										+ UtilText.returnStringAtRandom(
+										"As if compelled by the pungent scent in the air, [npc.name] drinks absentmindedly. [npc.herself]  vacant stare and growing belly stand testament to [npc.herself]  state. It's as if [npc.herself]  body moves on its own, [npc.herself]  mind detached.",
+										"[npc.Name]'s consciousness seems to have retreated, leaving a primal instinct to respond to the heady scent. She carries on drinking, [npc.herself]  belly growing with every gulp, looking closer to a reflex reflex rather than anything conscious.",
+										"The potent scent in the air stirs a deep-seated instinct within [npc.name]. [npc.herself]  eyes are vacant, [npc.herself]  belly distending with the copious fluid. [npc.herself]  mind seems detached, yet she nonetheless continues to drink, the act reduced to a mere instinctual motion.",
+										"With each inhalation of the rich scent, [npc.name] seems to drift further away, [npc.herself]  body mindlessly continuing the task of drinking. [npc.herself]  eyes seem unfocused, and [npc.herself]  belly visibly growing larger.")
+										+ UtilText.returnStringAtRandom(
+										"In a dazed state, [npc.name] reclines on the floor, extracting one final swallow from the condom. Oblivious to [npc.her] surroundings, [npc.she] scrubs the interior clean with [npc.her] tongue, every last remnant eagerly collected. With the emptied item discarded and the overpowering scent gradually dissipating, [npc.she] remains still. heavy, ragged breaths the only indication of [npc.her] consciousness. A few minutes pass before the fullness of [npc.her] distended belly impinges on [npc.her] awareness, and the recollections of the act are hastily cast into the farthest corners of [npc.her] mind.",
+										"Propped on an elbow, [npc.name] drains the condom with a final swig. [npc.She] methodically sweeps [npc.her] tongue across the interior, collecting every leftover before discarding the depleted container. As the engulfing scent begins to lift, [npc.she] lays still, the rhythm of [npc.her] gasps breaking the silence. With the passing of a few minutes, [npc.her] grossly expanded belly pulls [npc.her] back to reality, instigating a struggle to quarantine the memory of the experience.",
+										"Sitting in exhaustion on the floor, [npc.name] draws the last mouthful from the condom. [npc.She] then commences the task of thoroughly cleaning it with [npc.her] tongue, lost in a rhythm of mindless repetition. Discarding the emptied item and the potent smell finally dissipating, [npc.she] rests, breaths deep and punctuated with fatigue. Slowly, the enormity of [npc.her] distended belly dawns, inciting a desperate push to repress the lingering memories.")
+										+ "</p>"
+										+ target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					}
+				}
+
+		}
+    } else {
+
+		switch (level){
+
+//reaction to cum production level, action of the condom being drank, and the dialogue, showing if the target struggles to drink it all if the production is too high
+
+			case ZERO_NONE:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(lift)] the condom, straining to see the negligible amount of fluid within.",
+                            "The condom in [npc.name]'s hand [npc.verb(contains)] just a faint trace of fluid, hardly even worth noting.")
+                        + UtilText.returnStringAtRandom(
+                            " Nonetheless, [npc.she] [npc.verb(extend)] a tendril into it, eagerly absorbing the tiny volume. [npc.she] [npc.verb(go)] so far as to envelop and dissolve the condom itself, ensuring every last trace is absorbed into [npc.her] form.",
+                            " [npc.She] [npc.verb(absorb)] the pitiful amount with fervor, even dissolving the condom itself to ensure not a single drop is wasted, every iota of the substance seeping into [npc.her].")
+                        + UtilText.returnStringAtRandom(
+                            " [npc.She] [npc.verb(dissolve)] the now-absorbed condom, unsatisfied and longing for more.",
+                            " [npc.She] [npc.verb(crave)] more after the fleeting experience, left unsatisfied by the paltry offering, the condom itself already dispersed within [npc.her].")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(eye)] the condom in [npc.her] hand, its contents almost nonexistent.",
+                            "[npc.Name] [npc.verb(hold)] the condom, the barely-visible droplet of fluid within it causing a ripple of unease to course through [npc.her].")
+                        + UtilText.returnStringAtRandom(
+                            " Taking a deep pulse, [npc.she] [npc.verb(extend)] a tendril into it and [npc.verb(absorb)] the scant fluid.",
+                            " [npc.She] [npc.verb(force)] [npc.herself] to absorb the negligible amount, relieved that there's so little of it, the trace of fluid swiftly disappearing within [npc.her].")
+                        + "<p>"
+                        + "In a blink of an eye, it's done, and [npc.she] [npc.verb(toss)] the empty condom away, glad to be done with it."
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+
+			case ONE_TRICKLE:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(lift)] the condom, the trace amounts of fluid inside barely noticeable.",
+                            "[npc.Name] [npc.verb(inspect)] the condom, a thin sheen of fluid barely dampening its interior.")
+                        + UtilText.returnStringAtRandom(
+                            " Nonetheless, [npc.she] [npc.verb(extend)] a tendril into it, eagerly absorbing the scant offering, [npc.her] tendril scouring every inch of its interior. [npc.She] even goes so far as to invert the condom, ensuring that not a single molecule escapes [npc.her] grasp.",
+                            " [npc.She] [npc.verb(absorb)] the nominal amount with fervor, relishing every bit. [npc.Her] tendril meticulously traverses the interior of the condom, caressing every surface, even inverting it to ensure that no drop is missed.")
+                        + UtilText.returnStringAtRandom(
+                            " Within moments, the condom is empty, and [npc.she] [npc.verb(discard)] it, [npc.her] form already pulsating, yearning for more.",
+                            " [npc.She] [npc.verb(find)] [npc.herself] disappointed by the brief experience, the absorbed fluid already dissipated within [npc.her], [npc.her] craving for more still unfulfilled.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(pick)] up the condom, the minute amount of fluid within it barely discernible.",
+                            "[npc.Name] [npc.verb(eye)] the condom and its minimal contents with a sense of apprehension.")
+                        + UtilText.returnStringAtRandom(
+                            " Taking a pulse to steady [npc.herself], [npc.she] [npc.verb(extend)] a tendril into it and [npc.verb(start)] to absorb.",
+                            " [npc.She] [npc.verb(absorb)] the meager amount of fluid, glad for the small quantity, its presence swiftly disappearing within [npc.her].")
+                        + "<p>"
+                        + "In an instant, it's over, and [npc.she] [npc.verb(toss)] the empty condom away, relieved to be done with it."
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+			case TWO_SMALL_AMOUNT:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(hold)] up the condom, the minimal amount of fluid lying at the bottom.",
+                            "With anticipation, [npc.name] [npc.verb(observe)] the contents of the condom, the scant fluid ripe for absorption.")
+                        + UtilText.returnStringAtRandom(
+                            " [npc.She] eagerly [npc.verb(insert)] a tendril into it, sweeping along every inch of its interior, making certain not a single droplet escapes [npc.her] touch.",
+                            " [npc.She] [npc.verb(absorb)] the meager amount, a tendril swirling inside the condom, painting its insides with [npc.herself] to catch every remaining molecule, relishing the fleeting experience.")
+                        + UtilText.returnStringAtRandom(
+                            " The contents disappear into [npc.her] form almost instantly, diluting and becoming invisible, leaving [npc.her] craving more.",
+                            " Barely a moment passes before the condom is emptied, the absorbed fluid quickly diluting within [npc.her], leaving [npc.her] form pulsating, longing for another encounter.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                            + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(pick)] up the condom, [npc.her] gaze focused on the small pool of fluid it contains.",
+                            "Holding the condom, [npc.name] [npc.verb(glance)] at the meager reservoir of fluid, a sense of apprehension washing over [npc.herHim].")
+                            + UtilText.returnStringAtRandom(
+                            " With a pulse to steady [npc.herself], [npc.she] [npc.verb(extend)] a tendril towards it, preparing to absorb.",
+                            " [npc.She] hesitantly [npc.verb(thrust)] a tendril into the condom, pausing a moment before [npc.verb(beginning)] the absorption.")
+                            + "<p>"
+                            + "[npc.Name] [npc.verb(shiver)] as the fluid merges into [npc.her] form, quickly disappearing into the translucent mass,"
+                            + " hoping to be done with it as soon as possible. The now empty condom is swiftly discarded, a testament to [npc.her] completed task."
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+            case THREE_AVERAGE:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "[npc.Name] [npc.verb(hold)] up the condom, keenly inspecting the volume it carries.",
+                                "The condom, partially filled, attracts the eager attention of [npc.name].")
+                            + UtilText.returnStringAtRandom(
+                                " Eagerly, [npc.she] [npc.verb(extend)] a tendril into it, beginning to absorb its contents.",
+                                " Without any hesitation, [npc.she] [npc.verb(thrust)] a finger into it, initiating the absorption.")
+                            + UtilText.returnStringAtRandom(
+                                " The contents are absorbed swiftly, leaving the condom completely devoid of any traces. The absorbed cum beginning its journey towards [npc.her] core.",
+                                " Having satisfied [npc.her] thirst, [npc.she] [npc.verb(retract)] [npc.her] tendril, leaving the condom utterly empty. Inside [npc.her], the absorbed cum already meeting [npc.her] core, causes [npc.herHim] to shiver.")
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "[npc.Name] [npc.verb(pick)] up the condom, [npc.her] eyes observing the contained fluid with trepidation.",
+                                "Holding up the partially filled condom, [npc.name] [npc.verb(gaze)] at its contents with noticeable distaste.")
+                            + UtilText.returnStringAtRandom(
+                                " With visible hesitation, [npc.she] [npc.verb(insert)] a tendril, preparing to absorb.",
+                                " [npc.She] [npc.verb(slowly thrust)] a finger into it, pausing momentarily before starting the absorption.")
+                                + "<p>"
+                                + "[npc.Name] [npc.verb(grimace)] as the fluid fills [npc.her] form, [npc.her] core pulsating as [npc.she] tries to assimilate it quickly. The cum starts its journey towards [npc.her] core."
+                            + UtilText.returnStringAtRandom(
+                                " As swiftly as [npc.she] can, [npc.she] [npc.verb(retract)] [npc.her] tendril, the absorbed cum meeting [npc.her] core and making [npc.herHim] tremble, as [npc.she] tries to put what [npc.sheHas] just done out of [npc.her] mind...",
+                                " [npc.She] [npc.verb(pull)] [npc.her] tendril back as quickly as possible, trying to forget what [npc.sheHas] just done, as the absorbed cum begins its journey towards [npc.her] core.")
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+			case FOUR_LARGE:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(examine)] the substantially filled condom in [npc.her] hands, [npc.her] form visibly pulsating with anticipation.",
+                            "Holding up the condom, [npc.name] [npc.verb(observes)] its filled form, a noticeable volume of fluid making it expand slightly.")
+                        + UtilText.returnStringAtRandom(
+                            " Eagerly, [npc.she] [npc.verb(thrust)] a finger into it, immediately beginning to absorb its contents, [npc.her] form rippling with pleasure.",
+                            " [npc.She] swiftly [npc.verb(inserts)] a finger, starting the absorption process without hesitation, [npc.her] form vibrating lightly with anticipation.")
+                        + UtilText.returnStringAtRandom(
+                            " The cum starts spreading through [npc.her] body to reach [npc.her] core, [npc.her] anticipation growing, [npc.her] composure occasionally lost in the process.",
+                            " The cum has already reached [npc.her] core and starts vigorously fertilizing it, causing the surrounding slime to turn a noticeable shade whiter, forcing [npc.her] to stifle a gasp.")
+                        + UtilText.returnStringAtRandom(
+                            " Once all the fluid has been absorbed, [npc.she] [npc.verb(withdraw)] [npc.her] finger, leaving the condom completely devoid of any traces. As the cum continues its assault on [npc.her] core over the next hours, [npc.she] [npc.verb(find)] [npc.herself] losing composure every now and then.",
+                            " [npc.She] [npc.verb(retracts)] [npc.her] finger, the condom now completely empty. As the cum relentlessly fertilizes [npc.her] core in the ensuing hours, [npc.she] [npc.verb(struggle)] to maintain [npc.her] composure.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(look)] at the condom in [npc.her] hands, filled with a substantial amount of fluid, causing [npc.her] to hesitate momentarily.",
+                            "Holding up the condom, [npc.name] [npc.verb(observes)] its expanded form, filled with a noticeable amount of fluid, taking a metaphorical deep breath.")
+                        + UtilText.returnStringAtRandom(
+                            " With visible reluctance, [npc.she] [npc.verb(inserts)] a finger, the sensation of absorption instantly filling [npc.her] form.",
+                            " [npc.She] hesitantly [npc.verb(thrusts)] a finger into it, pausing momentarily before starting the absorption process.")
+                        + UtilText.returnStringAtRandom(
+                            " The cum starts spreading through [npc.her] body to reach [npc.her] core, causing a mild discomfort. [npc.She] tries to assimilate it quickly, forcing [npc.her] to maintain her composure.",
+                            " The cum has already reached [npc.her] core, causing it to pulsate and the surrounding slime to turn a noticeable shade whiter, making [npc.her] shiver and struggle to hide her discomfort.")
+                        + UtilText.returnStringAtRandom(
+                            " [npc.She] [npc.verb(withdraws)] [npc.her] finger as soon as all the fluid is absorbed, leaving the condom empty. The cum continues its intense fertilization of [npc.her] core over the next hours, occasionally disrupting [npc.her] composure.",
+                            " [npc.She] quickly [npc.verb(retracts)] [npc.her] finger, leaving the condom devoid of any fluid. As the cum relentlessly assails [npc.her] core in the coming hours, [npc.her] composure is occasionally compromised.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+			case FIVE_HUGE:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(grip)] the bulging condom in [npc.her] [npc.hand], its sheer size a testament to the impressive load it contains. Anticipation causes [npc.her] form to ripple in eager anticipation.",
+                            "Holding the hefty condom, visibly strained by the volume of cum, a thrill of anticipation sends waves through [npc.her] form.")
+                        + UtilText.returnStringAtRandom(
+                            " Wasting no time, [npc.she] [npc.verb(inserts)] a finger into it, [npc.her] form trembling slightly as she absorbs the large amount of cum.",
+                            " [npc.She] [npc.verb(pierces)] the condom, [npc.her] form reacting to the sudden influx of cum.")
+                        + UtilText.returnStringAtRandom(
+                            " The substantial volume of cum races towards [npc.her] core, causing [npc.her] form to pulse more frequently. [npc.Her] body absorbs the cum, integrating it into [npc.her] form.",
+                            " The cum, in its vast quantity, reaches [npc.her] core almost instantly, inciting a pronounced reaction. [npc.Her] form pulsates more noticeably, as the fertilization process unfolds.")
+                        + UtilText.returnStringAtRandom(
+                            " Once all the fluid has been integrated, [npc.she] [npc.verb(withdraws)] [npc.her] finger, leaving the condom drained. [npc.Her] form continues to respond to the cum for the following hours, sometimes rippling intensely.",
+                            " [npc.She] [npc.verb(retracts)] [npc.her] finger, leaving the condom completely empty. The effects of the cum persist, causing [npc.her] form to ripple occasionally.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(hold)] the enormous condom, filled to the brim with cum. A wave of unease ripples through [npc.her] form as [npc.she] contemplates the task at hand.",
+                            "Holding the bulging condom, [npc.name] [npc.verb(pause)] a moment, looking somewhat apprehensive about the significant amount of cum.")
+                        + UtilText.returnStringAtRandom(
+                            " Gathering [npc.her] courage, [npc.she] [npc.verb(inserts)] a finger into the condom, [npc.her] form shuddering as [npc.she] starts to absorb the cum.",
+                            " [npc.She] [npc.verb(thrusts)] a finger into it, [npc.her] form quivering as the cum begins to spread inside [npc.herhim].")
+                        + UtilText.returnStringAtRandom(
+                            " The cum, in its significant volume, travels through [npc.her] form causing a mild discomfort as it heads for [npc.her] core. [npc.She] endures the discomfort, as [npc.she] absorbs the fluid.",
+                            " The amount of cum reaches [npc.her] core almost instantly, inciting a potent reaction. [npc.Her] form occasionally trembles as the cum gets assimilated.")
+                        + UtilText.returnStringAtRandom(
+                            " With the fluid completely absorbed, [npc.she] [npc.verb(withdraw)] [npc.her] finger, leaving the condom utterly drained. The effects of the cum persist for several hours, causing [npc.her] form to occasionally lose composure.",
+                            " [npc.She] [npc.verb(pulls)] [npc.her] finger back, the now empty condom in [npc.her] [npc.hand]. The effects of the cum continue to resonate within [npc.her] form, causing sporadic discomfort.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+			case SIX_EXTREME:
+                if(user.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                    return UtilText.parse(target, user,
+                        "<p>"
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(heft)] the grossly distended condom in [npc.her] [npc.hand], its formidable weight denoting the vast quantity of cum it contains.",
+                            "[npc.Name] [npc.verb(eye)] the overfilled condom with excitement, the anticipation of the copious cum within causing a tremble in [npc.her] fingers.")
+                        + UtilText.returnStringAtRandom(
+                            " [npc.She] [npc.verb(untie)] the end of the condom, the heady aroma of cum immediately wafting into [npc.her] nostrils, causing a shiver of anticipation to run down [npc.her] spine.",
+                            " [npc.She] [npc.verb(unfasten)] the tightly knotted end of the condom, the potent scent of the vast amount of cum enveloping [npc.her] senses and eliciting a pleasured sigh.")
+                        + UtilText.returnStringAtRandom(
+                            " [npc.She] [npc.verb(begins)] to absorb the hefty volume of cum through one of [npc.her] tendrils. As the cum pours into [npc.her], [npc.her] form subtly brightens, showing the effects of the cum's potency.",
+                            " [npc.She] [npc.verb(lifts)] a tendril and touches the open end of the condom, consuming the immense volume of cum. As [npc.she] [npc.verb(continue)] to drink, [npc.her] form begins to lighten, the cum's influence clearly taking effect.")
+                        + UtilText.returnStringAtRandom(
+                            " As soon as the condom is completely emptied, [npc.she] [npc.verb(retracts)] [npc.her] tendril, leaving behind a slightly lightened hue. Over the next few hours, the massive quantity of cum within [npc.her] continues its onslaught on [npc.her] core, making [npc.her] form occasionally ripple with exertion.",
+                            " [npc.She] [npc.verb(withdraws)] [npc.her] tendril after the condom has been utterly drained, [npc.her] form adopting a subtly lighter hue. As the cum wages a relentless war on [npc.her] core in the ensuing hours, [npc.her] composure is occasionally faltered, her form spasming slightly.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                } else {
+                    return UtilText.parse(target, user,
+                        "<p>"  
+                        + UtilText.returnStringAtRandom(
+                            "[npc.Name] [npc.verb(stare)] dubiously at the alarmingly swollen condom in [npc.her] [npc.hand], the daunting amount of cum inside unsettling [npc.herHim].",
+                            "[npc.Name] [npc.verb(gaze)] at the engorged condom with apprehension, the prodigious amount of cum making [npc.her] stomach churn.")
+                        + UtilText.returnStringAtRandom(
+                            " Swallowing hard, [npc.she] [npc.verb(untie)] the condom, the immediate release of the strong smell of cum making [npc.her] wrinkle [npc.her] nose in discomfort.",
+                            " Steeling [npc.her] resolve, [npc.she] [npc.verb(unfasten)] the end of the condom, the heavy scent of cum flooding [npc.her] senses and causing [npc.herHim] to hesitate.")
+                        + UtilText.returnStringAtRandom(
+                            " With an effort, [npc.she] [npc.verb(extends)] a tendril to touch the open end of the condom, beginning to absorb the cum. As [npc.she] [npc.verb(continue)] to drink, [npc.her] form slowly starts to lighten.",
+                            " [npc.She] [npc.verb(brings)] up a tendril and hesitantly touches the condom, starting to consume the vast volume of cum. As the fluid seeps into [npc.her], [npc.her] form gradually shifts to a lighter hue.")
+                        + UtilText.returnStringAtRandom(
+                            " With the condom thoroughly drained, [npc.she] [npc.verb(pulls)] [npc.her] tendril back, [npc.her] hue faintly lighter than before. Over the next few hours, the substantial amount of cum continues to wage a fierce assault on [npc.her] core, causing [npc.her] form to convulse slightly every so often.",
+                            " [npc.She] [npc.verb(retracts)] [npc.her] tendril, leaving the condom completely empty and [npc.her] form with a subtly lightened hue. As the cum continues its relentless attempt to fertilize [npc.her] core over the ensuing hours, sporadic tremors run through [npc.her] form.")
+                        + "</p>"
+                        + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+                }
+			case SEVEN_MONSTROUS:
+				if(getMillilitresStored()<10000){
+
+					if (target.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+                        return UtilText.parse(target, user,
+                            "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "[npc.Name] shivers in anticipation, [npc.her] gaze drawn to the condom, bulging and straining with its substantial load. The sight triggers a ripple of excitement, palpable in [npc.her] amorphous form.",
+                                "A look of eagerness spreads across [npc.Name]'s form as [npc.her] eyes lock onto the condom, heavy with a plentiful load. [npc.Her] body quivers with anticipation, mirroring the potential promise contained within the latex.",
+                                "The sight of the robust condom, filled to the brink, sparks a wave of desire in [npc.Name]. [npc.Her] gelatinous form shivers, resonating with the weighty expectation of the impending intimate exchange.")
+                            + UtilText.returnStringAtRandom(
+                                "Gently, [npc.she] undoes the knot, releasing a heady aroma of musky masculinity that permeates the air around [npc.her], its potent potency triggering a visible ripple across [npc.her] form.",
+                                "With precision, [npc.she] loosens the knot, liberating the dense scent of the stored semen into the surroundings. The heavy fragrance seeps into [npc.her] senses, sending a tremor through [npc.her] form, echoing [npc.her] mounting desire.",
+                                "An agile flick unties the knot, allowing the intoxicating scent of the fluid to waft through the air. The immediate effect is profound, fogging [npc.her] senses and initiating a shudder that travels across [npc.her] semi-translucent body.")
+                            + UtilText.returnStringAtRandom(
+                                "Responding to the sensory barrage, [npc.her] body forms a slender tendril, plunging into the condom to begin siphoning the semen. The intimate taste and smell deepens [npc.her] trance, [npc.her] form quivering with the influx of sensations.",
+                                "Reacting to the olfactory and gustatory stimuli, [npc.her] form shapes an extension, reaching out to the condom and drawing in the semen. The fluid mixes within [npc.her], setting off a deeper state of sensual trance, visible in [npc.her] rhythmic undulations.",
+                                "In response to the deluge of sensations, [npc.her] body forms a finger-like appendage to dip into the condom, initiating the absorption of the semen. As the taste and smell pervade [npc.her], [npc.her] form enters a deeper trance, shuddering with each surge of fluid.")
+                            + UtilText.returnStringAtRandom(
+                                "As the fluid integrates, it prompts a noticeable expansion in [npc.her] physique, particularly emphasizing [npc.her] enticing features. Simultaneously, a gradual color shift towards a whiter shade becomes visible, echoing the internal transformation.",
+                                "With the continued absorption of the fluid, [npc.her] body responds by subtly expanding, the growth particularly pronounced in [npc.her] voluptuous curves. Concurrently, a gentle whitening of [npc.her] hue reflects the transformative journey within.",
+                                "As the fluid fills [npc.her], [npc.her] form reacts by subtly growing, highlighting [npc.her] attractive attributes. Alongside, a delicate transition to a lighter shade paints a visual narrative of the ongoing integration.")
+                            + UtilText.returnStringAtRandom(
+                                "The fluid, now within [npc.her], launches a determined invasion towards [npc.herPos] core, seeking to inseminate. The relentless assault sends tremors throughout [npc.her] form, making it difficult for [npc.herHim] to maintain composure.",
+                                "Upon absorption, the fluid embarks on a fervent journey towards [npc.herPos] core, driven by the primal instinct to fertilize. The resulting chaos within [npc.her] sends waves of instability across [npc.her] body, destabilizing [npc.herHim] both mentally and physically.",
+                                "As soon as it's inside, the fluid mounts an intense attack on [npc.herPos] core in its quest to impregnate. The continuous internal struggle sends shockwaves of imbalance through [npc.her], testing [npc.herPos] control.")
+                            + UtilText.returnStringAtRandom(
+                                "In an unconscious display of primal need, [npc.her] tendril weaves a path along the slick inner walls of the nearly drained condom, tracing the lingering fluid, and scraping every possible trace of the precious substance. With a dexterity that belies its gelatinous nature, it writhes around in search of isolated specks, leaving nothing unattended. Even the stray droplets at the bottom aren't overlooked, the tendril unfurling to claim them. The thoroughness of [npc.her] actions makes it clear that nothing will be left behind, not even the scent, as [npc.her] tendril scrubs the inner surface clean of every trace.",
+                                "[npc.Her] tendril acts out of an unseen instinct, meticulously sweeping across the damp interior of the almost spent condom. It clings to the fluid-coated walls, gathering the precious essence that still clings there. In a desperate hunt for any forgotten particles, the tendril wriggles, leaving no crevice unexplored. Descending to catch the last remaining droplets, the tendril expands, occupying the entirety of the latex space to ensure nothing remains. This silent commitment to leaving no trace behind speaks volumes about [npc.her] primal craving, leaving the condom so devoid of evidence that it's impossible to prove anything was once inside.",
+                                "There's a primitive tenacity in how [npc.her] tendril navigates the depleted condom, scraping along its wet inner walls to gather any leftover fluid. It contorts and curls, seeking any hidden reservoirs in the latex folds, ensuring that no opportunity for collection is wasted. The remaining droplets at the bottom are also claimed, as if driven by an instinctual mandate to salvage every possible particle. The relentlessness of this pursuit underscores the potency of [npc.her] unconscious desire, as the tendril continues to scrape and prod until the condom is as spotless as if it had never been used.")
+                            + UtilText.returnStringAtRandom(
+                                "Upon draining the condom completely, the semen's influence on [npc.her] coloration becomes starkly apparent, [npc.her] form having shifted to a noticeably whiter shade. Despite this, the cum's quest to impregnate [npc.herPos] core continues unabated, leaving [npc.herHim] struggling for stability.",
+                                "With the condom now emptied, the evidence of the absorbed cum is clear in [npc.her] now predominantly white hue. However, the internal battle rages on, as the semen relentlessly strives to fertilize [npc.herPos] core, leaving [npc.herHim] wrestling with the after-effects.",
+                                "Having fully absorbed the condom's contents, the change in [npc.her] color is undeniable. [npc.Her] form has taken on a significantly whiter shade. Yet, the struggle within [npc.her] is far from over, as the relentless desire of the cum to fertilize [npc.herPos] core continues to unsettle [npc.herHim].")
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					} else {
+                        return UtilText.parse(target, user,
+                            "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "[npc.Name]'s form quivers apprehensively at the sight of the cum-laden condom, stretched near transparent due to its monstrous contents.",
+                                "[npc.Name]'s semi-transparent body ripples with unease as [npc.she] takes in the sight of the latex pouch, swollen with an ample load of cum.",
+                                "An involuntary shiver courses through [npc.Name]'s gelatinous body, revealing [npc.her] apprehension towards the copious amount of semen enclosed within the thin latex.")
+                            + UtilText.returnStringAtRandom(
+                                " With a tangible sense of reluctance, [npc.her] body forms a tendril, which cautiously undoes the knot, freeing the cum to be absorbed.",
+                                " Holding back [npc.her] discomfort, [npc.her] form shapes an appendage that carefully unties the knot, allowing the potent cum to be drawn into [npc.her] body.",
+                                " [npc.She] tentatively creates a tendril, which then proceeds to unravel the condom's knot, setting in motion the absorption of the potent fluid.")
+                            + UtilText.returnStringAtRandom(
+                                " The sheer volume of cum begins its assault on [npc.herPos] core, its primal instinct to inseminate causing visible tremors within [npc.her] form. Despite the strain, [npc.she] endures, as the absorption of the cum continues.",
+                                " The internal struggle begins as the substantial amount of cum starts its fervent journey towards [npc.herPos] core, its desire to fertilize evident. [npc.she] perseveres through the ordeal, persistently assimilating the cum despite the challenge.",
+                                " An intense battle unfolds within [npc.her] as the cum seeks to impregnate [npc.herPos] core, causing oscillations across [npc.her] body. [npc.she] persists, slowly ingesting the cum bit by bit, despite the tumultuous circumstances.")
+                            + UtilText.returnStringAtRandom(
+                                " As the fluid integrates, [npc.her] form reacts by subtly growing, highlighting [npc.her] attractive attributes. Alongside, a delicate transition to a lighter shade is evident.",
+                                " With the continued absorption of the fluid, [npc.her] body responds by subtly expanding, the growth particularly pronounced in [npc.her] voluptuous curves. Concurrently, a gentle whitening of [npc.her] hue is observable.",
+                                " Each second of absorption sees [npc.her] form enlarging slightly, particularly emphasizing [npc.her] enticing features. Simultaneously, a gradual color shift towards a whiter shade becomes visible.")
+                            + UtilText.returnStringAtRandom(
+                                "Once [npc.she] has completely assimilated the vast load, [npc.her] tendril withdraws, discarding the now-empty condom. [npc.Her] size has noticeably increased and [npc.her] form has turned significantly whiter. Exhausted, [npc.she] tries to suppress the memory of the process [npc.she] just went through, even as the internal turmoil continues.",
+                                "After the final vestige of cum is absorbed, [npc.her] tendril disengages, letting the used condom fall aside. [npc.Her] form, now larger and noticeably lighter, trembles from the exertion. [npc.She] attempts to shake off the recollection of the intense act of assimilation, despite the ongoing internal struggle.",
+                                "When every drop has been integrated, [npc.her] tendril pulls back, leaving behind the emptied condom. [npc.Her] body, now distinctly larger and significantly paler, quivers from the strain. [npc.She] tries to push the memory of the taxing absorption out of [npc.her] mind, even as the relentless internal chaos persists.")
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					}
+                    
+				} else {//endpoint, over 10L
+
+					if (target.hasFetish(Fetish.FETISH_CUM_ADDICT)) {
+						return UtilText.parse(target, user,
+                            "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "As [npc.name] [npc.verb(take)] the colossal condom gingerly, a thrill runs through [npc.herHim], an intriguing blend of anticipation and apprehension. [npc.she] [npc.verb(observe)] the arcane seal flickering under the weight of the load. The condom's latex is stretched thin, turning near-transparent to reveal the vast volume of cum stored within, stirring a mix of hunger, lust, and a dash of worry within [npc.herHim].",
+                                "[npc.Name] [npc.verb(grip)] the titanic condom apprehensively, its enchantment intermittently glowing due to the immense strain. The sight of the fluid within kindles within [npc.herHim] an almost primal hunger, a surge of desire, and a hint of unease.",
+                                "[npc.Name], holding the monstrous condom, [npc.verb(observe)] the enchantment flickering under the intense pressure. The anticipation is palpable, amplified by the sight of the strained, near-transparent latex revealing the cum inside. It induces an array of feelings within [npc.herHim] - a deep-seated hunger, potent lust, and a slight unease.")
+                            + UtilText.returnStringAtRandom(
+                                "Untying the knot releases a potent scent that saturates the air before subtly infiltrating [npc.herHim], eliciting a sense of dizziness that awakens a latent desire within [npc.herHim].",
+                                "As [npc.she] [npc.verb(loosen)] the knot, the powerful scent of the cum pervades the surroundings before gently permeating [npc.herHim], inducing a lightheadedness that stirs a deeply rooted hunger.",
+                                "When the knot gives way, a heady aroma of cum engulfs [npc.herHim], subtly seeping into [npc.herHim] and stirring a sense of disorientation that rouses an innate craving.")
+                            + UtilText.returnStringAtRandom(
+                                "Acting on a deep-seated instinct, [npc.she] [npc.verb(submerge)] a tendril into the condom, commencing the absorption process. As [npc.her] form and the fluid become one, a primal force awakens within [npc.herHim], obliterating the world beyond the rhythm of absorption, pulling [npc.herHim] into a trance-like loop.",
+                                "[npc.She] [npc.verb(sink)] a part of [npc.her] body into the condom, kick-starting the absorption. This initiates a primal shift within [npc.herHim], [npc.herHim] consciousness narrowing onto the enticing fluid, and the rhythm of the absorption, drawing [npc.herHim] into a state of primal focus, oblivious to the world beyond.",
+                                "Urged by a primal force, [npc.she] [npc.verb(plunge)] a part of [npc.her] form into the condom, initiating the absorption. The primal force within [npc.herHim] ascends as [npc.her] form and the fluid mingle, the outside world blurs into insignificance, leaving [npc.herHim] entranced by the rhythm of the absorbing cycle.")
+                            + UtilText.returnStringAtRandom(
+                                "The first few liters merge with [npc.her] form, causing it to bulge and lighten. A surge of energy wells up within [npc.herHim] as the cum begins its intense attempt to fertilize [npc.her] core. Driven by this unprecedented sensation, [npc.her] absorption accelerates.",
+                                "With the initial liters of fluid absorbed, causing [npc.her] form to swell and lighten, the cum starts its relentless effort to impregnate [npc.her] core, sending [npc.herHim] into overdrive, [npc.her] absorption pace quickening.",
+                                "After the first few liters of cum are absorbed, [npc.her] form begins to distend and lighten, the cum desperately attempts to fertilize [npc.her] core, pushing [npc.her] absorption into overdrive.")
+                            + UtilText.returnStringAtRandom(
+                                "The fluid courses through [npc.herHim], filling it, stretching it, and [npc.her] sense of self intertwines with the fluid, creating an intoxicating sensation that beckons [npc.herHim] to continue until the last drop is absorbed.",
+                                "As the cum seeps deeper into [npc.herHim], causing it to stretch and fill, [npc.her] identity seems to meld with the fluid, resulting in a sensation so intoxicating that [npc.her] need to consume becomes insatiable.",
+                                "With every passing moment, the fluid integrates more into [npc.herHim], distending and filling it. A sense of unity with the fluid engulfs [npc.herHim], providing an exhilarating sensation that urges [npc.herHim] to continue until completely sated.")
+                            + UtilText.returnStringAtRandom(
+                                "As the last droplets of cum are taken in, the effort leaves [npc.her] form significantly larger and almost entirely white. The fluid is restless within, attempting to fertilize [npc.her] core with an intensity [npc.she]'s never before experienced, stirring a novel sensation within [npc.herHim].",
+                                "Once the final traces of cum are absorbed, [npc.her] form is left twice its original size and an almost pure white. The absorbed cum tries desperately to fertilize [npc.her] core, invoking an unprecedented, intense feeling.",
+                                "With the absorption of the last droplets of cum, [npc.her] form bulges to almost double its starting size, and the color fades to a near-total white. The cum within tries to impregnate [npc.her] core, triggering an intense sensation that [npc.she]'s never felt before.")
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					} else {
+                        return UtilText.parse(target, user,
+                            "<p>"
+                            + UtilText.returnStringAtRandom(
+                                "In [npc.her] [npc.hand], [npc.Name] [npc.verb(hold)] a condom swollen to its physical limits with an astounding volume of cum. The sight alone sends a dizzying sensation washing over [npc.her]. As [npc.her] gaze fixates on the pulsating enchantment, [npc.she] [npc.verb(notice)] the seal strained nearly to the point of breaking.",
+                                "[npc.Name] finds [npc.her] [npc.eyes] drawn wide at the sight of the distended condom clutched in [npc.her] hand. The cum it contains surpasses anything [npc.she] ever thought [npc.she] would confront. As [npc.she] contemplates the daunting task, [npc.she] can't help but notice the arcane enchantment visibly stretched to its breaking point.",
+                                "[npc.Name] [npc.verb(stare)] at the titanically bloated condom in [npc.her] [npc.hand]. Filled to its limit with an almost unthinkable amount of cum, [npc.her] heart races in [npc.her] chest. The strain on the arcane seal is alarmingly clear, reflecting the magnitude of the task before [npc.her].")
+                            + UtilText.returnStringAtRandom(
+                                "The condom's once-opaque latex has been strained to translucency, revealing the vast amount of fluid within. A pit forms in [npc.her] stomach, and [npc.she] swallows nervously.",
+                                "The latex looks dangerously thin, as if it might burst at any moment. The sight is enough to give [npc.her] pause, but [npc.she] quickly shakes off the apprehension, preparing [npc.herself] to get this over with.",
+                                "The sight of the condom, bulging and straining to contain its contents, fills [npc.her] with dread. [npc.She] lets out a sigh, knowing that there's no turning back now.")
+                            + UtilText.returnStringAtRandom(
+                                " As [npc.she] [npc.verb(untie)] the knot, the strong scent of the fluid is unleashed, making [npc.her] mind spin.",
+                                " With a resigned sigh, [npc.she] [npc.verb(untie)] the knot. The scent of the cum is almost overpowering, and [npc.she] has to force [npc.herself] to focus.",
+                                " [npc.She] [npc.verb(untie)] the knot hesitantly, the unleashed scent of the cum making [npc.her] mind swim.")
+                            + UtilText.returnStringAtRandom(
+                                " Upon plunging a tendril into the overfilled condom, [npc.she] instigates the first absorption. This initial influx overwhelms [npc.her], but even so, [npc.she] persists, undeterred by the challenging task [npc.she] has to face.",
+                                " [npc.Name]'s tendril delves into the condom, ushering in the first wave of absorption. This sudden rush stirs [npc.her] senses, but [npc.she] remains resolute, intent on carrying out the daunting task at hand.",
+                                " The moment [npc.her] tendril pierces the surface of the fluid within the condom, the absorption begins. The initial shock sends ripples through [npc.her], but [npc.she] steels [npc.herself], resolved to confront the task ahead.")
+                            + UtilText.returnStringAtRandom(
+                                " [npc.Her] form undulates as [npc.she] absorbs more of the cum, the thick fluid quickly dispersing within [npc.her], eagerly seeking [npc.her] core.",
+                                " Absorbing more of the substance, [npc.her] translucent form ripples and shifts as the cum rapidly dissipates, making its way unerringly towards [npc.her] core.",
+                                " [npc.she] envelops more of the fluid, which immediately starts to diffuse within [npc.her], homing in on [npc.her] core.")
+                            + UtilText.returnStringAtRandom(
+                                " The scent of the cum fills the air as each absorption adds to [npc.her] form, causing it to swell subtly. The thick fluid contributes to [npc.her] enticing figure, refining [npc.her] silhouette.",
+                                " With each absorption, and with the scent growing stronger, [npc.her] figure noticeably expands, filling out [npc.her] form with an intriguing fullness.",
+                                " Every addition, accompanied by the overpowering scent, causes a wave of expansion across [npc.her] form, emphasizing the delightful curves of [npc.her] body.")
+                            + UtilText.returnStringAtRandom(
+                                " The intoxicating scent fills the air, an inescapable presence as [npc.her] form swells. Overcome by the scent and the relentless onslaught of fluid, [npc.her] focus slips away, leaving [npc.her] utterly subsumed.",
+                                " As the potent scent becomes increasingly suffocating, [npc.her] form expands visibly. The powerful aroma and the persistent fluid assault prove too much to withstand, completely submerging [npc.her].",
+                                " With each absorption, the scent grows more overpowering, filling the air and [npc.her] senses. The sensory onslaught of the potent scent and fluid robs [npc.her] of control, leaving [npc.her] utterly drowned in the sensations.")
+                            + UtilText.returnStringAtRandom(
+                                "In the grip of the potent scent, [npc.name] finds [npc.herself] lost in the process, [npc.her] form stretching with each new absorption. With [npc.her] core hidden deep within the sea of cum, [npc.her] form nearly the same shade, [npc.she] carries on absorbing.",
+                                "A primal instinct stirs within [npc.name] as the scent pervades, [npc.her] vacant eyes and growing form the only signs of [npc.her] submission. [npc.her] core now concealed within the sea of white, yet [npc.she] continues to absorb.",
+                                "The pungent scent stirs [npc.name] to continue. [npc.her] form swelling with each absorption, [npc.her] core now lost deep within a sea of white, [npc.her] continues.")
+                            + UtilText.returnStringAtRandom(
+                                "In a dazed state, [npc.name] extends a tendril towards the condom, absorbing the final remnants. Oblivious to [npc.her] surroundings, [npc.she] meticulously cleans the interior, each trace eagerly collected. As the emptied item is discarded and the scent gradually starts to fade, [npc.her] form oscillates heavily, struggling to maintain its shape under the weight of the now pearly-white mass.",
+                                "Lost in the haze, [npc.name] sends out a tendril, dutifully absorbing the last of the substance from the condom. Every last trace is collected, the emptied item discarded. With the fading of the scent, [npc.her] form struggles to keep its shape, swaying heavily under the burden of the white mass, now twice [npc.her] original size.",
+                                "Unaware of [npc.her] surroundings, [npc.name] sends a tendril to gather the last drops from the condom. Absorbing until nothing is left, [npc.her] form quivers under the weight of the now pearly-white mass, struggling to maintain its shape as the scent dissipates, leaving behind a form twice [npc.her] original size."))
+                            + "</p>"
+                            + target.ingestFluid(SexAreaOrifice.MOUTH, storedFluids));
+					}
+				}
+
+		}
+
+    }
