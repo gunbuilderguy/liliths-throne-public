@@ -2,8 +2,8 @@
 <placeType>
 	<worldRegion>DOMINION</worldRegion>
 	<name><![CDATA[Entrance]]></name>
-	<tooltipDescription><![CDATA[The entrance to Kate's small apartment, above the shopping arcade.]]></tooltipDescription>
-	<virginityLossDescription><![CDATA[in the entrance of Kate's apartment]]></virginityLossDescription>
+	<tooltipDescription><![CDATA[The front door of Kate's apartment opens onto a cramped entrance hall littered with kicked-off shoes.]]></tooltipDescription>
+	<virginityLossDescription><![CDATA[in the entrance hall of Kate's apartment]]></virginityLossDescription>
 	<sexBlockedFromCharacterPresent>true</sexBlockedFromCharacterPresent>
 	<colour>BASE_GREEN</colour>
 	<backgroundColour>MAP_BACKGROUND</backgroundColour>

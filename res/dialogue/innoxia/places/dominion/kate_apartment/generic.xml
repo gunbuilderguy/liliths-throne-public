@@ -9,8 +9,40 @@
 		<responses/>
 	</scene>
 
+	<scene id="hallway">
+		<content folderPath="txt/places/dominion/kate_apartment/generic">HALLWAY</content>
+		<secondsPassed><![CDATA[15]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<scene id="kitchen">
+		<content folderPath="txt/places/dominion/kate_apartment/generic">KITCHEN</content>
+		<secondsPassed><![CDATA[15]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<scene id="lounge">
+		<content folderPath="txt/places/dominion/kate_apartment/generic">LOUNGE</content>
+		<secondsPassed><![CDATA[15]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
 	<scene id="bedroom">
 		<content folderPath="txt/places/dominion/kate_apartment/generic">BEDROOM</content>
+		<secondsPassed><![CDATA[15]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<scene id="bathroom">
+		<content folderPath="txt/places/dominion/kate_apartment/generic">BATHROOM</content>
 		<secondsPassed><![CDATA[15]]></secondsPassed>
 		<continuesDialogue>false</continuesDialogue>
 		<travelDisabled>false</travelDisabled>

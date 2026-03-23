@@ -3,27 +3,86 @@
 
 	<htmlContent tag="ENTRANCE"><![CDATA[
 	<p>
-		A narrow staircase from the arcade leads up to a small landing.
-		Kate's apartment door is right there &mdash; scuffed wood, a peeling succubus sticker on the knocker, and a welcome mat that reads 'Go Away'.
+		The front door of Kate's apartment opens onto a cramped entrance hall.
+		Several pairs of shoes have been kicked off and left where they fell &mdash; low-top skaters, strappy heels, a single boot with no partner in sight.
+		A set of keys hangs from a hook that's half-pulled from the wall, and a faded welcome mat has had something rude embroidered over the original message in bright pink thread.
 	</p>
 	<p>
-		The entrance is barely a hallway: a coat hook with a leather jacket slung over it,
-		a pair of low-top skater shoes kicked into the corner,
-		and the faint smell of incense and something sharper underneath it.
+		The air smells faintly of her perfume &mdash; something sweet and heavy that clings to everything in this place.
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="HALLWAY"><![CDATA[
+	<p>
+		A narrow hallway connects the rooms of Kate's apartment.
+		The walls are lined with framed photographs of people you don't recognise &mdash; other demons, mostly, caught mid-laugh or mid-drink at parties that look like they happened decades ago.
+		A coat stand by the wall is holding considerably more lingerie than coats.
+	</p>
+	<p>
+		The carpet is worn but clean enough, and faint music drifts from somewhere deeper in the apartment &mdash; something low and slow.
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="KITCHEN"><![CDATA[
+	<p>
+		Kate's kitchen is a tiny, utilitarian space that's seen better days.
+		Takeaway boxes are stacked in a precarious tower beside the bin, and the countertop is mostly occupied by an extremely expensive-looking coffee machine
+		that's clearly the most valued object in the room.
+		A single mug sits beside it bearing a slogan that would make most people blush.
+	</p>
+	<p>
+		There's one clean plate in the drying rack.
+		Just one.
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="LOUNGE"><![CDATA[
+	<p>
+		The lounge is a study in comfortable neglect.
+		A worn velvet sofa &mdash; deep plum, sagging in the middle &mdash; faces a flat-screen that's been left on and muted, flickering through some daytime programme.
+		Fashion magazines are stacked on every available surface, interspersed with empty glasses and the occasional stray piece of jewellery.
+	</p>
+	<p>
+		A blanket lies crumpled on the sofa, still holding the impression of someone who fell asleep here recently and didn't bother to tidy up.
+		The curtains are half-drawn, letting in slats of dusty light.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BEDROOM"><![CDATA[
 	<p>
-		Kate's bedroom is exactly what you'd expect and nothing you'd admit to expecting.
-		A large bed dominates the space, sheets tangled and half-pulled off.
-		The walls are covered in a chaotic mix of band posters, sketches, and a few framed tattoo designs.
-		Candles in various states of melt sit on every flat surface.
+		Kate's bedroom is dominated by a large, unmade bed with rumpled black sheets and too many pillows.
+		Blackout curtains are drawn against the daylight, leaving the room in a dim, warm half-dark.
+		Clothes are scattered across the floor &mdash; a skater dress draped over a chair, underwear in a trail toward the bathroom.
 	</p>
 	<p>
-		A vanity mirror is propped against one wall, its surface smudged with lipstick marks.
-		Clothes are draped over a chair that hasn't been sat in for its intended purpose in weeks.
+		The air in here is heavier &mdash; her perfume, yes, but something warmer underneath it. Lived-in. Intimate.
+		A vanity table against one wall is cluttered with cosmetics, and a full-length mirror beside it has a crack running diagonally across the glass.
+	</p>
+	#IF(game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count") >= 9)
+	<p>
+		A large dog bed sits at the foot of the bed, a folded blanket laid neatly inside it.
+		#IF(game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count") >= 16)
+		'Dogmeat' has been stitched into the blanket in the same bright pink thread as the welcome mat downstairs.
+		#ENDIF
+		It's the tidiest thing in the room.
+	</p>
+	#ENDIF
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="BATHROOM"><![CDATA[
+	<p>
+		Every surface in Kate's bathroom is covered in cosmetics and hair products &mdash; bottles, tubes, and jars crowding each other for space on the sink,
+		the windowsill, and even the edge of the claw-foot tub in the corner.
+		Half-melted candles have been lit so many times they're just lumps of coloured wax fused to whatever surface they were last set down on.
+	</p>
+	<p>
+		The mirror above the sink has a lipstick mark on it &mdash; a perfect kiss print in dark red.
+		A fluffy towel is draped over the tub's edge, and the whole room smells of expensive shampoo and steam.
 	</p>
 	]]>
 	</htmlContent>

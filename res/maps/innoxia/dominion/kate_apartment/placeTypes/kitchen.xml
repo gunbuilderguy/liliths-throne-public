@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <placeType>
 	<worldRegion>DOMINION</worldRegion>
-	<name><![CDATA[Kate's Bedroom]]></name>
-	<tooltipDescription><![CDATA[Kate's bedroom. A large unmade bed dominates the room, blackout curtains drawn against the daylight.]]></tooltipDescription>
-	<virginityLossDescription><![CDATA[in Kate's bedroom]]></virginityLossDescription>
-	<sexBlockedFromCharacterPresent>false</sexBlockedFromCharacterPresent>
-	<colour>BASE_CRIMSON</colour>
+	<name><![CDATA[Kitchen]]></name>
+	<tooltipDescription><![CDATA[A tiny kitchenette with takeaway boxes stacked by the bin and an expensive coffee machine.]]></tooltipDescription>
+	<virginityLossDescription><![CDATA[in Kate's kitchen]]></virginityLossDescription>
+	<sexBlockedFromCharacterPresent>true</sexBlockedFromCharacterPresent>
+	<colour>BASE_YELLOW</colour>
 	<backgroundColour>MAP_BACKGROUND</backgroundColour>
 	<encounterType>null</encounterType>
-	<dialogue>innoxia_places_dominion_kate_apartment_generic_bedroom</dialogue>
+	<dialogue>innoxia_places_dominion_kate_apartment_generic_kitchen</dialogue>
 	<populationPresent/>
 	<furniturePresent>true</furniturePresent>
 	<globalMapTile>false</globalMapTile>

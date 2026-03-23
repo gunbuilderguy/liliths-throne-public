@@ -11,12 +11,17 @@
 	<visibleFromStart>true</visibleFromStart>
 	<fullyRevealedFromStart>false</fullyRevealedFromStart>
 	<globalMapLocation>WORLD_MAP_DOMINION</globalMapLocation>
-	<standardPlace>innoxia_dominion_kate_apartment_entrance</standardPlace>
+	<standardPlace>innoxia_dominion_kate_apartment_hallway</standardPlace>
 	<entryFromGlobalMapLocation>innoxia_dominion_kate_apartment_entrance</entryFromGlobalMapLocation>
 	<teleportPermissions>NONE</teleportPermissions>
 	<places>
 		<place colour="#ffffff">GENERIC_IMPASSABLE</place>
+
 		<place colour="#00ff00">innoxia_dominion_kate_apartment_entrance</place>
+		<place colour="#808080">innoxia_dominion_kate_apartment_hallway</place>
+		<place colour="#ffff00">innoxia_dominion_kate_apartment_kitchen</place>
+		<place colour="#00ff80">innoxia_dominion_kate_apartment_lounge</place>
 		<place colour="#ff0000">innoxia_dominion_kate_apartment_bedroom</place>
+		<place colour="#0000ff">innoxia_dominion_kate_apartment_bathroom</place>
 	</places>
 </worldType>
