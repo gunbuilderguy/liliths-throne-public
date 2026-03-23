@@ -54,11 +54,11 @@ Target: Every narrative "beat" should use `UtilText.returnStringAtRandom()` with
 
 Starting at SIX_EXTREME, the scent of cum becomes a narrative element. The three fetish types should react to it differently:
 
-**MASOCHIST:** The scent is overwhelming/intoxicating but they lean into it, the sensory assault feeding their masochistic pleasure. At SEVEN_MONSTROUS endpoint, the scent drives them into a daze of painful ecstasy.
+**MASOCHIST:** The scent is intoxicating — they love how it assaults their senses. They actively breathe it in, the overwhelming aroma feeding their arousal. At SEVEN_MONSTROUS endpoint, the scent drives them into a daze of painful ecstasy.
 
-**SUBMISSIVE:** The scent is dizzying/overpowering but they endure it out of obedience. At SEVEN_MONSTROUS endpoint, the scent clouds their mind but their submissive instinct keeps them drinking mechanically.
+**SUBMISSIVE:** They let the scent overpower them and submit to it. They don't fight the dizzying effect — they yield to it, letting it wash over them as part of their submission. At SEVEN_MONSTROUS endpoint, they surrender entirely to the scent, drinking mechanically.
 
-**PURE_VIRGIN:** The scent is revolting/violating, an assault on their senses. At SEVEN_MONSTROUS endpoint, the scent overwhelms their consciousness mercifully, but they're horrified when awareness returns.
+**PURE_VIRGIN:** The scent is revolting/violating, an assault on their senses they desperately try to resist. But once their belly is visibly distorted from the volume, it becomes too much and they fall into a state of indifference/unconsciousness — the body continues but the mind has checked out.
 
 **Scent escalation by tier:**
 - SIX_EXTREME: Scent introduced as notable sensory element (1 mention, in the "bringing to lips" beat)
