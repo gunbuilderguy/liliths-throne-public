@@ -688,9 +688,9 @@ public class SuccubisSecrets {
 
 	} else if (index == 18
 			&& (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 1
-					|| Main.game.getDialogueFlags().getSavedLong("kate_collar_state") >= 1)
-			&& !DogmeatDialogue.isBothAtApartment()
-			&& Kate.getDogmeatRelationshipTier() >= 1) {
+					|| (Main.game.getDialogueFlags().getSavedLong("kate_collar_state") >= 1
+							&& Kate.getDogmeatRelationshipTier() >= 1))
+			&& !DogmeatDialogue.isBothAtApartment()) {
 		return new Response("Ask about Dogmeat",
 				"Ask Kate how things are going with her four-legged visitor.",
 				DogmeatDialogue.KATE_TALK_ABOUT_DOGMEAT);

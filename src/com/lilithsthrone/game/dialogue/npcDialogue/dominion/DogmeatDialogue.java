@@ -98,9 +98,20 @@ public class DogmeatDialogue {
 		@Override
 		public void applyPreParsingEffects() {
 			Main.game.getDialogueFlags().setSavedLong("dogmeat_found", Main.game.getMinutesPassed());
-			// If Kate's hidden tracking enchantment is still on the collar, she now has a fix on his location.
+			// If Kate's hidden tracking enchantment was placed on the collar, activate the schedule.
 			if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
 				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_schedule_active", 1);
+				// Check if the player already removed the tracking enchantment before visiting.
+				// If they did, the collar won't have the CLOTHING_TRACKING effect anymore.
+				AbstractClothing collar = Main.game.getPlayer().getClothingInSlot(
+						com.lilithsthrone.game.inventory.InventorySlot.NECK);
+				boolean trackingStillPresent = collar != null
+						&& collar.getEffects().stream().anyMatch(
+								e -> e.getSecondaryModifier() == com.lilithsthrone.game.inventory.enchanting.TFModifier.CLOTHING_TRACKING);
+				if (!trackingStillPresent) {
+					// Player removed the enchantment before coming here — mark it as removed.
+					Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_removed", 1);
+				}
 				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_tracking_active", 0);
 			}
 		}

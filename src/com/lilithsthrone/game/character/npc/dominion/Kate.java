@@ -374,7 +374,13 @@ public class Kate extends NPC {
 	@Override
 	public void turnUpdate() {
 		// If the player has removed the tracking enchant from the collar, update state.
-		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1) {
+		// Check both when tracking_active==1 (pre-visit) and after schedule is active
+		// (post-visit, where applyPreParsingEffects already consumed tracking_active).
+		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_active") == 1
+				|| (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1
+						&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_removed") == 0
+						&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_tracking_confronted") == 0
+						&& Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_informed") == 0)) {
 			AbstractClothing collar = Main.game.getPlayer().getClothingInSlot(InventorySlot.NECK);
 			boolean trackingPresent = collar != null
 					&& collar.getClothingType().getId().equals("innoxia_neck_dogmeat_collar_engraved")
@@ -405,11 +411,13 @@ public class Kate extends NPC {
 
 		if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_schedule_active") == 1) {
 			Dogmeat dogmeat = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			// If Dogmeat is now a companion, skip the apartment visit logic entirely.
+			// If Dogmeat is now a companion, skip the visit logic entirely.
 			if (dogmeat != null && Main.game.getPlayer().getCompanions().contains(dogmeat)) {
 				// fall through to normal shop-presence logic below
 			} else if (dogmeat != null
-					&& this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))) {
+					&& (this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))
+							|| this.getWorldLocation().equals(dogmeat.getWorldLocation()))) {
+				// Kate is either at her apartment (tier 3+) or at Dogmeat's alley (tier 0-2).
 
 				long arrivalMinute = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute");
 				long now           = Main.game.getMinutesPassed();
@@ -444,12 +452,13 @@ public class Kate extends NPC {
 				}
 			}
 		}
-		// Normal shop presence logic — skip if Kate is currently on a home visit or at her apartment.
+		// Normal shop presence logic — skip if Kate is currently on a home visit or on a scheduled visit.
 		boolean onHomeVisit = Main.game.getDialogueFlags().getSavedLong("kate_home_visit_active") == 1
 				&& (this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_FIRST_FLOOR)
 						|| this.getWorldLocation().equals(WorldType.LILAYAS_HOUSE_GROUND_FLOOR));
 		boolean atApartment = this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"));
-		if (!onHomeVisit && !atApartment && !Main.game.getCharactersPresent().contains(this)) {
+		boolean onScheduledVisit = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute") > 0;
+		if (!onHomeVisit && !atApartment && !onScheduledVisit && !Main.game.getCharactersPresent().contains(this)) {
 			if (Main.game.isExtendedWorkTime()) {
 				this.returnToHome();
 			} else {
@@ -516,10 +525,21 @@ public class Kate extends NPC {
 			Main.game.getDialogueFlags().setSavedLong("kate_home_visit_active", 0);
 		}
 
-		// Hour-13 safety fallback: return both NPCs from apartment if still there.
+		// Hour-13 safety fallback: return both NPCs from visit location if still there.
 		if (hour == 13) {
 			Dogmeat dogmeatFallback = (Dogmeat) Main.game.getNpc(Dogmeat.class);
-			if (this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))) {
+			// Clear any lingering visit state and return Kate to shop.
+			if (Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_arrival_minute") > 0) {
+				long actsRemaining = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_acts_remaining");
+				if (actsRemaining > 0 && dogmeatFallback != null) {
+					simulateOffscreenActs(dogmeatFallback, (int) actsRemaining);
+				}
+				long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_offscreen_count", offscreenCount + 1);
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_acts_remaining", 0);
+				Main.game.getDialogueFlags().setSavedLong("kate_dogmeat_arrival_minute", 0);
+				this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
+			} else if (this.getWorldLocation().equals(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"))) {
 				this.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_KATES_SHOP, false);
 			}
 			if (dogmeatFallback != null
@@ -535,11 +555,16 @@ public class Kate extends NPC {
 			if (dogmeat != null && !Main.game.getPlayer().getCompanions().contains(dogmeat)
 					&& !dogmeat.getWorldLocation().equals(WorldType.EMPTY)) {
 				if (hour == 11) {
-					// Both head to Kate's apartment for the visit.
-					this.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
-							PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
-					dogmeat.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
-							PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
+					// Tier 3+: both head to Kate's apartment for the visit.
+					// Below tier 3: Kate goes to Dogmeat's alley location instead.
+					if (getDogmeatRelationshipTier() >= 3) {
+						this.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
+								PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
+						dogmeat.setLocation(WorldType.getWorldTypeFromId("innoxia_dominion_kate_apartment"),
+								PlaceType.getPlaceTypeFromId("innoxia_dominion_kate_apartment_bedroom"), false);
+					} else {
+						this.setLocation(dogmeat.getWorldLocation(), dogmeat.getLocationPlace().getPlaceType(), false);
+					}
 
 					long offscreenCount = Main.game.getDialogueFlags().getSavedLong("kate_dogmeat_offscreen_count");
 					boolean hasBestiality = this.hasFetish(Fetish.FETISH_BESTIALITY);
