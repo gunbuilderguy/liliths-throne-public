@@ -67,7 +67,7 @@ public class Sally extends NPC {
 	public Sally(boolean isImported) {
 		super(isImported,
 				new NameTriplet("Sally"), "Hayward",
-				"Having taken over her parents' ranch at a young age, Sally is the sole owner and operator of Sally's Stables, a horse-morph breeding farm out in the Foloi Fields.",
+				"Having taken over her parents' ranch at a young age, Sally is the sole owner and operator of Sally's Stables, a horse breeding farm out in the Foloi Fields.",
 				19, Month.JUNE, 8,
 				10, Gender.F_V_B_FEMALE, Subspecies.HUMAN, RaceStage.HUMAN,
 				new CharacterInventory(false, 10),

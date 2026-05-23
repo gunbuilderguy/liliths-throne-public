@@ -134,7 +134,9 @@ import com.lilithsthrone.game.character.npc.fields.Arion;
 import com.lilithsthrone.game.character.npc.fields.Astrapi;
 import com.lilithsthrone.game.character.npc.fields.Aurokaris;
 import com.lilithsthrone.game.character.npc.fields.Belle;
+import com.lilithsthrone.game.character.npc.fields.Blaze;
 import com.lilithsthrone.game.character.npc.fields.Ceridwen;
+import com.lilithsthrone.game.character.npc.fields.Copper;
 import com.lilithsthrone.game.character.npc.fields.Dale;
 import com.lilithsthrone.game.character.npc.fields.Daphne;
 import com.lilithsthrone.game.character.npc.fields.Eisek;
@@ -171,6 +173,7 @@ import com.lilithsthrone.game.character.npc.fields.SallyStallion;
 import com.lilithsthrone.game.character.npc.fields.Silvia;
 import com.lilithsthrone.game.character.npc.fields.Sleip;
 import com.lilithsthrone.game.character.npc.fields.Sterope;
+import com.lilithsthrone.game.character.npc.fields.Thunder;
 import com.lilithsthrone.game.character.npc.fields.Ursa;
 import com.lilithsthrone.game.character.npc.fields.Vronti;
 import com.lilithsthrone.game.character.npc.fields.Wynter;
@@ -2738,6 +2741,9 @@ public class Game implements XMLSaving {
 			// Sally's Stables:
 
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Sally.class))) { addNPC(new Sally(), false); addedNpcs.add(Sally.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Thunder.class))) { addNPC(new Thunder(), false); addedNpcs.add(Thunder.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Blaze.class))) { addNPC(new Blaze(), false); addedNpcs.add(Blaze.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Copper.class))) { addNPC(new Copper(), false); addedNpcs.add(Copper.class); }
 
 			// Headless horseman:
 

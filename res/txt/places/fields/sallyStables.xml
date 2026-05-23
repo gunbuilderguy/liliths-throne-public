@@ -5,7 +5,7 @@
 
 	<htmlContent tag="EXTERIOR"><![CDATA[
 	<p>
-		The dirt track from the main road leads you to the entrance of Sally's Stables, a well-kept horse ranch nestled in a sheltered valley. A cluster of traditional wooden stable buildings are arranged around a central yard, their dark timber frames and mossy tiled roofs giving the place a rustic, homey charm. White-painted fences enclose several paddocks stretching behind the main buildings, where you can see a handful of magnificent horse-morph stallions grazing.
+		The dirt track from the main road leads you to the entrance of Sally's Stables, a well-kept horse ranch nestled in a sheltered valley. A cluster of traditional wooden stable buildings are arranged around a central yard, their dark timber frames and mossy tiled roofs giving the place a rustic, homey charm. White-painted fences enclose several paddocks stretching behind the main buildings, where you can see a handful of magnificent stallions grazing.
 	</p>
 	<p>
 		#IF(game.isDayTime())
@@ -230,14 +230,14 @@
 		The grooming stalls are a row of spacious, well-bedded stalls separated by sturdy wooden partitions. Each stall has a cross-tie station where a stallion can be secured for grooming, and hooks on the partition walls hold assortments of brushes, curry combs, and hoof picks.
 	</p>
 	<p>
-		Several impressive horse-morph stallions are in their stalls, their powerful frames and glossy coats a testament to Sally's care. They watch you with alert, intelligent eyes, some nickering softly in greeting.
+		Several impressive stallions are in their stalls, their powerful frames and glossy coats a testament to Sally's care. They watch you with alert, intelligent eyes, some nickering softly in greeting.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="STALL1_WORK_START"><![CDATA[
 	<p>
-		Rolling up your sleeves, you grab a grooming kit from the wall and approach the nearest stallion. He's a big, muscular horse-morph with a sleek coat, and he stamps one hoof impatiently as you clip the cross-ties to his halter.
+		Rolling up your sleeves, you grab a grooming kit from the wall and approach the nearest stallion. He's a big, muscular horse with a sleek coat, and he stamps one hoof impatiently as you clip the cross-ties to his halter.
 	</p>
 	<p>
 		You start with the curry comb, working in firm, circular motions across his broad shoulders and barrel, loosening dirt and dead hair from his thick coat. The stallion's muscles twitch beneath your hands, but he soon settles into the rhythm, letting out a contented sigh.
@@ -437,7 +437,7 @@
 		[sally.speechNoExtraEffects(Doing it by hand gives you way more control. You can feel exactly when he's getting close, adjust your pressure, and get a better collection. Plus, there are tricks to boost the yield - massaging his balls, a bit of teasing beforehand, even rimming if you're comfortable with it. A fertility pill before the session helps too. With all that, you can get up to triple the normal amount!)]
 	</p>
 	<p>
-		She tosses you a box of horse-morph-sized condoms.
+		She tosses you a box of oversized condoms.
 	</p>
 	<p>
 		[sally.speechNoExtraEffects(Condom for the premium orders, bucket for the standard. I'll show you the technique!)]
