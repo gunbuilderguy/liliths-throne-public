@@ -268,11 +268,11 @@
 
 
 		<!-- Sally's Stables: -->
-			<!-- Jed talk flags: -->
-			<flag dailyReset="true">jed_talk_himself</flag>
-			<flag dailyReset="true">jed_talk_work</flag>
-			<flag dailyReset="true">jed_talk_sally</flag>
-			<flag dailyReset="true">jed_talk_stables</flag>
+			<!-- Sally talk flags: -->
+			<flag dailyReset="true">sally_talk_herself</flag>
+			<flag dailyReset="true">sally_talk_work</flag>
+			<flag dailyReset="true">sally_talk_stables</flag>
+			<flag dailyReset="true">sally_talk_horses</flag>
 			<!-- Work flags: -->
 			<flag dailyReset="false">sally_work_started</flag>
 			<flag dailyReset="false">sally_work_offered</flag>
@@ -280,11 +280,14 @@
 			<flag dailyReset="false">sally_discovered_secret</flag>
 			<flag dailyReset="false">sally_breeding_unlocked</flag>
 			<flag dailyReset="false">sally_hand_unlocked</flag>
+			<flag dailyReset="true">sally_peeked_today</flag>
 			<!-- Saved longs (used via flags.setLong/getLong, defined in comment block below):
 				sally_work_level (The work level of the player at Sally's Stables, 0=hand, 1=breeding fleshlight, 2=breeding by hand)
 				sally_work_hours (The number of hours worked in the current session)
 				sally_total_grooming_hours (Total grooming hours worked)
 				sally_breeding_sessions (Total breeding collection sessions completed)
+				sally_stallions_refresh_week (The week number when stallions were last refreshed)
+				sally_cum_yield_multiplier (Current collection yield multiplier from actions, 100-300 representing 1x-3x)
 			-->
 
 

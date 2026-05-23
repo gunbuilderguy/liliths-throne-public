@@ -79,7 +79,6 @@ import com.lilithsthrone.game.character.npc.fields.Hammer;
 import com.lilithsthrone.game.character.npc.fields.HeadlessHorseman;
 import com.lilithsthrone.game.character.npc.fields.Heather;
 import com.lilithsthrone.game.character.npc.fields.Imsu;
-import com.lilithsthrone.game.character.npc.fields.Jed;
 import com.lilithsthrone.game.character.npc.fields.Jess;
 import com.lilithsthrone.game.character.npc.fields.Kazik;
 import com.lilithsthrone.game.character.npc.fields.Kheiron;
@@ -1348,16 +1347,6 @@ public class ParserTarget {
 		@Override
 		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
 			return Main.game.getNpc(Sally.class);
-		}
-	};
-
-	public static AbstractParserTarget JED = new AbstractParserTarget(Util.newArrayListOfValues("jed"), "") {
-		public String getDescription() {
-			return Main.game.getNpc(Jed.class).getDescription();
-		}
-		@Override
-		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
-			return Main.game.getNpc(Jed.class);
 		}
 	};
 

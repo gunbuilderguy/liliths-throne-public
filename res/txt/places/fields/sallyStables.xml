@@ -5,24 +5,24 @@
 
 	<htmlContent tag="EXTERIOR"><![CDATA[
 	<p>
-		The dirt track from the main road leads you to the entrance of Sally's Stables, a sprawling horse ranch set in a sheltered valley. A series of traditional wooden stable buildings are arranged around a central yard, their dark timber frames and tiled roofs giving the place a rustic, well-maintained charm. White-painted fences enclose several paddocks stretching out behind the main buildings, where you can see a handful of magnificent horse-morphs grazing or cantering about.
+		The dirt track from the main road leads you to the entrance of Sally's Stables, a well-kept horse ranch nestled in a sheltered valley. A cluster of traditional wooden stable buildings are arranged around a central yard, their dark timber frames and mossy tiled roofs giving the place a rustic, homey charm. White-painted fences enclose several paddocks stretching behind the main buildings, where you can see a handful of magnificent horse-morph stallions grazing.
 	</p>
 	<p>
 		#IF(game.isDayTime())
-			In the warm daylight, the stables have a peaceful, idyllic quality to them. The sound of horses whinnying and the occasional clang of a farrier's hammer give the place a lively atmosphere.
+			In the warm daylight, the stables have a peaceful, idyllic quality. The sound of horses nickering and the chirp of sparrows gives the place a lively atmosphere. You can see someone moving about in the yard - a slim, red-haired girl in a plaid shirt, hauling a feed bucket.
 		#ELSE
-			In the evening light, warm lanterns glow from within the stable buildings, casting a cosy amber light across the yard. The place is quieter now, though you can still hear the occasional soft whinny from within the stalls.
+			In the evening light, warm lanterns glow from within the stable buildings, casting a cosy amber glow across the yard. The place is quieter now, though you can still hear the occasional whinny from within.
 		#ENDIF
 	</p>
 	<p>
-		A large wooden sign above the main gate reads 'Sally's Stables' in bold, hand-painted letters, and beneath it, a smaller sign advertises: [style.italicsGood(Stable Hands Wanted - Enquire Within)].
+		A hand-painted wooden sign above the main gate reads 'Sally's Stables' in cheerful, slightly uneven letters. Beneath it, a smaller sign advertises: [style.italicsGood(Help Wanted - Enquire Within)].
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="EXTERIOR_ENTER"><![CDATA[
 	<p>
-		Deciding to take a closer look, you push open the wooden gate and [pc.walk] into the stable yard. The ground beneath your [pc.feet] is hard-packed dirt, well-worn by countless hooves and boots. The main stable block rises up before you, its wide double doors standing open in welcome.
+		You push open the wooden gate and [pc.walk] into the stable yard. The ground beneath your [pc.feet] is hard-packed dirt, worn smooth by years of hooves and boots. The smell of hay, horse, and fresh earth fills your nostrils.
 	</p>
 	]]>
 	</htmlContent>
@@ -32,24 +32,21 @@
 
 	<htmlContent tag="EXIT"><![CDATA[
 	<p>
-		You're standing in the main yard of Sally's Stables, a wide, open area of hard-packed earth surrounded by the ranch's various buildings. A water trough sits against one wall, and several hay bales are stacked neatly beside the main stable entrance. The air is thick with the earthy scent of horses, hay, and leather.
+		You're standing in the main yard of Sally's Stables, a wide, open area of hard-packed earth surrounded by the ranch's wooden buildings. A water trough sits against one wall, and several hay bales are stacked neatly beside the main stable entrance. The air is thick with the earthy scent of horses, hay, and leather.
 	</p>
 	<p>
-		#IF(jed.getLocationPlaceType()==PLACE_TYPE_innoxia_fields_sallyStables_reception)
-			Through the open door to the reception area, you can see Jed busily organising paperwork behind his desk.
+		#IF(sally.getLocationPlaceType()==PLACE_TYPE_innoxia_fields_sallyStables_reception)
+			Through the open door, you can see Sally at her desk, her ginger braid draped over one shoulder as she scribbles something in a ledger.
 		#ELSE
-			The reception area beyond the open door appears to be unattended at the moment.
+			The reception area seems empty at the moment - Sally must be elsewhere in the stables.
 		#ENDIF
-	</p>
-	<p>
-		From here, you could head inside to the reception, or leave through the main gate and head back out into the Foloi Fields.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="EXIT_LEAVE"><![CDATA[
 	<p>
-		Having had enough of Sally's Stables for now, you [pc.walk] back through the main gate and head out into the Foloi Fields...
+		Having had enough of the stables for now, you [pc.walk] back through the main gate and head out into the Foloi Fields...
 	</p>
 	]]>
 	</htmlContent>
@@ -59,10 +56,10 @@
 
 	<htmlContent tag="CORRIDOR"><![CDATA[
 	<p>
-		The main aisle of the stable block is wide and well-swept, with straw scattered across the stone floor. Heavy wooden beams support the high ceiling overhead, and iron lanterns hang from hooks at regular intervals, keeping the interior well-lit. The warm scent of hay and horse fills the air, mingled with the not-unpleasant smell of leather and saddle soap.
+		The main aisle of the stable block is wide and well-swept, with straw scattered across the stone floor. Heavy wooden beams support the high ceiling overhead, and iron lanterns hang from hooks at regular intervals. The warm scent of hay and horse fills the air, mingled with the not-unpleasant smell of leather and saddle soap.
 	</p>
 	<p>
-		Stall doors line one side of the aisle, each one bearing a brass nameplate with a stallion's name engraved on it. On the other side, doors lead to the tack room, Sally's office, and other utility rooms. At the far end, a wide door opens onto the paddock.
+		Stall doors line one side of the aisle, each bearing a brass nameplate with a stallion's name. On the other side, doors lead to the tack room, Sally's office, and the bunkhouse. At the far end, a wide door opens onto the paddock.
 	</p>
 	]]>
 	</htmlContent>
@@ -72,19 +69,20 @@
 
 	<htmlContent tag="RECEPTION"><![CDATA[
 	<p>
-		The reception area is a modest but tidy room, with a large wooden desk dominating the centre. Behind it, a noticeboard is covered in schedules, feeding charts, and competition notices. A few wooden chairs line the walls for waiting visitors, and a rack by the door holds several pairs of muddy boots and well-worn riding gloves.
+		The reception is a modest, lived-in room that doubles as Sally's front office. A battered wooden desk sits in the centre, covered in feed invoices, farrier bills, and a few well-thumbed horse magazines. Rosettes and photos of prize stallions cover the walls. A pair of muddy boots sits by the door, and a kettle steams gently on a little stove in the corner.
 	</p>
 	]]>
 	</htmlContent>
 
-	<htmlContent tag="RECEPTION_JED_PRESENT"><![CDATA[
+	<htmlContent tag="RECEPTION_SALLY_PRESENT"><![CDATA[
 	<p>
-		#IF(jed.isPlayerKnowsName())
-			Jed is behind the desk, his tall horse-morph ears flicking attentively as he looks up at you with a friendly smile.
-			[jed.speechNoExtraEffects(Hey there, [pc.name]! What can I do for you?)]
+		#IF(sally.isPlayerKnowsName())
+			Sally looks up from her desk with a bright, freckled smile, tucking a loose strand of ginger hair behind her ear.
+			[sally.speechNoExtraEffects(Oh hey, [pc.name]! What's up?)]
 		#ELSE
-			A tall horse-morph is sitting behind the reception desk, his long face breaking into a friendly smile as he notices your arrival. His chestnut-coloured fur is neatly groomed, and he's wearing a simple plaid work shirt rolled up to his elbows.
-			[jed.speechNoExtraEffects(Welcome to Sally's Stables! I'm Jed, the head hand here. What can I help you with?)]
+			A young woman is sitting behind the desk - she can't be much older than nineteen. She's got a mane of bright ginger hair pulled back in a messy braid, a dusting of freckles across her upturned nose, and the kind of sun-kissed, lightly tanned skin that comes from spending every day outdoors. She's wearing a red plaid shirt with the sleeves rolled up, denim shorts, and well-worn boots.
+			She looks up as you enter and breaks into a warm, easy smile.
+			[sally.speechNoExtraEffects(Hey there! Welcome to my stables! I'm Sally - what can I do for you?)]
 		#ENDIF
 	</p>
 	]]>
@@ -93,54 +91,57 @@
 
 	<!-- Talk topics: -->
 
-	<htmlContent tag="JED_TALK_HIMSELF"><![CDATA[
+	<htmlContent tag="SALLY_TALK_HERSELF"><![CDATA[
 	<p>
-		[jed.speechNoExtraEffects(Me? Oh, I've been working here for about six years now. Started out just like you would, mucking stalls and hauling feed. Sally took a liking to me though, and before long I was running the day-to-day. Can't complain, really - the work's honest and the stallions are good company.)]
+		[sally.speechNoExtraEffects(Me? Oh, there's not much to tell, really. I grew up here - my parents started this place before I was born. I've been mucking stalls and grooming horses since I could walk. When they retired last year, I took over the whole operation.)]
 	</p>
 	<p>
-		He scratches behind one of his long ears thoughtfully.
+		She grins, fidgeting with the end of her braid.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(Plus, Sally's a good boss. Tough, but fair. She knows horses better than anyone I've ever met.)]
-	</p>
-	]]>
-	</htmlContent>
-
-	<htmlContent tag="JED_TALK_WORK"><![CDATA[
-	<p>
-		[jed.speechNoExtraEffects(The work here's pretty straightforward. We mostly deal with stallions - grooming, feeding, exercising, that sort of thing. Sally breeds 'em for competition and sale, so they need to be in top condition. A well-groomed stallion can fetch a premium price, so we take it seriously.)]
-	</p>
-	<p>
-		He leans forward on the desk.
-	</p>
-	<p>
-		[jed.speechNoExtraEffects(If you're interested in working here, just let me know. We can always use an extra pair of hands, especially during competition season. The pay's decent, and you'll learn a lot about horse-morph care.)]
+		[sally.speechNoExtraEffects(I know I'm young for it, but honestly? I think I was born to do this. I love these horses. Every single one of 'em.)]
 	</p>
 	]]>
 	</htmlContent>
 
-	<htmlContent tag="JED_TALK_SALLY"><![CDATA[
+	<htmlContent tag="SALLY_TALK_WORK"><![CDATA[
 	<p>
-		[jed.speechNoExtraEffects(Sally? She's the heart and soul of this place. Been running it for nigh on twenty years now. She's a horse-morph herself, which helps - she understands the stallions better than most. Got a real gift for it.)]
+		[sally.speechNoExtraEffects(The work's mostly just taking good care of the boys - that's what I call the stallions. Grooming, feeding, mucking out, exercise. Nothing fancy, just honest, hard graft. The kind of thing that's satisfying when you do it right, you know?)]
 	</p>
 	<p>
-		Jed pauses, choosing his next words carefully.
+		She leans forward, green eyes bright with enthusiasm.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(She can be a bit... hands-on with her methods, I suppose you'd say. But the results speak for themselves. Our stallions are the finest in the Foloi Fields, bar none.)]
+		[sally.speechNoExtraEffects(If you want to help out, I'd really appreciate it. I've got nine stallions to look after, and there's only one of me! The pay's [style.boldGood(400 flames)] per shift - four hours of grooming work. What do you say?)]
 	</p>
 	]]>
 	</htmlContent>
 
-	<htmlContent tag="JED_TALK_STABLES"><![CDATA[
+	<htmlContent tag="SALLY_TALK_STABLES"><![CDATA[
 	<p>
-		[jed.speechNoExtraEffects(The stables themselves have been here for ages. Sally inherited the place from her mother, who built it up from nothing. We've got about two dozen stallions at any given time, all horse-morphs. The grooming stalls are where the day-to-day work happens - brushing, feeding, hoof care, that sort of thing.)]
+		[sally.speechNoExtraEffects(The stables have been here for about twenty years now. Mum and Dad built it up from nothing - just a paddock and a shed at first. Now we've got proper stalls, a tack room, bunkhouse for hands, and the paddock out back.)]
 	</p>
 	<p>
-		He gestures vaguely towards the back of the stables.
+		She gestures around the room with obvious pride.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(There's also the breeding stalls further back, but those are mostly Sally's domain. And the paddock out back is where the stallions get their exercise. It's a good setup, all things considered.)]
+		[sally.speechNoExtraEffects(Three of the stallions are mine - Thunder, Blaze, and Copper. The other six belong to folks from around the area who board them here. Those change around from time to time as owners come and go.)]
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="SALLY_TALK_HORSES"><![CDATA[
+	<p>
+		Sally's face absolutely lights up at the mention of her horses.
+	</p>
+	<p>
+		[sally.speechNoExtraEffects(Oh, they're gorgeous, all of them! Thunder's my biggest - he's a huge bay with the sweetest temperament you've ever seen. Blaze is a chestnut, bit of a handful but he's got the best conformation for competition. And Copper's my old faithful - dapple grey, gentle as a lamb.)]
+	</p>
+	<p>
+		She sighs happily.
+	</p>
+	<p>
+		[sally.speechNoExtraEffects(Horse-morphs are amazing creatures. People think they're just big animals, but they've all got their own personalities. You learn to read 'em after a while - when they're happy, when they're stressed, when they need something...)]
 	</p>
 	]]>
 	</htmlContent>
@@ -150,13 +151,13 @@
 
 	<htmlContent tag="WORK_SIGNUP"><![CDATA[
 	<p>
-		[jed.speechNoExtraEffects(Great, so you want to work here? Alright, let me go over the basics. You'd be starting as a stable hand - that means grooming the stallions, mucking out stalls, filling water troughs, and hauling feed bags. It's honest work, but it's hard work. You'll be paid [style.boldGood(400 flames)] for each four-hour shift you put in.)]
+		[sally.speechNoExtraEffects(Oh, you want to help out? Brilliant! So basically, you'd be grooming the stallions - brushing, combing, picking hooves, checking for any nicks or swelling. It's physical work but it's not complicated. The boys are all well-behaved, mostly.)]
 	</p>
 	<p>
-		He rummages behind the desk and produces a simple leather work glove.
+		She rummages in a drawer and produces a worn leather apron.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(Here, take this. It's nothing fancy, but it'll mark you as one of our hands so the stallions know you're supposed to be here. So, what do you say? Ready to sign on?)]
+		[sally.speechNoExtraEffects(Wear this while you're working - keeps your clothes clean. Well, clean-ish. So, you in?)]
 	</p>
 	]]>
 	</htmlContent>
@@ -166,20 +167,20 @@
 		[pc.speechNoExtraEffects(Sure, I'll give it a go.)]
 	</p>
 	<p>
-		Jed breaks into a broad grin, his tail swishing behind him.
+		Sally beams at you, practically bouncing on her heels.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(Excellent! Welcome aboard, [pc.name]! Head on down to the grooming stalls whenever you're ready to start your first shift. The brushes and supplies are all there - just pick a stallion and get to work. I'll be here if you need anything.)]
+		[sally.speechNoExtraEffects(Yay! Welcome aboard, [pc.name]! Head on down to the grooming stalls whenever you're ready. The brushes and kit are all hanging on the wall - just grab what you need and pick a stallion. Give me a shout if you need any help!)]
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="WORK_SIGNUP_DECLINE"><![CDATA[
 	<p>
-		[pc.speechNoExtraEffects(Actually, I think I'll pass for now.)]
+		[pc.speechNoExtraEffects(Maybe another time.)]
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(No worries at all. The offer's always open if you change your mind. Feel free to look around in the meantime!)]
+		[sally.speechNoExtraEffects(No worries! The offer's always open. Feel free to have a look around anyway!)]
 	</p>
 	]]>
 	</htmlContent>
@@ -189,17 +190,14 @@
 
 	<htmlContent tag="OFFICE"><![CDATA[
 	<p>
-		Sally's office is a wonderfully cluttered room that speaks of a lifetime spent around horses. A heavy oak desk sits beneath a window overlooking the paddock, its surface barely visible beneath stacks of breeding charts, veterinary reports, and competition entry forms. Shelves line every wall, crammed with rosettes, trophies, and framed photographs of prize-winning stallions.
-	</p>
-	<p>
-		The room smells of old leather and wood polish, with a faint undercurrent of the earthy horse-scent that permeates the entire stable. A well-worn leather armchair sits in one corner, clearly Sally's favourite spot for going over paperwork.
+		Sally's office is a wonderfully cluttered little room. A heavy oak desk sits beneath a window overlooking the paddock, its surface barely visible beneath stacks of breeding charts, veterinary reports, and competition entry forms. Rosettes and framed photographs cover every wall. The room smells of old leather and hay, with a faint undercurrent of Sally's own scent - something floral mixed with the earthiness of the stables.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="OFFICE_SALLY_PRESENT"><![CDATA[
 	<p>
-		Sally is sitting behind her desk, her reading glasses perched on the end of her long equine nose as she pores over a breeding chart. She looks up as you enter, pushing her glasses up with one hoof-like hand.
+		Sally is sitting behind her desk, chewing the end of a pencil as she frowns at a breeding chart. She looks up as you enter, pushing a stray lock of ginger hair out of her face.
 	</p>
 	]]>
 	</htmlContent>
@@ -209,10 +207,7 @@
 
 	<htmlContent tag="TACK_ROOM"><![CDATA[
 	<p>
-		The tack room is a treasure trove of equestrian equipment. Rows of polished saddles sit on wooden racks along one wall, while bridles, halters, and lead ropes hang from hooks on the other. Glass-fronted cabinets house an impressive collection of grooming supplies - brushes, combs, hoof picks, and bottles of coat conditioner.
-	</p>
-	<p>
-		Everything is meticulously organised and well-maintained, speaking to the care and professionalism with which Sally runs her operation. A workbench in the corner holds leather-working tools for repairing tack, and the rich smell of saddle soap and neatsfoot oil fills the air.
+		The tack room is neatly organised despite its cramped size. Saddles sit on wooden racks, bridles and halters hang from hooks, and a glass-fronted cabinet holds grooming supplies. A workbench in one corner has leather-working tools for tack repairs. The rich smell of saddle soap fills the air.
 	</p>
 	]]>
 	</htmlContent>
@@ -222,10 +217,7 @@
 
 	<htmlContent tag="BUNKHOUSE"><![CDATA[
 	<p>
-		The bunkhouse is a cosy, if spartan, accommodation for the stable hands. Two sets of wooden bunk beds line the walls, each made up with clean but simple linen. A small kitchenette in one corner has a kettle and a few mugs, while a doorway leads to a basic washroom with a shower and toilet.
-	</p>
-	<p>
-		Personal effects are scattered about - a dog-eared novel on one bunk, a pair of riding boots tucked beneath another. The room has a lived-in warmth to it, and while it's nothing fancy, it's clean and dry.
+		The bunkhouse is spartan but cosy - a couple of bunk beds with clean linen, a kitchenette with a kettle, and a basic washroom. It doesn't see much use these days, since Sally runs the place mostly by herself, but it's kept clean and ready for any extra hands.
 	</p>
 	]]>
 	</htmlContent>
@@ -235,184 +227,153 @@
 
 	<htmlContent tag="STALL1"><![CDATA[
 	<p>
-		The grooming stalls are a row of spacious, well-bedded stalls separated by sturdy wooden partitions. Each stall has a cross-tie station where a stallion can be secured for grooming, and hooks on the partition walls hold an assortment of brushes, curry combs, and hoof picks.
+		The grooming stalls are a row of spacious, well-bedded stalls separated by sturdy wooden partitions. Each stall has a cross-tie station where a stallion can be secured for grooming, and hooks on the partition walls hold assortments of brushes, curry combs, and hoof picks.
 	</p>
 	<p>
-		Several impressive horse-morph stallions are in their stalls, their powerful frames and glossy coats a testament to the quality of care they receive here. They watch you with alert, intelligent eyes as you [pc.walk] past, some nickering softly in greeting.
+		Several impressive horse-morph stallions are in their stalls, their powerful frames and glossy coats a testament to Sally's care. They watch you with alert, intelligent eyes, some nickering softly in greeting.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="STALL1_WORK_START"><![CDATA[
 	<p>
-		Rolling up your sleeves, you grab a grooming kit from the tack wall and approach the nearest stallion. He's a big, muscular horse-morph with a sleek chestnut coat, and he stamps one hoof impatiently as you clip the cross-ties to his halter.
+		Rolling up your sleeves, you grab a grooming kit from the wall and approach the nearest stallion. He's a big, muscular horse-morph with a sleek coat, and he stamps one hoof impatiently as you clip the cross-ties to his halter.
 	</p>
 	<p>
-		[pc.speechNoExtraEffects(Easy there, big fella. Let's get you looking sharp.)]
-	</p>
-	<p>
-		You start with the curry comb, working in firm, circular motions across his broad shoulders and barrel, loosening the dirt and dead hair from his thick coat. The stallion's muscles twitch beneath your hands, but he soon settles into the rhythm, letting out a contented sigh.
+		You start with the curry comb, working in firm, circular motions across his broad shoulders and barrel, loosening dirt and dead hair from his thick coat. The stallion's muscles twitch beneath your hands, but he soon settles into the rhythm, letting out a contented sigh.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="STALL1_WORK_CONTINUE"><![CDATA[
 	<p>
-		You continue your work, switching between stallions as you work your way down the row of stalls. The repetitive, physical nature of the grooming is oddly soothing - brush, comb, pick hooves, check for any cuts or swelling, move on to the next one.
+		You continue working your way down the row, switching between stallions. The physical, repetitive nature of the grooming is oddly soothing - brush, comb, pick hooves, check for cuts, move to the next.
 	</p>
 	<p>
-		By the time you've finished, your arms are aching and you're covered in a fine layer of horse hair, but there's a satisfying sense of accomplishment in seeing a row of gleaming, well-groomed stallions watching you contentedly from their stalls.
+		By the time you've finished, your arms are aching and you're covered in a fine layer of horse hair, but there's a satisfying sense of accomplishment in seeing a row of gleaming, well-groomed stallions watching you contentedly.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="STALL1_WORK_END"><![CDATA[
 	<p>
-		You set down the grooming kit and wipe the sweat from your brow. That was hard work, but the stallions are looking magnificent. You've earned your pay for this shift.
+		You set down the grooming kit and wipe the sweat from your brow. That was hard work, but the stallions look magnificent. You've earned your [style.boldGood(400 flames)] for this shift.
 	</p>
 	]]>
 	</htmlContent>
 
 
-	<!-- Breeding Stalls (stall2): -->
+	<!-- Breeding Stalls (stall2) - Discovery/Peek storyline: -->
 
 	<htmlContent tag="STALL2"><![CDATA[
 	<p>
-		The breeding stalls are set apart from the main grooming area, behind a sturdy door marked 'Authorised Personnel Only'. The stalls here are larger and more heavily reinforced than the grooming stalls, with thick rubber matting on the floors and padded walls. The lighting is dimmer, creating a more private atmosphere.
+		The breeding stalls are set apart from the main grooming area, behind a sturdy door. The stalls here are larger and more heavily reinforced, with thick rubber matting on the floors and padded walls. The lighting is dimmer.
 	</p>
 	<p>
-		A large cabinet against one wall holds various supplies - oversized fleshlights, collection buckets, and condoms designed for horse-morphs. Everything is scrupulously clean, despite the nature of the work that goes on here.
+		A large cabinet against one wall holds various supplies - oversized fleshlights, collection condoms, buckets, and bottles of lubricant. Everything is scrupulously clean.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="STALL2_LOCKED"><![CDATA[
 	<p>
-		You try the door to the breeding stalls, but it's locked. A sign reads 'Authorised Personnel Only'. It seems you'll need permission from Sally or Jed before you can access this area.
+		You try the door to the breeding stalls, but it's shut tight. You'll need to talk to Sally before you can get in here.
 	</p>
 	]]>
 	</htmlContent>
 
-
-	<!-- Paddock: -->
-
-	<htmlContent tag="PADDOCK"><![CDATA[
+	<htmlContent tag="STALL2_DOOR_AJAR"><![CDATA[
 	<p>
-		The paddock is a large, fenced area of lush grass stretching out behind the stable buildings. Several stallions are turned out here, some grazing peacefully while others canter along the fence line, their manes and tails streaming behind them.
+		As you [pc.walk] down the stable aisle in the evening quiet, you notice that the door to the breeding stalls is slightly ajar. Warm lamplight spills through the gap, and you can hear soft, rhythmic sounds coming from within - and a familiar voice murmuring soothingly.
 	</p>
 	<p>
-		A line of mature oak trees along one side provides welcome shade, and a large water trough sits near the gate. From here, you have a clear view of the surrounding Foloi Fields, rolling away to the horizon in every direction.
+		That's definitely Sally in there. The door's been left open just enough that you could peek through without being seen...
 	</p>
 	]]>
 	</htmlContent>
 
-
-	<!-- Sally missing / discovery storyline: -->
-
-	<htmlContent tag="SALLY_MISSING_JED"><![CDATA[
+	<htmlContent tag="STALL2_PEEK"><![CDATA[
 	<p>
-		You notice that Sally doesn't seem to be in her usual spot. Curious, you wander over to Jed's desk.
+		Pressing yourself against the wall, you carefully peer through the gap in the door...
 	</p>
 	<p>
-		[pc.speechNoExtraEffects(Hey Jed, have you seen Sally around? I haven't spotted her for a while.)]
+		Inside, you see Sally standing beside one of the larger stallions, who's secured in a reinforced stall. She's shed her plaid shirt and is working in just her sports bra and shorts, her freckled shoulders gleaming faintly with exertion. In her hands, she holds an oversized fleshlight, which she's working over the stallion's impressive member with practised, casual efficiency.
 	</p>
 	<p>
-		Jed's ears flick back for a moment, and you notice a faint flush beneath his chestnut fur.
+		[sally.speechNoExtraEffects(There's a good boy... almost done... just relax...)]
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(Oh, uh, Sally? She's... around. Doing her evening rounds, I think. Checking on the stallions and all that. You know how she is - hands-on management and all that.)]
+		She might as well be brushing his coat for all the fuss she's making about it. Her expression is calm, focused - the same look she has when she's grooming or picking hooves. A collection bucket sits on the floor beneath the stallion, and her movements are smooth and unhurried.
 	</p>
 	<p>
-		His eyes dart away evasively.
-	</p>
-	<p>
-		[jed.speechNoExtraEffects(I wouldn't go looking for her if I were you. She doesn't like to be disturbed during her... evening routine.)]
+		You watch for a moment, transfixed, before quietly slipping away...
 	</p>
 	]]>
 	</htmlContent>
 
-	<htmlContent tag="SALLY_DISCOVERY"><![CDATA[
+	<htmlContent tag="STALL2_ENTER_DIRECTLY"><![CDATA[
 	<p>
-		As you [pc.walk] towards the breeding stalls, you hear soft, rhythmic sounds coming from within. The door, usually locked tight, has been left slightly ajar. Curiosity getting the better of you, you peer through the gap...
+		You push the door open and [pc.step] inside. Sally is standing beside one of the stallions, working an oversized fleshlight over his length with the same casual competence she brings to everything else around the stables.
 	</p>
 	<p>
-		Inside, you see Sally standing beside one of the larger stallions, who's secured in a reinforced stall. She's shed her usual work jacket and rolled up her sleeves, and in her hands she holds an oversized fleshlight, which she's working over the stallion's impressive member with practised efficiency.
+		She glances over her shoulder at you, not missing a beat in her rhythm.
 	</p>
 	<p>
-		The stallion's eyes are half-closed in pleasure, his powerful body trembling slightly as Sally murmurs soothing words to him. A large collection bucket sits on the floor beneath him, ready to catch the results of her ministrations.
+		[sally.speechNoExtraEffects(Oh, hey [pc.name]! Sorry, just finishing up the evening collections. Pull up a stool if you want - I'll be done in a tick.)]
 	</p>
 	<p>
-		Sally hasn't noticed you yet, and you stand frozen in the doorway, unsure whether to quietly slip away or make your presence known...
-	</p>
-	]]>
-	</htmlContent>
-
-	<htmlContent tag="SALLY_DISCOVERY_CAUGHT"><![CDATA[
-	<p>
-		Your [pc.foot] catches on the door frame with a soft scuff, and Sally's ears snap towards you instantly. She turns her head, her eyes widening as she spots you in the doorway. To her credit, she doesn't stop what she's doing - the stallion lets out a low, warning snort at the momentary change in rhythm, and Sally smoothly resumes her strokes.
-	</p>
-	<p>
-		[sally.speechNoExtraEffects(Well. I suppose there was no keeping this from you forever.)]
-	</p>
-	<p>
-		She nods her head towards a stool against the wall, gesturing for you to sit.
-	</p>
-	<p>
-		[sally.speechNoExtraEffects(Close the door behind you. Might as well explain, since you've seen this much.)]
+		She says it as naturally as if you'd walked in on her filling a water trough.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="SALLY_EXPLAINS"><![CDATA[
 	<p>
-		Sally continues her work as she talks, her movements steady and unhurried.
+		Sally wipes her hands on a towel and turns to face you, completely unbothered.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Breeding stallions is the real money-maker here, [pc.name]. A single collection from a champion-quality stallion can be worth more than a month of grooming fees. But it's... not the sort of thing you advertise on the sign out front, if you take my meaning.)]
+		[sally.speechNoExtraEffects(So yeah, this is the other half of the business! Stallion semen is worth a fortune - breeders pay good money for quality stock. I do the collections every evening after seven. The boys are used to me, and I know how to keep 'em calm and comfortable.)]
 	</p>
 	<p>
-		She glances at you over her shoulder.
+		She shrugs, a matter-of-fact little smile on her freckled face.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(I do the collections myself every evening. Always have. The stallions are used to me, and I know how to handle them without getting hurt. It's skilled work - you can't just grab hold and yank. You need to know the animal, read his signals, keep him calm and comfortable.)]
+		[sally.speechNoExtraEffects(I know it seems a bit... odd, maybe, if you're not used to it. But honestly, it's no different from any other part of looking after them. They need it done, I do it. Same as feeding or grooming. It's just... animal husbandry.)]
 	</p>
 	<p>
-		The stallion lets out a deep, rumbling groan, and Sally adjusts her grip on the fleshlight.
+		She glances back at the stallion, who's dozing contentedly in his stall.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Truth is, I could use some help. I've got more stallions than I can handle alone in the evenings, and some of them get... restless if they have to wait too long. How would you feel about learning the trade?)]
+		[sally.speechNoExtraEffects(Anyway, I could really use the help. Nine stallions is a lot for one pair of hands, especially in the evenings. The semen sells for [style.boldGood(twice)] what you'd get from the milking rooms in the city. Would you be up for lending a hand?)]
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="SALLY_OFFER_ACCEPT"><![CDATA[
 	<p>
-		[pc.speechNoExtraEffects(I... sure. If you think I can handle it.)]
+		[pc.speechNoExtraEffects(Sure, I can help with that.)]
 	</p>
 	<p>
-		Sally lets out a warm, whinnying laugh.
+		[sally.speechNoExtraEffects(Brilliant! I'll start you off with the fleshlights - they do most of the work for you, really. Just ease it on, let him do his thing, and catch the result in a condom or bucket. Easy peasy!)]
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(That's the spirit. Don't worry, I'll start you off easy. You can use the fleshlights at first - they do most of the work for you. Once you've got the hang of that, we'll talk about the next steps.)]
+		She gestures at the supply cabinet with a grin.
 	</p>
 	<p>
-		She nods towards the supply cabinet.
-	</p>
-	<p>
-		[sally.speechNoExtraEffects(The pay's better too - [style.boldGood(800 flames)] per session, since this is specialised work. And I'll throw in a bonus for every good collection. Come back any evening after seven and I'll show you the ropes.)]
+		[sally.speechNoExtraEffects(Come back any evening after seven and we can work together. The pay's [style.boldGood(based on what you collect)] - the semen sells at double the milking room rate, so good technique means more money. I'll show you some tricks to improve the yield too, once you've got the basics down.)]
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="SALLY_OFFER_DECLINE"><![CDATA[
 	<p>
-		[pc.speechNoExtraEffects(I appreciate the offer, but I think I'll stick to the grooming for now.)]
+		[pc.speechNoExtraEffects(I appreciate the offer, but I'll stick to grooming for now.)]
 	</p>
 	<p>
-		Sally shrugs, not seeming offended.
+		Sally nods cheerfully.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Fair enough. The offer stands if you change your mind. Just don't go telling everyone about this, alright? Bad for business if the wrong sort of people start showing up.)]
+		[sally.speechNoExtraEffects(No problem! The offer's there whenever you want it. And don't worry, I won't be weird about it - it's totally normal around here!)]
 	</p>
 	]]>
 	</htmlContent>
@@ -422,104 +383,160 @@
 
 	<htmlContent tag="BREEDING_WORK_FLESHLIGHT_START"><![CDATA[
 	<p>
-		Sally hands you one of the oversized fleshlights from the supply cabinet. It's surprisingly heavy, made from high-quality materials designed to simulate the real thing as closely as possible.
+		Sally hands you one of the oversized fleshlights from the supply cabinet. It's heavy, made from high-quality materials.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Alright, here's how it works. You approach the stallion slowly, let him see and smell the sleeve. Then you ease it on gently - don't rush it. Once he starts thrusting, just hold it steady and let him do the work. Keep a condom or the bucket underneath to catch the result. Easy as that.)]
+		[sally.speechNoExtraEffects(Right, so - approach slowly, let him see the sleeve. Ease it on gently, and once he starts thrusting, just hold it steady. Condom or bucket underneath to catch. Simple!)]
 	</p>
 	<p>
-		She guides you over to the first stallion of the evening, a powerful bay horse-morph with a thick, arched neck.
+		She guides you over to the first stallion of the evening.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(This one's Thunder. He's gentle as a lamb once he gets going. Good one to start with. I'll be right here if you need me.)]
+		[sally.speechNoExtraEffects(This one's Thunder. He's a sweetheart. I'll be right here if you need me.)]
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BREEDING_WORK_FLESHLIGHT_CONTINUE"><![CDATA[
 	<p>
-		Following Sally's instructions, you approach Thunder slowly, keeping your movements calm and deliberate. The stallion watches you with dark, intelligent eyes, his nostrils flaring as he catches your scent. You can see him starting to stiffen already, his massive member sliding free of its sheath as he anticipates what's coming.
+		Following Sally's instructions, you approach the stallion slowly. He watches you with dark eyes, nostrils flaring as he catches your scent. You can see him stiffening already, his massive member sliding free of its sheath.
 	</p>
 	<p>
-		You ease the fleshlight over him, feeling the stallion's whole body shudder at the contact. True to Sally's word, he begins thrusting almost immediately, his powerful hips rolling in a steady rhythm. You hold the sleeve firmly, bracing yourself against his strength, and position the collection bucket beneath him.
+		You ease the fleshlight over him, feeling his whole body shudder at the contact. He begins thrusting almost immediately, his powerful hips rolling in a steady rhythm. You hold the sleeve firmly and position the collection beneath.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BREEDING_WORK_FLESHLIGHT_END"><![CDATA[
 	<p>
-		After several minutes, Thunder lets out a deep, shuddering groan and you feel the fleshlight pulse in your hands as he finishes. You carefully ease the sleeve off and check the collection - a generous amount, by any standard.
+		The stallion lets out a deep, shuddering groan and finishes. You carefully ease the sleeve off and check the collection.
 	</p>
 	<p>
-		Sally gives you an approving nod from where she's been watching.
+		Sally gives you an approving thumbs-up from across the stall.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Not bad for your first time. Natural talent, I'd say. Clean up the sleeve and move on to the next one when you're ready.)]
+		[sally.speechNoExtraEffects(Nice one! Clean the sleeve and on to the next when you're ready.)]
 	</p>
 	]]>
 	</htmlContent>
 
 
-	<!-- Breeding work - By hand stage: -->
+	<!-- Breeding work - By hand unlock: -->
 
 	<htmlContent tag="BREEDING_WORK_HAND_UNLOCK"><![CDATA[
 	<p>
-		After another evening of collections, Sally pulls you aside. She looks impressed.
+		After another evening of collections, Sally pulls you aside, looking impressed.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(You've got good instincts, [pc.name]. The stallions are comfortable with you, and your collection yields have been excellent. I think you're ready for the next level.)]
+		[sally.speechNoExtraEffects(You've got really good instincts, [pc.name]. The boys are comfortable with you, and the yields have been great. I think you're ready for the hands-on approach.)]
 	</p>
 	<p>
-		She holds up her bare hands.
+		She holds up her bare hands with a casual grin.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(The fleshlights are fine for routine collections, but for the really valuable stallions, nothing beats the personal touch. Doing it by hand gives you much more control - you can feel exactly when he's getting close, adjust your pressure and speed, and get a better, cleaner collection. The yields are higher too, which means more money for everyone.)]
+		[sally.speechNoExtraEffects(Doing it by hand gives you way more control. You can feel exactly when he's getting close, adjust your pressure, and get a better collection. Plus, there are tricks to boost the yield - massaging his balls, a bit of teasing beforehand, even rimming if you're comfortable with it. A fertility pill before the session helps too. With all that, you can get up to triple the normal amount!)]
 	</p>
 	<p>
-		She tosses you a box of horse-morph-sized condoms and gestures at the bucket.
+		She tosses you a box of horse-morph-sized condoms.
 	</p>
 	<p>
-		[sally.speechNoExtraEffects(Catch it in a condom for the premium orders, or the bucket for the standard ones. I'll show you the technique.)]
+		[sally.speechNoExtraEffects(Condom for the premium orders, bucket for the standard. I'll show you the technique!)]
 	</p>
 	]]>
 	</htmlContent>
 
+
+	<!-- Breeding work - By hand: -->
+
 	<htmlContent tag="BREEDING_WORK_HAND_START"><![CDATA[
 	<p>
-		You pull on a pair of elbow-length rubber gloves and apply a generous amount of lubricant. The stallion before you is already half-erect, his flat, flared cockhead peeking out from his sheath as he senses what's about to happen.
+		You pull on elbow-length rubber gloves and apply lubricant. The stallion before you is already half-erect, his cockhead peeking out from his sheath.
 	</p>
 	<p>
-		Taking a steadying breath, you wrap both hands around his shaft, feeling the heat and weight of him. He's enormous - your fingers can barely encircle his girth - but you remember Sally's instructions: steady pressure, long strokes, read his body language.
+		Taking a steadying breath, you wrap both hands around his shaft, feeling the heat and weight of him.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BREEDING_WORK_HAND_CONTINUE"><![CDATA[
 	<p>
-		You work your hands up and down the stallion's massive shaft, feeling his pulse quicken beneath your fingers. His whole body is tense with pleasure, muscles rippling beneath his glossy coat. He stamps one hoof and lets out a deep, rumbling whinny.
-	</p>
-	<p>
-		You grab a condom from the box with one hand, deftly rolling it over his flared head while maintaining your rhythm with the other. Sally taught you well - you can feel him getting close from the way his shaft throbs and his balls tighten up.
+		You work your hands up and down the stallion's massive shaft, feeling his pulse quicken. His whole body is tense with pleasure, muscles rippling beneath his glossy coat. He stamps one hoof and lets out a deep whinny.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BREEDING_WORK_HAND_END"><![CDATA[
 	<p>
-		With a final, powerful thrust against your grip, the stallion lets out a loud whinny and finishes, his member pulsing heavily in your hands. The condom swells impressively with his output, and you carefully ease it off and tie the end, depositing it in the labelled collection container.
+		With a final powerful thrust against your grip, the stallion finishes, his member pulsing heavily in your hands. The condom swells with his output, and you carefully ease it off and tie the end, depositing it in the labelled container.
 	</p>
 	<p>
-		You give the stallion a pat on the neck as his breathing steadies, and he nuzzles against you gratefully. Despite the unusual nature of the work, there's a genuine satisfaction in doing it well.
+		You give the stallion a pat on the neck as his breathing steadies. He nuzzles against you gratefully.
 	</p>
 	]]>
 	</htmlContent>
 
 	<htmlContent tag="BREEDING_WORK_HAND_END_BUCKET"><![CDATA[
 	<p>
-		With a final, powerful thrust against your grip, the stallion lets out a loud whinny and finishes. You angle his member downwards, directing the thick, heavy spurts into the collection bucket below. It's a generous yield - Sally will be pleased.
+		With a final powerful thrust against your grip, the stallion finishes. You angle his member downwards, directing the thick, heavy spurts into the collection bucket below. A generous yield.
 	</p>
 	<p>
-		You give the stallion a pat on the neck as his breathing steadies, and reach for a towel to clean your hands. Despite the unusual nature of the work, there's a genuine satisfaction in doing it well.
+		You give the stallion a pat on the neck and reach for a towel to clean your hands.
+	</p>
+	]]>
+	</htmlContent>
+
+
+	<!-- Yield boost actions: -->
+
+	<htmlContent tag="YIELD_BALL_MASSAGE"><![CDATA[
+	<p>
+		With your free hand, you reach beneath the stallion and gently cup his heavy balls, kneading them with a firm but careful pressure. The stallion lets out a low, rumbling groan, his shaft twitching in response. You can feel his balls tighten as the stimulation takes effect.
+	</p>
+	<p>
+		[style.italicsGood(Yield increased!)]
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="YIELD_TEASE"><![CDATA[
+	<p>
+		Before starting the main collection, you spend a few minutes teasing the stallion, running your fingers lightly along his sheath and inner thighs, letting him get worked up before you even touch his shaft properly. By the time you grip him, he's rock-hard and quivering with anticipation.
+	</p>
+	<p>
+		[style.italicsGood(Yield increased!)]
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="YIELD_RIM"><![CDATA[
+	<p>
+		Steeling yourself, you move behind the stallion and press your face between his muscular haunches, extending your [pc.tongue] to tease around his tailhole. The stallion's whole body stiffens with surprise and pleasure, and he lets out a shuddering whinny. When you return to his front, his shaft is throbbing visibly harder than before.
+	</p>
+	<p>
+		[style.italicsGood(Yield greatly increased!)]
+	</p>
+	]]>
+	</htmlContent>
+
+	<htmlContent tag="YIELD_FERTILITY_PILL"><![CDATA[
+	<p>
+		You feed the stallion a fertility pill mixed in with a treat before beginning the session. The effects take hold quickly, and you can practically see his balls swell slightly as his virility kicks into overdrive.
+	</p>
+	<p>
+		[style.italicsGood(Yield increased!)]
+	</p>
+	]]>
+	</htmlContent>
+
+
+	<!-- Paddock: -->
+
+	<htmlContent tag="PADDOCK"><![CDATA[
+	<p>
+		The paddock is a large, fenced area of lush grass behind the stable buildings. Several stallions are turned out here, some grazing peacefully while others canter along the fence line, their manes and tails streaming behind them.
+	</p>
+	<p>
+		A line of oak trees along one side provides shade, and a water trough sits near the gate. From here, you have a clear view of the Foloi Fields rolling away to the horizon.
 	</p>
 	]]>
 	</htmlContent>
@@ -529,20 +546,10 @@
 
 	<htmlContent tag="WORK_PAYMENT_GROOMING"><![CDATA[
 	<p>
-		Having finished your shift, you head back to the reception to collect your pay. Jed counts out [style.boldGood(400 flames)] and slides them across the desk.
+		Sally counts out your pay with a smile.
 	</p>
 	<p>
-		[jed.speechNoExtraEffects(Good work today, [pc.name]. The stallions are looking great. Same time again whenever you're ready.)]
-	</p>
-	]]>
-	</htmlContent>
-
-	<htmlContent tag="WORK_PAYMENT_BREEDING"><![CDATA[
-	<p>
-		After finishing the evening's collections, Sally counts out your pay.
-	</p>
-	<p>
-		[sally.speechNoExtraEffects(Here you go - [style.boldGood(800 flames)] for the session. The yields were good tonight. You're a natural at this, [pc.name].)]
+		[sally.speechNoExtraEffects(Here you go - [style.boldGood(400 flames)]. The boys are looking gorgeous! Same time again whenever you're ready.)]
 	</p>
 	]]>
 	</htmlContent>

@@ -29,11 +29,8 @@ import com.lilithsthrone.game.character.body.valueEnums.Muscle;
 import com.lilithsthrone.game.character.body.valueEnums.NippleSize;
 import com.lilithsthrone.game.character.body.valueEnums.OrificeElasticity;
 import com.lilithsthrone.game.character.body.valueEnums.OrificePlasticity;
-import com.lilithsthrone.game.character.body.valueEnums.PenetrationGirth;
-import com.lilithsthrone.game.character.body.valueEnums.TesticleSize;
 import com.lilithsthrone.game.character.body.valueEnums.TongueLength;
 import com.lilithsthrone.game.character.body.valueEnums.Wetness;
-import com.lilithsthrone.game.character.effects.Perk;
 import com.lilithsthrone.game.character.effects.PerkCategory;
 import com.lilithsthrone.game.character.effects.PerkManager;
 import com.lilithsthrone.game.character.fetishes.Fetish;
@@ -70,11 +67,11 @@ public class Sally extends NPC {
 	public Sally(boolean isImported) {
 		super(isImported,
 				new NameTriplet("Sally"), "Hayward",
-				"The owner and operator of Sally's Stables, this experienced horse-morph has been breeding and raising stallions for most of her life. She's tough, practical, and deeply knowledgeable about her charges.",
-				42, Month.MARCH, 15,
-				20, Gender.F_V_B_FEMALE, Subspecies.HORSE_MORPH, RaceStage.GREATER,
+				"A cheerful, freckled farm girl who took over her parents' stables at a young age. She treats all aspects of horse care with a matter-of-fact practicality, no matter how intimate they might seem to an outsider.",
+				19, Month.JUNE, 8,
+				10, Gender.F_V_B_FEMALE, Subspecies.HUMAN, RaceStage.HUMAN,
 				new CharacterInventory(false, 10),
-				WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_office"),
+				WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_reception"),
 				true);
 
 		if(!isImported) {
@@ -99,75 +96,74 @@ public class Sally extends NPC {
 
 	@Override
 	public void setStartingBody(boolean setPersona) {
-		// Persona:
 		if(setPersona) {
 			this.setPersonalityTraits(
-					PersonalityTrait.CONFIDENT,
+					PersonalityTrait.NAIVE,
 					PersonalityTrait.KIND,
-					PersonalityTrait.BRAVE);
+					PersonalityTrait.INNOCENT);
 
-			this.setSexualOrientation(SexualOrientation.AMBIPHILIC);
+			this.setSexualOrientation(SexualOrientation.GYNEPHILIC);
 
 			this.setHistory(Occupation.NPC_BUSINESS_OWNER);
 
-			this.addFetish(Fetish.FETISH_DOMINANT);
-			this.addFetish(Fetish.FETISH_PENIS_RECEIVING);
+			this.clearFetishes();
+			this.clearFetishDesires();
 
-			this.setFetishDesire(Fetish.FETISH_ORAL_GIVING, FetishDesire.THREE_LIKE);
-			this.setFetishDesire(Fetish.FETISH_SIZE_QUEEN, FetishDesire.THREE_LIKE);
-
+			this.setFetishDesire(Fetish.FETISH_VAGINAL_RECEIVING, FetishDesire.TWO_NEUTRAL);
+			this.setFetishDesire(Fetish.FETISH_DOMINANT, FetishDesire.ONE_DISLIKE);
+			this.setFetishDesire(Fetish.FETISH_SUBMISSIVE, FetishDesire.ONE_DISLIKE);
+			this.setFetishDesire(Fetish.FETISH_SADIST, FetishDesire.ZERO_HATE);
 			this.setFetishDesire(Fetish.FETISH_MASOCHIST, FetishDesire.ZERO_HATE);
 		}
 
 		// Body:
-		// Core:
-		this.setHeight(180);
-		this.setFemininity(70);
-		this.setMuscle(Muscle.THREE_MUSCULAR.getMedianValue());
-		this.setBodySize(BodySize.TWO_AVERAGE.getMedianValue());
+		this.setHeight(163);
+		this.setFemininity(80);
+		this.setMuscle(Muscle.TWO_TONED.getMedianValue());
+		this.setBodySize(BodySize.ONE_SLENDER.getMedianValue());
 
-		// Coverings:
-		this.setEyeCovering(new Covering(BodyCoveringType.EYE_HORSE_MORPH, PresetColour.EYE_BROWN));
-		this.setSkinCovering(new Covering(BodyCoveringType.HORSE_HAIR, CoveringPattern.NONE, CoveringModifier.SHORT, PresetColour.COVERING_BROWN, false, PresetColour.COVERING_WHITE, false), true);
+		// Coverings - freckled skin, ginger hair, green eyes:
+		this.setSkinCovering(new Covering(BodyCoveringType.HUMAN, CoveringPattern.FRECKLED_FACE, CoveringModifier.SMOOTH, PresetColour.SKIN_LIGHT, false, PresetColour.SKIN_LIGHT, false), true);
+		this.setEyeCovering(new Covering(BodyCoveringType.EYE_HUMAN, PresetColour.EYE_GREEN));
 
-		this.setHairCovering(new Covering(BodyCoveringType.HAIR_HORSE_HAIR, CoveringPattern.NONE, PresetColour.COVERING_BROWN_DARK, false, PresetColour.COVERING_WHITE, false), false);
-		this.setHairLength(HairLength.THREE_SHOULDER_LENGTH.getMedianValue());
-		this.setHairStyle(HairStyle.PONYTAIL);
+		this.setHairCovering(new Covering(BodyCoveringType.HAIR_HUMAN, CoveringPattern.NONE, PresetColour.COVERING_GINGER, false, PresetColour.COVERING_GINGER, false), false);
+		this.setHairLength(HairLength.FOUR_MID_BACK.getMedianValue());
+		this.setHairStyle(HairStyle.BRAIDED);
 
-		this.setHairCovering(new Covering(BodyCoveringType.BODY_HAIR_HORSE_HAIR, PresetColour.COVERING_BROWN_DARK), false);
-		this.setUnderarmHair(BodyHair.TWO_MANICURED);
+		this.setHairCovering(new Covering(BodyCoveringType.BODY_HAIR_HUMAN, PresetColour.COVERING_GINGER), false);
+		this.setUnderarmHair(BodyHair.ZERO_NONE);
 		this.setAssHair(BodyHair.ZERO_NONE);
 		this.setPubicHair(BodyHair.TWO_MANICURED);
 		this.setFacialHair(BodyHair.ZERO_NONE);
 
 		// Face:
-		this.setFaceVirgin(false);
+		this.setFaceVirgin(true);
 		this.setLipSize(LipSize.TWO_FULL);
-		this.setFaceCapacity(Capacity.THREE_SLIGHTLY_LOOSE, true);
+		this.setFaceCapacity(Capacity.ZERO_IMPENETRABLE, true);
 		this.setTongueLength(TongueLength.ZERO_NORMAL.getMedianValue());
 
 		// Chest:
 		this.setNippleVirgin(true);
-		this.setBreastSize(CupSize.D.getMeasurement());
-		this.setBreastShape(BreastShape.ROUND);
-		this.setNippleSize(NippleSize.TWO_BIG);
-		this.setAreolaeSize(AreolaeSize.TWO_BIG);
+		this.setBreastSize(CupSize.C.getMeasurement());
+		this.setBreastShape(BreastShape.PERKY);
+		this.setNippleSize(NippleSize.ONE_SMALL);
+		this.setAreolaeSize(AreolaeSize.ONE_SMALL);
 
 		// Ass:
 		this.setAssVirgin(true);
 		this.setAssBleached(false);
 		this.setAssSize(AssSize.THREE_NORMAL);
 		this.setHipSize(HipSize.THREE_GIRLY);
-		this.setAssCapacity(Capacity.ONE_EXTREMELY_TIGHT, true);
+		this.setAssCapacity(Capacity.ZERO_IMPENETRABLE, true);
 		this.setAssWetness(Wetness.ZERO_DRY);
 		this.setAssElasticity(OrificeElasticity.ONE_RIGID.getValue());
 		this.setAssPlasticity(OrificePlasticity.THREE_RESILIENT.getValue());
 
-		// Vagina:
-		this.setVaginaVirgin(false);
-		this.setVaginaCapacity(Capacity.THREE_SLIGHTLY_LOOSE, true);
-		this.setVaginaWetness(Wetness.THREE_WET);
-		this.setVaginaElasticity(OrificeElasticity.THREE_FLEXIBLE.getValue());
+		// Vagina - virgin:
+		this.setVaginaVirgin(true);
+		this.setVaginaCapacity(Capacity.ZERO_IMPENETRABLE, true);
+		this.setVaginaWetness(Wetness.TWO_MOIST);
+		this.setVaginaElasticity(OrificeElasticity.ONE_RIGID.getValue());
 		this.setVaginaPlasticity(OrificePlasticity.THREE_RESILIENT.getValue());
 	}
 
@@ -177,7 +173,7 @@ public class Sally extends NPC {
 
 		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_groin_panties", PresetColour.CLOTHING_WHITE, false), true, this);
 		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_chest_sports_bra", PresetColour.CLOTHING_WHITE, false), true, this);
-		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_leg_jeans", PresetColour.CLOTHING_BLUE, false), true, this);
+		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_leg_shorts", PresetColour.CLOTHING_BLUE, false), true, this);
 		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_torso_plaid_shirt", PresetColour.CLOTHING_RED, false), true, this);
 		this.equipClothingFromNowhere(Main.game.getItemGen().generateClothing("innoxia_foot_boots", PresetColour.CLOTHING_DESATURATED_BROWN, false), true, this);
 	}
@@ -193,18 +189,11 @@ public class Sally extends NPC {
 	public void hourlyUpdate(int hour) {
 		if(!Main.game.getCharactersPresent().contains(this)) {
 			if(hour >= 19 || hour < 5) {
-				// After 7pm, Sally moves to the breeding stalls (stall2) with stallions
 				if(this.getLocationPlaceType() != PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_stall2")) {
 					needsMoving = true;
 				}
-			} else if(hour >= 9 && hour < 17) {
-				// During the day, Sally is in her office
-				if(this.getLocationPlaceType() != PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_office")) {
-					needsMoving = true;
-				}
 			} else {
-				// Early morning / evening transition - she's in the corridor
-				if(this.getLocationPlaceType() != PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_corridor")) {
+				if(this.getLocationPlaceType() != PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_reception")) {
 					needsMoving = true;
 				}
 			}
@@ -217,10 +206,8 @@ public class Sally extends NPC {
 			int hour = Main.game.getHourOfDay();
 			if(hour >= 19 || hour < 5) {
 				this.setLocation(WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_stall2"), true);
-			} else if(hour >= 9 && hour < 17) {
-				this.setLocation(WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_office"), false);
 			} else {
-				this.setLocation(WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_corridor"), false);
+				this.setLocation(WorldType.getWorldTypeFromId("innoxia_fields_sallyStables"), PlaceType.getPlaceTypeFromId("innoxia_fields_sallyStables_reception"), false);
 			}
 			needsMoving = false;
 			Main.game.updateResponses();
@@ -249,11 +236,11 @@ public class Sally extends NPC {
 
 	@Override
 	public SexPace getSexPaceDomPreference() {
-		return SexPace.DOM_NORMAL;
+		return SexPace.DOM_GENTLE;
 	}
 
 	@Override
 	public SexPace getSexPaceSubPreference(GameCharacter character) {
-		return SexPace.SUB_EAGER;
+		return SexPace.SUB_NORMAL;
 	}
 }

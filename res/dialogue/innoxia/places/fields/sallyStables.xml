@@ -46,7 +46,7 @@
 	</scene>
 
 
-	<!-- Corridor / Stable Aisle: -->
+	<!-- Corridor: -->
 	<scene id="corridor">
 		<content folderPath="txt/places/fields/sallyStables">CORRIDOR</content>
 		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
@@ -56,18 +56,18 @@
 	</scene>
 
 
-	<!-- Reception: -->
+	<!-- Reception (Sally is here during the day): -->
 	<scene id="reception">
 		<preParsingEffects><![CDATA[
 			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'RECEPTION'))]
-			#IF(game.getCharactersPresent().contains(jed))
-				[#jed.setPlayerKnowsName(true)]
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'RECEPTION_JED_PRESENT'))]
+			#IF(game.getCharactersPresent().contains(sally))
+				[#sally.setPlayerKnowsName(true)]
+				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'RECEPTION_SALLY_PRESENT'))]
 			#ENDIF
 		]]></preParsingEffects>
 		<content/>
 		<secondsPassed minutes="true"><![CDATA[
-			#IF(flags.hasFlag(FLAG_innoxia_sally_work_started) || !game.getCharactersPresent().contains(jed))
+			#IF(flags.hasFlag(FLAG_innoxia_sally_work_started) || !game.getCharactersPresent().contains(sally))
 				1
 			#ELSE
 				5
@@ -75,169 +75,143 @@
 		]]></secondsPassed>
 		<continuesDialogue>false</continuesDialogue>
 		<travelDisabled><![CDATA[
-			[#!flags.hasFlag(FLAG_innoxia_sally_work_started)]
+			[#!flags.hasFlag(FLAG_innoxia_sally_work_started) && game.getCharactersPresent().contains(sally)]
 		]]></travelDisabled>
 		<responses>
 			<!-- Talk -->
 			<response>
-				<availabilityConditional><![CDATA[[#game.getCharactersPresent().contains(jed)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#game.getCharactersPresent().contains(sally)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Talk]]></responseTitle>
-				<responseTooltip><![CDATA[Chat with Jed for a bit.]]></responseTooltip>
+				<responseTooltip><![CDATA[Chat with Sally.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk</nextDialogue>
 			</response>
 			<!-- Work signup -->
 			<response>
-				<availabilityConditional><![CDATA[[#game.getCharactersPresent().contains(jed) && !flags.hasFlag(FLAG_innoxia_sally_work_started)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#game.getCharactersPresent().contains(sally) && !flags.hasFlag(FLAG_innoxia_sally_work_started)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
 				<responseTitle><![CDATA[Work]]></responseTitle>
-				<responseTooltip><![CDATA[Ask Jed about working at the stables.]]></responseTooltip>
+				<responseTooltip><![CDATA[Ask Sally about working at the stables.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_work</nextDialogue>
-			</response>
-			<!-- Promotion (when eligible) -->
-			<response>
-				<availabilityConditional><![CDATA[[#game.getCharactersPresent().contains(jed) && flags.hasFlag(FLAG_innoxia_sally_work_started) && flags.hasFlag(FLAG_innoxia_sally_work_promotion1)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[3]]></index>
-				<responseTitle><![CDATA[Promotion]]></responseTitle>
-				<responseTooltip><![CDATA[Jed mentioned that Sally wanted to speak with you about a promotion.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception_promotion</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
 
-	<!-- Talk with Jed: -->
+	<!-- Talk with Sally: -->
 	<scene id="reception_talk">
 		<content><![CDATA[
 		<p>
-			You lean on the reception desk and ask Jed what he'd like to talk about.
+			You lean on the desk and chat with Sally.
 		</p>
 		]]></content>
 		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
 		<responses>
-			<!-- About himself -->
 			<response>
-				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_jed_talk_himself)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_talk_herself)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[About Jed]]></responseTitle>
-				<responseTooltip><![CDATA[Ask Jed about himself.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk_himself</nextDialogue>
+				<responseTitle><![CDATA[About Sally]]></responseTitle>
+				<responseTooltip><![CDATA[Ask Sally about herself.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_talk_herself</nextDialogue>
 			</response>
-			<!-- About work -->
 			<response>
-				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_jed_talk_work)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_talk_work)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
 				<responseTitle><![CDATA[The work]]></responseTitle>
-				<responseTooltip><![CDATA[Ask Jed about the work here.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk_work</nextDialogue>
+				<responseTooltip><![CDATA[Ask about what work there is.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_talk_work</nextDialogue>
 			</response>
-			<!-- About Sally -->
 			<response>
-				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_jed_talk_sally)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_talk_stables)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[3]]></index>
-				<responseTitle><![CDATA[About Sally]]></responseTitle>
-				<responseTooltip><![CDATA[Ask Jed about Sally.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk_sally</nextDialogue>
+				<responseTitle><![CDATA[The stables]]></responseTitle>
+				<responseTooltip><![CDATA[Ask about the stables.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_talk_stables</nextDialogue>
 			</response>
-			<!-- About stables -->
 			<response>
-				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_jed_talk_stables)]]]></availabilityConditional>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_talk_horses)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[4]]></index>
-				<responseTitle><![CDATA[The stables]]></responseTitle>
-				<responseTooltip><![CDATA[Ask Jed about the stables.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk_stables</nextDialogue>
+				<responseTitle><![CDATA[The horses]]></responseTitle>
+				<responseTooltip><![CDATA[Ask about the stallions.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_talk_horses</nextDialogue>
 			</response>
-			<!-- Back -->
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[5]]></index>
 				<responseTitle><![CDATA[Back]]></responseTitle>
-				<responseTooltip><![CDATA[You've heard enough for now.]]></responseTooltip>
+				<responseTooltip><![CDATA[End the conversation.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="reception_talk_himself">
-		<content folderPath="txt/places/fields/sallyStables">JED_TALK_HIMSELF</content>
+	<scene id="talk_herself">
+		<content folderPath="txt/places/fields/sallyStables">SALLY_TALK_HERSELF</content>
 		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setFlag(FLAG_innoxia_jed_talk_himself, true)]
-		]]></effects>
+		<effects><![CDATA[[#flags.setFlag(FLAG_innoxia_sally_talk_herself, true)]]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue the conversation.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="reception_talk_work">
-		<content folderPath="txt/places/fields/sallyStables">JED_TALK_WORK</content>
+	<scene id="talk_work">
+		<content folderPath="txt/places/fields/sallyStables">SALLY_TALK_WORK</content>
 		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setFlag(FLAG_innoxia_jed_talk_work, true)]
-		]]></effects>
+		<effects><![CDATA[[#flags.setFlag(FLAG_innoxia_sally_talk_work, true)]]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue the conversation.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="reception_talk_sally">
-		<content folderPath="txt/places/fields/sallyStables">JED_TALK_SALLY</content>
+	<scene id="talk_stables">
+		<content folderPath="txt/places/fields/sallyStables">SALLY_TALK_STABLES</content>
 		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setFlag(FLAG_innoxia_jed_talk_sally, true)]
-		]]></effects>
+		<effects><![CDATA[[#flags.setFlag(FLAG_innoxia_sally_talk_stables, true)]]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue the conversation.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="reception_talk_stables">
-		<content folderPath="txt/places/fields/sallyStables">JED_TALK_STABLES</content>
+	<scene id="talk_horses">
+		<content folderPath="txt/places/fields/sallyStables">SALLY_TALK_HORSES</content>
 		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setFlag(FLAG_innoxia_jed_talk_stables, true)]
-		]]></effects>
+		<effects><![CDATA[[#flags.setFlag(FLAG_innoxia_sally_talk_horses, true)]]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue the conversation.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_talk</nextDialogue>
 			</response>
 		</responses>
@@ -262,7 +236,7 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
 				<responseTitle><![CDATA[Decline]]></responseTitle>
-				<responseTooltip><![CDATA[Decline the offer for now.]]></responseTooltip>
+				<responseTooltip><![CDATA[Not right now.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception_work_decline</nextDialogue>
 			</response>
 		</responses>
@@ -277,13 +251,13 @@
 			[#flags.setFlag(FLAG_innoxia_sally_work_started, true)]
 			[#flags.setLong(FLAG_innoxia_sally_work_level, 0)]
 			[#flags.setLong(FLAG_innoxia_sally_work_hours, 0)]
+			[#flags.setLong(FLAG_innoxia_sally_total_grooming_hours, 0)]
 		]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Head to the grooming stalls to start your first shift.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_reception</nextDialogue>
 			</response>
 		</responses>
@@ -294,79 +268,249 @@
 		<secondsPassed minutes="true"><![CDATA[2]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[[#flags.setFlag(FLAG_innoxia_sally_work_offered, true)]]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<nextDialogue>innoxia_places_fields_sallyStables_reception</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+
+	<!-- Office: -->
+	<scene id="office">
+		<preParsingEffects><![CDATA[
+			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'OFFICE'))]
+		]]></preParsingEffects>
+		<content/>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<!-- Tack Room: -->
+	<scene id="tackRoom">
+		<content folderPath="txt/places/fields/sallyStables">TACK_ROOM</content>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<!-- Bunkhouse: -->
+	<scene id="bunkhouse">
+		<content folderPath="txt/places/fields/sallyStables">BUNKHOUSE</content>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+	<!-- Paddock: -->
+	<scene id="paddock">
+		<content folderPath="txt/places/fields/sallyStables">PADDOCK</content>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses/>
+	</scene>
+
+
+	<!-- Grooming Stalls (stall1): -->
+	<scene id="stall1">
+		<content folderPath="txt/places/fields/sallyStables">STALL1</content>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses>
+			<response>
+				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_work_started)]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Start shift]]></responseTitle>
+				<responseTooltip><![CDATA[Start a grooming shift (4 hours). You'll earn 400 flames.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<!-- Grooming work: -->
+	<scene id="grooming_work">
+		<preParsingEffects><![CDATA[
+			#IF(flags.getLong(FLAG_innoxia_sally_work_hours) == 0)
+				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL1_WORK_START'))]
+			#ELSE
+				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL1_WORK_CONTINUE'))]
+			#ENDIF
+		]]></preParsingEffects>
+		<content/>
+		<secondsPassed minutes="true"><![CDATA[240]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
 		<effects><![CDATA[
-			[#flags.setFlag(FLAG_innoxia_sally_work_offered, true)]
+			[#flags.setLong(FLAG_innoxia_sally_work_hours, flags.getLong(FLAG_innoxia_sally_work_hours) + 4)]
+			[#flags.setLong(FLAG_innoxia_sally_total_grooming_hours, flags.getLong(FLAG_innoxia_sally_total_grooming_hours) + 4)]
+			[#pc.incrementMoney(400)]
+		]]></effects>
+		<responses>
+			<response>
+				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_work_hours) < 16]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Keep working]]></responseTitle>
+				<responseTooltip><![CDATA[Continue for another 4-hour shift.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work</nextDialogue>
+			</response>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[2]]></index>
+				<responseTitle><![CDATA[Finish]]></responseTitle>
+				<responseTooltip><![CDATA[End your shift.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work_end</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<scene id="grooming_work_end">
+		<content folderPath="txt/places/fields/sallyStables">STALL1_WORK_END</content>
+		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setLong(FLAG_innoxia_sally_work_hours, 0)]
+			#IF(flags.getLong(FLAG_innoxia_sally_total_grooming_hours) >= 20 && !flags.hasFlag(FLAG_innoxia_sally_discovered_secret))
+				[#flags.setFlag(FLAG_innoxia_sally_work_promotion1, true)]
+			#ENDIF
 		]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception</nextDialogue>
+				<nextDialogue>innoxia_places_fields_sallyStables_stall1</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
 
-	<!-- Promotion (Sally wants to speak with you): -->
-	<scene id="reception_promotion">
-		<content folderPath="txt/places/fields/sallyStables">SALLY_MISSING_JED</content>
-		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
-		<continuesDialogue>true</continuesDialogue>
-		<travelDisabled>true</travelDisabled>
+	<!-- Breeding Stalls (stall2) - Peek/Enter mechanic: -->
+	<scene id="stall2">
+		<preParsingEffects><![CDATA[
+			#IF(!flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked))
+				#IF(flags.hasFlag(FLAG_innoxia_sally_work_promotion1) && game.getCharactersPresent().contains(sally) && !game.isHourBetween(7, 19))
+					[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL2_DOOR_AJAR'))]
+				#ELSE
+					[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL2_LOCKED'))]
+				#ENDIF
+			#ELSE
+				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL2'))]
+			#ENDIF
+		]]></preParsingEffects>
+		<content/>
+		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled><![CDATA[
+			[#!flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && !(flags.hasFlag(FLAG_innoxia_sally_work_promotion1) && game.getCharactersPresent().contains(sally) && !game.isHourBetween(7, 19))]
+		]]></travelDisabled>
 		<responses>
+			<!-- Peek (first discovery, door ajar, like Lilaya's lab spy option): -->
 			<response>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_discovered_secret) && flags.hasFlag(FLAG_innoxia_sally_work_promotion1) && game.getCharactersPresent().contains(sally) && !game.isHourBetween(7, 19) && !flags.hasFlag(FLAG_innoxia_sally_peeked_today)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Find Sally]]></responseTitle>
-				<responseTooltip><![CDATA[Go look for Sally yourself.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_sally_discovery</nextDialogue>
-				<effects><![CDATA[
-					[#flags.setFlag(FLAG_innoxia_sally_work_promotion1, false)]
-				]]></effects>
+				<responseTitle><![CDATA[Peek]]></responseTitle>
+				<responseTooltip><![CDATA[Quietly peer through the gap in the door...]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_peek</nextDialogue>
 			</response>
+			<!-- Enter directly (first discovery): -->
 			<response>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_discovered_secret) && flags.hasFlag(FLAG_innoxia_sally_work_promotion1) && game.getCharactersPresent().contains(sally) && !game.isHourBetween(7, 19)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
-				<responseTitle><![CDATA[Leave it]]></responseTitle>
-				<responseTooltip><![CDATA[Take Jed's advice and leave Sally alone for now.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_reception</nextDialogue>
+				<responseTitle><![CDATA[Enter]]></responseTitle>
+				<responseTooltip><![CDATA[Push the door open and walk in.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_enter_directly</nextDialogue>
 			</response>
-		</responses>
-	</scene>
-
-
-	<!-- Sally discovery scene: -->
-	<scene id="sally_discovery">
-		<content folderPath="txt/places/fields/sallyStables">SALLY_DISCOVERY</content>
-		<secondsPassed minutes="true"><![CDATA[2]]></secondsPassed>
-		<continuesDialogue>true</continuesDialogue>
-		<travelDisabled>true</travelDisabled>
-		<responses>
+			<!-- Start breeding work (fleshlight): -->
 			<response>
+				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && flags.getLong(FLAG_innoxia_sally_work_level) == 1 && !game.isHourBetween(7, 19)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Make yourself known]]></responseTitle>
-				<responseTooltip><![CDATA[Step forward and reveal yourself.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_sally_caught</nextDialogue>
+				<responseTitle><![CDATA[Start collections]]></responseTitle>
+				<responseTooltip><![CDATA[Start an evening collection session with the fleshlight.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_fleshlight</nextDialogue>
 			</response>
+			<!-- Start breeding work (by hand with yield options): -->
 			<response>
+				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && flags.getLong(FLAG_innoxia_sally_work_level) >= 2 && !game.isHourBetween(7, 19)]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[2]]></index>
-				<responseTitle><![CDATA[Slip away]]></responseTitle>
-				<responseTooltip><![CDATA[Quietly leave before she notices you.]]></responseTooltip>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Start collections]]></responseTitle>
+				<responseTooltip><![CDATA[Start an evening collection session by hand.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_prep</nextDialogue>
+			</response>
+			<!-- Too early: -->
+			<response>
+				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && game.isHourBetween(7, 19)]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[[style.colourBad(Too early)]]]></responseTitle>
+				<responseTooltip><![CDATA[Collections are done in the evening (after 7pm).]]></responseTooltip>
+				<nextDialogue>null</nextDialogue>
+			</response>
+			<!-- Locked, step back: -->
+			<response>
+				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && !flags.hasFlag(FLAG_innoxia_sally_work_promotion1)]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[[pc.Step] back]]></responseTitle>
+				<responseTooltip><![CDATA[The door is shut.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_corridor</nextDialogue>
 				<effects><![CDATA[
-					[#flags.setFlag(FLAG_innoxia_sally_work_promotion1, true)]
 					[#pc.setNearestLocation(WORLD_TYPE_innoxia_fields_sallyStables, PLACE_TYPE_innoxia_fields_sallyStables_corridor)]
 				]]></effects>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="sally_caught">
-		<content folderPath="txt/places/fields/sallyStables">SALLY_DISCOVERY_CAUGHT</content>
+
+	<!-- Peek scene (voyeurism, like Lilaya's lab): -->
+	<scene id="peek">
+		<content folderPath="txt/places/fields/sallyStables">STALL2_PEEK</content>
+		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setFlag(FLAG_innoxia_sally_peeked_today, true)]
+		]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Go in]]></responseTitle>
+				<responseTooltip><![CDATA[Now that you know what's going on, go in and talk to Sally about it.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_enter_directly</nextDialogue>
+			</response>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[2]]></index>
+				<responseTitle><![CDATA[Slip away]]></responseTitle>
+				<responseTooltip><![CDATA[Quietly leave. You can come back another time.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_corridor</nextDialogue>
+				<effects><![CDATA[
+					[#pc.setNearestLocation(WORLD_TYPE_innoxia_fields_sallyStables, PLACE_TYPE_innoxia_fields_sallyStables_corridor)]
+				]]></effects>
+			</response>
+		</responses>
+	</scene>
+
+	<!-- Enter directly: -->
+	<scene id="enter_directly">
+		<content folderPath="txt/places/fields/sallyStables">STALL2_ENTER_DIRECTLY</content>
 		<secondsPassed minutes="true"><![CDATA[2]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
@@ -375,12 +519,13 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Listen]]></responseTitle>
-				<responseTooltip><![CDATA[Sit down and hear what Sally has to say.]]></responseTooltip>
+				<responseTooltip><![CDATA[Hear what Sally has to say about this.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_sally_explains</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
+	<!-- Sally explains (offers the job): -->
 	<scene id="sally_explains">
 		<content folderPath="txt/places/fields/sallyStables">SALLY_EXPLAINS</content>
 		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
@@ -391,14 +536,14 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Accept]]></responseTitle>
-				<responseTooltip><![CDATA[Agree to help Sally with the breeding collections.]]></responseTooltip>
+				<responseTooltip><![CDATA[Agree to help with the collections.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_sally_offer_accept</nextDialogue>
 			</response>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
 				<responseTitle><![CDATA[Decline]]></responseTitle>
-				<responseTooltip><![CDATA[Politely decline Sally's offer.]]></responseTooltip>
+				<responseTooltip><![CDATA[Politely decline.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_sally_offer_decline</nextDialogue>
 			</response>
 		</responses>
@@ -419,11 +564,7 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Return to the stables.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_corridor</nextDialogue>
-				<effects><![CDATA[
-					[#pc.setNearestLocation(WORLD_TYPE_innoxia_fields_sallyStables, PLACE_TYPE_innoxia_fields_sallyStables_corridor)]
-				]]></effects>
+				<nextDialogue>innoxia_places_fields_sallyStables_stall2</nextDialogue>
 			</response>
 		</responses>
 	</scene>
@@ -441,193 +582,6 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Head back to the stables.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_corridor</nextDialogue>
-				<effects><![CDATA[
-					[#pc.setNearestLocation(WORLD_TYPE_innoxia_fields_sallyStables, PLACE_TYPE_innoxia_fields_sallyStables_corridor)]
-				]]></effects>
-			</response>
-		</responses>
-	</scene>
-
-
-	<!-- Office: -->
-	<scene id="office">
-		<preParsingEffects><![CDATA[
-			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'OFFICE'))]
-			#IF(game.getCharactersPresent().contains(sally))
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'OFFICE_SALLY_PRESENT'))]
-			#ENDIF
-		]]></preParsingEffects>
-		<content/>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled>false</travelDisabled>
-		<responses/>
-	</scene>
-
-
-	<!-- Tack Room: -->
-	<scene id="tackRoom">
-		<content folderPath="txt/places/fields/sallyStables">TACK_ROOM</content>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled>false</travelDisabled>
-		<responses/>
-	</scene>
-
-
-	<!-- Bunkhouse: -->
-	<scene id="bunkhouse">
-		<content folderPath="txt/places/fields/sallyStables">BUNKHOUSE</content>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled>false</travelDisabled>
-		<responses/>
-	</scene>
-
-
-	<!-- Paddock: -->
-	<scene id="paddock">
-		<content folderPath="txt/places/fields/sallyStables">PADDOCK</content>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled>false</travelDisabled>
-		<responses/>
-	</scene>
-
-
-	<!-- Grooming Stalls (stall1) - Work area: -->
-	<scene id="stall1">
-		<content folderPath="txt/places/fields/sallyStables">STALL1</content>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled>false</travelDisabled>
-		<responses>
-			<!-- Start grooming work shift -->
-			<response>
-				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_work_started)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Start shift]]></responseTitle>
-				<responseTooltip><![CDATA[Start a grooming shift (4 hours). You'll earn 400 flames.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work</nextDialogue>
-			</response>
-		</responses>
-	</scene>
-
-	<!-- Grooming work session: -->
-	<scene id="grooming_work">
-		<preParsingEffects><![CDATA[
-			#IF(flags.getLong(FLAG_innoxia_sally_work_hours) == 0)
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL1_WORK_START'))]
-			#ELSE
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL1_WORK_CONTINUE'))]
-			#ENDIF
-		]]></preParsingEffects>
-		<content/>
-		<secondsPassed minutes="true"><![CDATA[240]]></secondsPassed>
-		<continuesDialogue>true</continuesDialogue>
-		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setLong(FLAG_innoxia_sally_work_hours, flags.getLong(FLAG_innoxia_sally_work_hours) + 4)]
-			[#flags.setLong(FLAG_innoxia_sally_total_grooming_hours, flags.getLong(FLAG_innoxia_sally_total_grooming_hours) + 4)]
-			[#pc.incrementMoney(400)]
-		]]></effects>
-		<responses>
-			<!-- Continue working -->
-			<response>
-				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_work_hours) < 16]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Keep working]]></responseTitle>
-				<responseTooltip><![CDATA[Continue working for another 4-hour shift.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work</nextDialogue>
-			</response>
-			<!-- Finish -->
-			<response>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[2]]></index>
-				<responseTitle><![CDATA[Finish]]></responseTitle>
-				<responseTooltip><![CDATA[End your shift and collect your pay.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_grooming_work_end</nextDialogue>
-			</response>
-		</responses>
-	</scene>
-
-	<scene id="grooming_work_end">
-		<content folderPath="txt/places/fields/sallyStables">STALL1_WORK_END</content>
-		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
-		<continuesDialogue>true</continuesDialogue>
-		<travelDisabled>true</travelDisabled>
-		<effects><![CDATA[
-			[#flags.setLong(FLAG_innoxia_sally_work_hours, 0)]
-			#IF(flags.getLong(FLAG_innoxia_sally_total_grooming_hours) >= 20 && !flags.hasFlag(FLAG_innoxia_sally_discovered_secret) && !flags.hasFlag(FLAG_innoxia_sally_work_promotion1))
-				[#flags.setFlag(FLAG_innoxia_sally_work_promotion1, true)]
-			#ENDIF
-		]]></effects>
-		<responses>
-			<response>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Continue.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_stall1</nextDialogue>
-			</response>
-		</responses>
-	</scene>
-
-
-	<!-- Breeding Stalls (stall2): -->
-	<scene id="stall2">
-		<preParsingEffects><![CDATA[
-			#IF(flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked))
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL2'))]
-			#ELSE
-				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'STALL2_LOCKED'))]
-			#ENDIF
-		]]></preParsingEffects>
-		<content/>
-		<secondsPassed minutes="true"><![CDATA[1]]></secondsPassed>
-		<continuesDialogue>false</continuesDialogue>
-		<travelDisabled><![CDATA[
-			[#!flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked)]
-		]]></travelDisabled>
-		<responses>
-			<!-- Start breeding work (fleshlight level) -->
-			<response>
-				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && flags.getLong(FLAG_innoxia_sally_work_level) == 1 && !game.isHourBetween(7, 19)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Start collections]]></responseTitle>
-				<responseTooltip><![CDATA[Start an evening collection session using the fleshlight (4 hours). You'll earn 800 flames.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_fleshlight</nextDialogue>
-			</response>
-			<!-- Start breeding work (by hand level) -->
-			<response>
-				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && flags.getLong(FLAG_innoxia_sally_work_level) >= 2 && !game.isHourBetween(7, 19)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[Start collections]]></responseTitle>
-				<responseTooltip><![CDATA[Start an evening collection session by hand (4 hours). You'll earn 800 flames.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand</nextDialogue>
-			</response>
-			<!-- Not evening -->
-			<response>
-				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked) && game.isHourBetween(7, 19)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[[style.colourBad(Too early)]]]></responseTitle>
-				<responseTooltip><![CDATA[Collections are only done in the evening (after 7pm). Come back later.]]></responseTooltip>
-				<nextDialogue>null</nextDialogue>
-			</response>
-			<!-- Step back if locked -->
-			<response>
-				<availabilityConditional><![CDATA[[#!flags.hasFlag(FLAG_innoxia_sally_breeding_unlocked)]]]></availabilityConditional>
-				<responseTabIndex><![CDATA[0]]></responseTabIndex>
-				<index><![CDATA[1]]></index>
-				<responseTitle><![CDATA[[pc.Step] back]]></responseTitle>
-				<responseTooltip><![CDATA[You can't access the breeding stalls.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_corridor</nextDialogue>
 				<effects><![CDATA[
 					[#pc.setNearestLocation(WORLD_TYPE_innoxia_fields_sallyStables, PLACE_TYPE_innoxia_fields_sallyStables_corridor)]
@@ -644,13 +598,13 @@
 				[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'BREEDING_WORK_FLESHLIGHT_START'))]
 			#ENDIF
 			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'BREEDING_WORK_FLESHLIGHT_CONTINUE'))]
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, 100)]
 		]]></preParsingEffects>
 		<content/>
 		<secondsPassed minutes="true"><![CDATA[240]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
 		<effects><![CDATA[
-			[#pc.incrementMoney(800)]
 			[#flags.setLong(FLAG_innoxia_sally_breeding_sessions, flags.getLong(FLAG_innoxia_sally_breeding_sessions) + 1)]
 		]]></effects>
 		<responses>
@@ -658,7 +612,7 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Finish]]></responseTitle>
-				<responseTooltip><![CDATA[Finish up the evening's collections.]]></responseTooltip>
+				<responseTooltip><![CDATA[Finish the evening's collections.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_fleshlight_end</nextDialogue>
 			</response>
 		</responses>
@@ -670,19 +624,19 @@
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
 		<effects><![CDATA[
+			[#pc.incrementMoney(Math.max(1, (int)(500 * 0.2 * flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) / 100)))]
 			#IF(flags.getLong(FLAG_innoxia_sally_breeding_sessions) >= 5 && flags.getLong(FLAG_innoxia_sally_work_level) < 2)
 				[#flags.setLong(FLAG_innoxia_sally_work_level, 2)]
 				[#flags.setFlag(FLAG_innoxia_sally_hand_unlocked, true)]
 			#ENDIF
 		]]></effects>
 		<responses>
-			<!-- Unlock by-hand if eligible -->
 			<response>
 				<availabilityConditional><![CDATA[[#flags.hasFlag(FLAG_innoxia_sally_hand_unlocked) && flags.getLong(FLAG_innoxia_sally_breeding_sessions) == 5]]]></availabilityConditional>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Sally has something to say...]]></responseTooltip>
+				<responseTooltip><![CDATA[Sally has something to tell you...]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_unlock</nextDialogue>
 			</response>
 			<response>
@@ -690,14 +644,12 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Head back into the stables.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_stall2</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-
-	<!-- Unlock by-hand work: -->
+	<!-- Unlock by-hand: -->
 	<scene id="breeding_work_hand_unlock">
 		<content folderPath="txt/places/fields/sallyStables">BREEDING_WORK_HAND_UNLOCK</content>
 		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
@@ -708,25 +660,148 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[You've unlocked the ability to do collections by hand!]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_stall2</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
 
-	<!-- Breeding work - By hand stage: -->
+	<!-- Breeding work - By hand prep (yield boost choices): -->
+	<scene id="breeding_work_hand_prep">
+		<content folderPath="txt/places/fields/sallyStables">BREEDING_WORK_HAND_START</content>
+		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, 100)]
+		]]></effects>
+		<responses>
+			<!-- Yield boost actions (each increases multiplier, up to 300): -->
+			<response>
+				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) < 300]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Massage balls]]></responseTitle>
+				<responseTooltip><![CDATA[Massage the stallion's balls to increase the yield. (+50% yield)]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_yield_ball_massage</nextDialogue>
+			</response>
+			<response>
+				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) < 300]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[2]]></index>
+				<responseTitle><![CDATA[Tease]]></responseTitle>
+				<responseTooltip><![CDATA[Spend time teasing the stallion before the main event. (+50% yield)]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_yield_tease</nextDialogue>
+			</response>
+			<response>
+				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) < 300]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[3]]></index>
+				<responseTitle><![CDATA[Rim]]></responseTitle>
+				<responseTooltip><![CDATA[Use your tongue on the stallion's rear to really get him worked up. (+100% yield)]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_yield_rim</nextDialogue>
+			</response>
+			<response>
+				<availabilityConditional><![CDATA[[#flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) < 300 && pc.hasItemType(IT_innoxia_pills_fertility)]]]></availabilityConditional>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[4]]></index>
+				<responseTitle><![CDATA[Fertility pill]]></responseTitle>
+				<responseTooltip><![CDATA[Feed the stallion a fertility pill to boost his output. (+50% yield, consumes pill)]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_yield_pill</nextDialogue>
+			</response>
+			<!-- Proceed to collection: -->
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[5]]></index>
+				<responseTitle><![CDATA[Collect]]></responseTitle>
+				<responseTooltip><![CDATA[Proceed with the collection.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<!-- Yield boost scenes: -->
+	<scene id="yield_ball_massage">
+		<content folderPath="txt/places/fields/sallyStables">YIELD_BALL_MASSAGE</content>
+		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, Math.min(300, flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) + 50))]
+		]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_prep</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<scene id="yield_tease">
+		<content folderPath="txt/places/fields/sallyStables">YIELD_TEASE</content>
+		<secondsPassed minutes="true"><![CDATA[15]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, Math.min(300, flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) + 50))]
+		]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_prep</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<scene id="yield_rim">
+		<content folderPath="txt/places/fields/sallyStables">YIELD_RIM</content>
+		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, Math.min(300, flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) + 100))]
+		]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_prep</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+	<scene id="yield_pill">
+		<content folderPath="txt/places/fields/sallyStables">YIELD_FERTILITY_PILL</content>
+		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
+		<continuesDialogue>true</continuesDialogue>
+		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#pc.removeItemByType(IT_innoxia_pills_fertility, 1)]
+			[#flags.setLong(FLAG_innoxia_sally_cum_yield_multiplier, Math.min(300, flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) + 50))]
+		]]></effects>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_prep</nextDialogue>
+			</response>
+		</responses>
+	</scene>
+
+
+	<!-- Breeding work - By hand (after choosing boosts): -->
 	<scene id="breeding_work_hand">
-		<preParsingEffects><![CDATA[
-			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'BREEDING_WORK_HAND_START'))]
-			[#game.appendToTextStartStringBuilder(game.parseFromFile('txt/places/fields/sallyStables', 'BREEDING_WORK_HAND_CONTINUE'))]
-		]]></preParsingEffects>
-		<content/>
+		<content folderPath="txt/places/fields/sallyStables">BREEDING_WORK_HAND_CONTINUE</content>
 		<secondsPassed minutes="true"><![CDATA[240]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
 		<effects><![CDATA[
-			[#pc.incrementMoney(800)]
 			[#flags.setLong(FLAG_innoxia_sally_breeding_sessions, flags.getLong(FLAG_innoxia_sally_breeding_sessions) + 1)]
 		]]></effects>
 		<responses>
@@ -734,46 +809,50 @@
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Condom]]></responseTitle>
-				<responseTooltip><![CDATA[Finish the stallion off into a condom for a premium collection.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_end_condom</nextDialogue>
+				<responseTooltip><![CDATA[Collect into a condom (premium order).]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_hand_end_condom</nextDialogue>
 			</response>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[2]]></index>
 				<responseTitle><![CDATA[Bucket]]></responseTitle>
-				<responseTooltip><![CDATA[Direct the stallion's output into the collection bucket.]]></responseTooltip>
-				<nextDialogue>innoxia_places_fields_sallyStables_breeding_work_hand_end_bucket</nextDialogue>
+				<responseTooltip><![CDATA[Direct into the collection bucket.]]></responseTooltip>
+				<nextDialogue>innoxia_places_fields_sallyStables_breeding_hand_end_bucket</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="breeding_work_hand_end_condom">
+	<scene id="breeding_hand_end_condom">
 		<content folderPath="txt/places/fields/sallyStables">BREEDING_WORK_HAND_END</content>
 		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#pc.incrementMoney(Math.max(1, (int)(500 * 0.2 * flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) / 100)))]
+		]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Clean up and head back.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_stall2</nextDialogue>
 			</response>
 		</responses>
 	</scene>
 
-	<scene id="breeding_work_hand_end_bucket">
+	<scene id="breeding_hand_end_bucket">
 		<content folderPath="txt/places/fields/sallyStables">BREEDING_WORK_HAND_END_BUCKET</content>
 		<secondsPassed minutes="true"><![CDATA[10]]></secondsPassed>
 		<continuesDialogue>true</continuesDialogue>
 		<travelDisabled>true</travelDisabled>
+		<effects><![CDATA[
+			[#pc.incrementMoney(Math.max(1, (int)(500 * 0.2 * flags.getLong(FLAG_innoxia_sally_cum_yield_multiplier) / 100)))]
+		]]></effects>
 		<responses>
 			<response>
 				<responseTabIndex><![CDATA[0]]></responseTabIndex>
 				<index><![CDATA[1]]></index>
 				<responseTitle><![CDATA[Continue]]></responseTitle>
-				<responseTooltip><![CDATA[Clean up and head back.]]></responseTooltip>
 				<nextDialogue>innoxia_places_fields_sallyStables_stall2</nextDialogue>
 			</response>
 		</responses>
