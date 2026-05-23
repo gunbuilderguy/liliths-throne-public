@@ -38,6 +38,11 @@ import com.lilithsthrone.world.places.PlaceType;
  */
 public class Thunder extends NPC {
 
+	public int getSemenValueMultiplier() { return 2; }
+	public int getDifficulty() { return 0; }
+	public String getDifficultyName() { return "docile"; }
+	public String getValueTierName() { return "standard"; }
+
 	public Thunder() {
 		this(false);
 	}

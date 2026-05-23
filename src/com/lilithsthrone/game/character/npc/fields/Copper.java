@@ -38,6 +38,11 @@ import com.lilithsthrone.world.places.PlaceType;
  */
 public class Copper extends NPC {
 
+	public int getSemenValueMultiplier() { return 3; }
+	public int getDifficulty() { return 0; }
+	public String getDifficultyName() { return "docile"; }
+	public String getValueTierName() { return "good"; }
+
 	public Copper() {
 		this(false);
 	}

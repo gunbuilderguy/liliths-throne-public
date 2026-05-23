@@ -38,6 +38,11 @@ import com.lilithsthrone.world.places.PlaceType;
  */
 public class Blaze extends NPC {
 
+	public int getSemenValueMultiplier() { return 5; }
+	public int getDifficulty() { return 2; }
+	public String getDifficultyName() { return "difficult"; }
+	public String getValueTierName() { return "good"; }
+
 	public Blaze() {
 		this(false);
 	}
