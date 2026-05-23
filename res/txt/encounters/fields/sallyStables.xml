@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dialogue>
+	<htmlContent tag="DISCOVERED"><![CDATA[
+	<p>
+		As you travel through a quiet stretch of the Foloi Fields, you notice a well-worn dirt track branching off from the main path. Following it with your eyes, you spot a collection of rustic wooden buildings nestled in a sheltered valley, surrounded by white-fenced paddocks.
+	</p>
+	<p>
+		The unmistakable sound of horses whinnying carries on the breeze, and as you draw closer, you can make out a large, hand-painted sign swinging gently above the main gate: [style.boldGood(Sally's Stables)].
+	</p>
+	<p>
+		It appears to be a well-established horse ranch, and from the general state of the place, it looks like it's been here for quite some time. You make a mental note of this location for future reference...
+	</p>
+	]]>
+	</htmlContent>
+</dialogue>

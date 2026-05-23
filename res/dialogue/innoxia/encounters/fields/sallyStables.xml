@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<dialogueNodes>
+	<scene id="discovered">
+		<content folderPath="txt/encounters/fields/sallyStables">DISCOVERED</content>
+		<secondsPassed minutes="true"><![CDATA[5]]></secondsPassed>
+		<continuesDialogue>false</continuesDialogue>
+		<travelDisabled>false</travelDisabled>
+		<responses>
+			<response>
+				<responseTabIndex><![CDATA[0]]></responseTabIndex>
+				<index><![CDATA[1]]></index>
+				<responseTitle><![CDATA[Continue]]></responseTitle>
+				<responseTooltip><![CDATA[You've discovered Sally's Stables!]]></responseTooltip>
+				<nextDialogue defaultPlaceType="innoxia_fields_sallyStables"/>
+				<effects><![CDATA[
+					[#pc.setLocation(WORLD_TYPE_WORLD_MAP, PLACE_TYPE_innoxia_fields_sallyStables)]
+				]]></effects>
+			</response>
+		</responses>
+	</scene>
+</dialogueNodes>

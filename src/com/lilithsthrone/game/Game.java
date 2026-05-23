@@ -152,6 +152,7 @@ import com.lilithsthrone.game.character.npc.fields.Hammer;
 import com.lilithsthrone.game.character.npc.fields.HeadlessHorseman;
 import com.lilithsthrone.game.character.npc.fields.Heather;
 import com.lilithsthrone.game.character.npc.fields.Imsu;
+import com.lilithsthrone.game.character.npc.fields.Jed;
 import com.lilithsthrone.game.character.npc.fields.Jess;
 import com.lilithsthrone.game.character.npc.fields.Kazik;
 import com.lilithsthrone.game.character.npc.fields.Kheiron;
@@ -166,6 +167,7 @@ import com.lilithsthrone.game.character.npc.fields.Nir;
 import com.lilithsthrone.game.character.npc.fields.Nizhoni;
 import com.lilithsthrone.game.character.npc.fields.Oglix;
 import com.lilithsthrone.game.character.npc.fields.Penelope;
+import com.lilithsthrone.game.character.npc.fields.Sally;
 import com.lilithsthrone.game.character.npc.fields.Silvia;
 import com.lilithsthrone.game.character.npc.fields.Sleip;
 import com.lilithsthrone.game.character.npc.fields.Sterope;
@@ -2733,8 +2735,17 @@ public class Game implements XMLSaving {
 				Main.game.getNpc(Dale.class).setAffection(Main.game.getNpc(Evelyx.class), AffectionLevel.POSITIVE_ONE_FRIENDLY.getMedianValue());
 			}
 
+			// Sally's Stables:
+
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Sally.class))) { addNPC(new Sally(), false); addedNpcs.add(Sally.class); }
+			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(Jed.class))) { addNPC(new Jed(), false); addedNpcs.add(Jed.class); }
+			if(addedNpcs.contains(Sally.class) || addedNpcs.contains(Jed.class)) {
+				Main.game.getNpc(Sally.class).setAffection(Main.game.getNpc(Jed.class), AffectionLevel.POSITIVE_TWO_LIKE.getMedianValue());
+				Main.game.getNpc(Jed.class).setAffection(Main.game.getNpc(Sally.class), AffectionLevel.POSITIVE_TWO_LIKE.getMedianValue());
+			}
+
 			// Headless horseman:
-			
+
 			if(!Main.game.NPCMap.containsKey(Main.game.getUniqueNPCId(HeadlessHorseman.class))) { addNPC(new HeadlessHorseman(), false); addedNpcs.add(HeadlessHorseman.class); }
 			
 			// Themiscyra:

@@ -79,6 +79,7 @@ import com.lilithsthrone.game.character.npc.fields.Hammer;
 import com.lilithsthrone.game.character.npc.fields.HeadlessHorseman;
 import com.lilithsthrone.game.character.npc.fields.Heather;
 import com.lilithsthrone.game.character.npc.fields.Imsu;
+import com.lilithsthrone.game.character.npc.fields.Jed;
 import com.lilithsthrone.game.character.npc.fields.Jess;
 import com.lilithsthrone.game.character.npc.fields.Kazik;
 import com.lilithsthrone.game.character.npc.fields.Kheiron;
@@ -90,6 +91,7 @@ import com.lilithsthrone.game.character.npc.fields.Nir;
 import com.lilithsthrone.game.character.npc.fields.Nizhoni;
 import com.lilithsthrone.game.character.npc.fields.Oglix;
 import com.lilithsthrone.game.character.npc.fields.Penelope;
+import com.lilithsthrone.game.character.npc.fields.Sally;
 import com.lilithsthrone.game.character.npc.fields.Silvia;
 import com.lilithsthrone.game.character.npc.fields.Sleip;
 import com.lilithsthrone.game.character.npc.fields.Sterope;
@@ -1336,6 +1338,26 @@ public class ParserTarget {
 		@Override
 		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
 			return Main.game.getNpc(Dale.class);
+		}
+	};
+
+	public static AbstractParserTarget SALLY = new AbstractParserTarget(Util.newArrayListOfValues("sally"), "") {
+		public String getDescription() {
+			return Main.game.getNpc(Sally.class).getDescription();
+		}
+		@Override
+		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
+			return Main.game.getNpc(Sally.class);
+		}
+	};
+
+	public static AbstractParserTarget JED = new AbstractParserTarget(Util.newArrayListOfValues("jed"), "") {
+		public String getDescription() {
+			return Main.game.getNpc(Jed.class).getDescription();
+		}
+		@Override
+		public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) {
+			return Main.game.getNpc(Jed.class);
 		}
 	};
 

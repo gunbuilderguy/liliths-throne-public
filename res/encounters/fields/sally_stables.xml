@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<encounterRoot>
+	<additionalPlaceTypeTriggers>
+		<placeType>WORLD_MAP_FIELDS</placeType>
+	</additionalPlaceTypeTriggers>
+	<possibleEncounters>
+		<encounter>
+			<name><![CDATA[sally's stables discovered]]></name>
+			<chanceToTrigger opportunisticEncounter="false"><![CDATA[
+				#IF(pc.getLocation().equals(10, 20))
+					101
+				#ELSE
+					0
+				#ENDIF
+			]]></chanceToTrigger>
+			<dialogueReturned><![CDATA[innoxia_encounters_fields_sallyStables_discovered]]></dialogueReturned>
+		</encounter>
+	</possibleEncounters>
+</encounterRoot>

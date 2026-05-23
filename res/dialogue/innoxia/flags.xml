@@ -265,8 +265,29 @@
 			<flag dailyReset="true">evelyx_bad_end_bondage</flag>
 			<flag dailyReset="true">evelyx_bad_end_bimbo</flag>
 			<flag dailyReset="true">evelyx_bad_end_feral</flag>
-		
-		
+
+
+		<!-- Sally's Stables: -->
+			<!-- Jed talk flags: -->
+			<flag dailyReset="true">jed_talk_himself</flag>
+			<flag dailyReset="true">jed_talk_work</flag>
+			<flag dailyReset="true">jed_talk_sally</flag>
+			<flag dailyReset="true">jed_talk_stables</flag>
+			<!-- Work flags: -->
+			<flag dailyReset="false">sally_work_started</flag>
+			<flag dailyReset="false">sally_work_offered</flag>
+			<flag dailyReset="false">sally_work_promotion1</flag>
+			<flag dailyReset="false">sally_discovered_secret</flag>
+			<flag dailyReset="false">sally_breeding_unlocked</flag>
+			<flag dailyReset="false">sally_hand_unlocked</flag>
+			<!-- Saved longs (used via flags.setLong/getLong, defined in comment block below):
+				sally_work_level (The work level of the player at Sally's Stables, 0=hand, 1=breeding fleshlight, 2=breeding by hand)
+				sally_work_hours (The number of hours worked in the current session)
+				sally_total_grooming_hours (Total grooming hours worked)
+				sally_breeding_sessions (Total breeding collection sessions completed)
+			-->
+
+
 	<!-- Themiscyra: -->
 		<flag dailyReset="false">themiscyra_smithies_looted</flag>
 		<flag dailyReset="false">themiscyra_jewellers_looted</flag>
@@ -517,6 +538,11 @@
 	evelyx_total_milked (The total millilitres milked from the player)
 	evelyx_player_number (The number which is given to the player when working as a cow for Evelyx)
 	
+	sally_work_level (The work level of the player at Sally's Stables, 0=hand, 1=breeding fleshlight, 2=breeding by hand)
+	sally_work_hours (The number of hours worked in the current session)
+	sally_total_grooming_hours (Total grooming hours worked)
+	sally_breeding_sessions (Total breeding collection sessions completed)
+
 	headless_horseman_year_warning (The year in which the headless horseman warning was encountered, used so that the warning is given each year)
 	headless_horseman_attack_minutes (The game.getMinutesPassed() at which the headless horseman was last encountered)
 	
