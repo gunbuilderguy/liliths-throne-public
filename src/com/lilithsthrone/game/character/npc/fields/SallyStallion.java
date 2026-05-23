@@ -79,19 +79,27 @@ public class SallyStallion extends NPC {
 	}
 
 	private void rollTraits() {
-		// 50% common (1x-2x), 30% uncommon (3x-5x), 15% rare (6x-8x), 5% prize (10x)
-		int roll = Util.random.nextInt(100);
-		if(roll < 50) {
+		// Semen value rolled independently: 40% 1x-2x, 30% 3x-5x, 20% 6x-8x, 10% 10x
+		int valueRoll = Util.random.nextInt(100);
+		if(valueRoll < 40) {
 			semenValueMultiplier = 1 + Util.random.nextInt(2);
-			difficulty = 0;
-		} else if(roll < 80) {
+		} else if(valueRoll < 70) {
 			semenValueMultiplier = 3 + Util.random.nextInt(3);
-			difficulty = 1;
-		} else if(roll < 95) {
+		} else if(valueRoll < 90) {
 			semenValueMultiplier = 6 + Util.random.nextInt(3);
-			difficulty = 2;
 		} else {
 			semenValueMultiplier = 10;
+		}
+
+		// Difficulty rolled independently: 40% docile, 30% spirited, 20% difficult, 10% very difficult
+		int diffRoll = Util.random.nextInt(100);
+		if(diffRoll < 40) {
+			difficulty = 0;
+		} else if(diffRoll < 70) {
+			difficulty = 1;
+		} else if(diffRoll < 90) {
+			difficulty = 2;
+		} else {
 			difficulty = 3;
 		}
 	}
@@ -101,7 +109,7 @@ public class SallyStallion extends NPC {
 	}
 
 	/**
-	 * 0 = docile, 1 = spirited, 2 = difficult, 3 = very difficult (prize stallion)
+	 * 0 = docile, 1 = spirited, 2 = difficult, 3 = very difficult
 	 */
 	public int getDifficulty() {
 		return difficulty;
