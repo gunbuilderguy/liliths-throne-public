@@ -26,6 +26,7 @@ import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.game.inventory.CharacterInventory;
 import com.lilithsthrone.game.sex.SexPace;
+import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.utils.colours.Colour;
 import com.lilithsthrone.utils.colours.PresetColour;
 import com.lilithsthrone.world.WorldType;
@@ -36,12 +37,15 @@ import com.lilithsthrone.world.places.PlaceType;
  * @version 0.4.15
  * @author Innoxia
  */
-public class Blaze extends NPC {
+public class Blaze extends NPC implements StallionTraitsProvider {
 
-	public int getSemenValueMultiplier() { return 5; }
-	public int getDifficulty() { return 2; }
-	public String getDifficultyName() { return "difficult"; }
-	public String getValueTierName() { return "good"; }
+	private static final List<StallionTrait> TRAITS = Util.newArrayListOfValues(
+			StallionTrait.CHAMPION_BLOODLINE, StallionTrait.AGGRESSIVE, StallionTrait.QUICK_FINISHER);
+
+	@Override
+	public List<StallionTrait> getStallionTraits() {
+		return TRAITS;
+	}
 
 	public Blaze() {
 		this(false);

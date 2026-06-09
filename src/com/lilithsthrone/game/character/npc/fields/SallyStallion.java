@@ -33,17 +33,16 @@ import com.lilithsthrone.world.places.PlaceType;
 
 /**
  * Randomly generated boarded stallion at Sally's Stables.
- * Each has a semen value multiplier (1x-10x) and a difficulty rating
- * that affects how easy they are to work with.
+ * Rolls a set of independent traits ({@link StallionTrait}) that each
+ * affect value, yield, difficulty, or time independently.
  *
  * @since 0.4.15
  * @version 0.4.15
  * @author Innoxia
  */
-public class SallyStallion extends NPC {
+public class SallyStallion extends NPC implements StallionTraitsProvider {
 
-	private int semenValueMultiplier = 1;
-	private int difficulty = 0;
+	private List<StallionTrait> traits;
 
 	public SallyStallion() {
 		this(false);
@@ -65,7 +64,7 @@ public class SallyStallion extends NPC {
 
 			setStartingBody(true);
 			this.setFeral(Subspecies.HORSE_MORPH);
-			rollTraits();
+			traits = StallionTrait.rollTraits();
 		}
 	}
 
@@ -78,58 +77,9 @@ public class SallyStallion extends NPC {
 	public void setupPerks(boolean autoSelectPerks) {
 	}
 
-	private void rollTraits() {
-		// Semen value rolled independently: 40% 1x-2x, 30% 3x-5x, 20% 6x-8x, 10% 10x
-		int valueRoll = Util.random.nextInt(100);
-		if(valueRoll < 40) {
-			semenValueMultiplier = 1 + Util.random.nextInt(2);
-		} else if(valueRoll < 70) {
-			semenValueMultiplier = 3 + Util.random.nextInt(3);
-		} else if(valueRoll < 90) {
-			semenValueMultiplier = 6 + Util.random.nextInt(3);
-		} else {
-			semenValueMultiplier = 10;
-		}
-
-		// Difficulty rolled independently: 40% docile, 30% spirited, 20% difficult, 10% very difficult
-		int diffRoll = Util.random.nextInt(100);
-		if(diffRoll < 40) {
-			difficulty = 0;
-		} else if(diffRoll < 70) {
-			difficulty = 1;
-		} else if(diffRoll < 90) {
-			difficulty = 2;
-		} else {
-			difficulty = 3;
-		}
-	}
-
-	public int getSemenValueMultiplier() {
-		return semenValueMultiplier;
-	}
-
-	/**
-	 * 0 = docile, 1 = spirited, 2 = difficult, 3 = very difficult
-	 */
-	public int getDifficulty() {
-		return difficulty;
-	}
-
-	public String getDifficultyName() {
-		switch(difficulty) {
-			case 0: return "docile";
-			case 1: return "spirited";
-			case 2: return "difficult";
-			case 3: return "very difficult";
-			default: return "docile";
-		}
-	}
-
-	public String getValueTierName() {
-		if(semenValueMultiplier >= 10) return "prize";
-		if(semenValueMultiplier >= 6) return "high-value";
-		if(semenValueMultiplier >= 3) return "good";
-		return "standard";
+	@Override
+	public List<StallionTrait> getStallionTraits() {
+		return traits;
 	}
 
 	@Override
